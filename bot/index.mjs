@@ -1,1 +1,1 @@
-console.log(procesT FOUND")Y FOUND" : "KEY NOT FOUND")Y FOUND" : "KEY NOT FOUND")
+console.log("BINANCE SQUARE BOT TEST OK");
