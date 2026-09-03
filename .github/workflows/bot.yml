@@ -1,16 +1,6 @@
-name: Binance Squat:
-    runs-on:orkflow_dispatch:
-
-    jobs:
-      test:
-          runs-on: ubuntu-latest
-              env:
-                  BINANCE_SQUARE_OPENAPI_E_OPENAPI_KEY }}
-                          - uses: ac  - uses: actions/checkout@v4
-
-                                - uses: ac  - uses: actions/checkout@ WITH:
-                                t/i       node-version: 24
-
-                                      - run: node bot/index.mjsode-version: 24
-
-                                            - run: node bot/index.mjs
+name: Test Bot
+on: [ubuntu-latest
+    steps:
+          - run: node bot/index.mjsatest
+              steps:
+                    - run: node bot/index.mjs
