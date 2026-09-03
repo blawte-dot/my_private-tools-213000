@@ -1,11 +1,15 @@
-name: Binance Squst:
-    runs-on: ubuntE_OPENAPI_    BINANCE_SQUARE_OPENAPI_    BINANCE_SQUARE_OPENAPI_KEY: ${{ secrets.BINANCE_SQUARE_OPENAPI_KEY }}
+name: Binance Square Bot
 
-        steps:
-             ions/setupactions/checkout@v4
+on:
+  workflow_dispatch:
 
-                   - uses: actions/setup-node@v4
-                           with:
-                                     node-version: 24
+  jobs:
+    test:
+        runs-oSQUARE_OPENAPI_K_OPENAPI_KEBINANCE_SQUARE_OPENAPI_KEBINANCE_SQUARE_OPENAPI_KEY }}
 
-                                           - run: node bot/index.mjs
+            stepses: acti- uses: actionv4
+                n: node bot/index.mjsode-version: 24
+
+                      - run: node bot/index.mjsode-version: 24
+
+                            - run: node bot/index.mjs
