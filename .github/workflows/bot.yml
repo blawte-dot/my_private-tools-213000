@@ -4,4 +4,4 @@ on: [workflow_dispatch]
       test:
           runs-on: ubuntu-latest
               steps:
-                    - run: node bot/index.mjs
+                - run: node bot/index.mjs
