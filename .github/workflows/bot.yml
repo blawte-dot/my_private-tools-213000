@@ -1,0 +1,11 @@
+name: Binance Square Bot
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        run: echo "Binance Square Bot is ready"
