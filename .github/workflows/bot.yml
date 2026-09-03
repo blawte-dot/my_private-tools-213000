@@ -1,27 +1,38 @@
-name: Test Bot
+name: Binance Square Auto Post
 
 on:
   workflow_dispatch:
 
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: binance-square-bot
+  cancel-in-progress: false
+
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Test Binance key
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Binance Square Skill
+        run: |
+          npx skills add binance/binance-skills-hub --skill square-post --agent '*' -y
+
+      - name: Run Binance Square Bot
         env:
           BINANCE_SQUARE_OPENAPI_KEY: ${{ secrets.BINANCE_SQUARE_OPENAPI_KEY }}
         run: |
-          if [ -n "$BINANCE_SQUARE_OPENAPI_KEY" ]; then
-            echo "BINANCE KEY FOUND"
-          else
-            echo "BINANCE KEY NOT FOUND"
-            exit 1
-          fi
-
-      - name: Run Binance bot
-        env:
-          BINANCE_SQUARE_OPENAPI_KEY: ${{ secrets.BINANCE_SQUARE_OPENAPI_KEY }}
-        run: node bot/index.mjs
+          node bot/index.mjs
