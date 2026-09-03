@@ -5,7 +5,7 @@ name: Binance Squat:
       test:
           runs-on: ubuntu-latest
               env:
-                    BINANCE_SQUARE_OPENAPI_E_OPENAPI_KEY }}
+                  BINANCE_SQUARE_OPENAPI_E_OPENAPI_KEY }}
                           - uses: ac  - uses: actions/checkout@v4
 
                                 - uses: ac  - uses: actions/checkout@ WITH:
