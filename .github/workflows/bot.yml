@@ -1,8 +1,23 @@
 name: Test Bot
+
 on: [workflow_dispatch]
+
 jobs:
   test:
-     runs-on: ubuntu-latest
-     steps:
-        - uses: actions/checkout@v4
-        - run: node bot/index.mjs
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test Binance key
+        env:
+          BINANCE_SQUARE_OPENAPI_KEY: ${{ secrets.BINANCE_SQUARE_OPENAPI_KEY }}
+        run: |
+          if [ -n "$BINANCE_SQUARE_OPENAPI_KEY" ]; then
+            echo "BINANCE KEY FOUND"
+          else
+            echo "BINANCE KEY NOT FOUND"
+            exit 1
+          fi
+
+      - run: node bot/index.mjs
