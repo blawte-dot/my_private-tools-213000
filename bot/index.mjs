@@ -11,10 +11,11 @@ const response = await fetch(
     headers: {
       "Content-Type": "application/json",
       "X-Square-OpenAPI-Key": key,
+      "clienttype": "binanceSkill"
     },
     body: JSON.stringify({
-      bodyTextOnly: "🤖 Binance Square Bot test — hello from my bot!",
-    }),
+      bodyTextOnly: "🤖 Binance Square Bot test 🚀\n\nThis is my first automated post!"
+    })
   }
 );
 
