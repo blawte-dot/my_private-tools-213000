@@ -1,25 +1,11 @@
-const key = process.env.BINANCE_SQUARE_OPENAPI_KEY;
-
-if (!key) {
-  throw new Error("BINANCE KEY NOT FOUND");
-}
-
 const response = await fetch(
-  "https://www.binance.com/bapi/composite/v1/public/pgc/openApi/content/add",
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Square-OpenAPI-Key": key,
-      "clienttype": "binanceSkill"
-    },
-    body: JSON.stringify({
-      bodyTextOnly: "🤖 Binance Square Bot test 🚀\n\nThis is my first automated post!"
-    })
-  }
+  "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT"
 );
 
-const result = await response.text();
+if (!response.ok) {
+  throw new Error(`Binance API error: ${response.status}`);
+}
 
-console.log("STATUS:", response.status);
-console.log("RESULT:", result);
+const data = await response.json();
+
+console.log("BTC PRICE:", data.price);
