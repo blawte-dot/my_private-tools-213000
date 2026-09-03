@@ -1,15 +1,16 @@
-name: Binance Square Bot
+name: Binance Squat:
+    runs-on:orkflow_dispatch:
 
-on:
-  workflow_dispatch:
+    jobs:
+      test:
+          runs-on: ubuntu-latest
+              env:
+                    BINANCE_SQUARE_OPENAPI_E_OPENAPI_KEY }}
+                          - uses: ac  - uses: actions/checkout@v4
 
-  jobs:
-    test:
-        runs-oSQUARE_OPENAPI_K_OPENAPI_KEBINANCE_SQUARE_OPENAPI_KEBINANCE_SQUARE_OPENAPI_KEY }}
+                                - uses: ac  - uses: actions/checkout@ WITH:
+                                t/i       node-version: 24
 
-            stepses: acti- uses: actionv4
-                n: node bot/index.mjsode-version: 24
+                                      - run: node bot/index.mjsode-version: 24
 
-                      - run: node bot/index.mjsode-version: 24
-
-                            - run: node bot/index.mjs
+                                            - run: node bot/index.mjs
