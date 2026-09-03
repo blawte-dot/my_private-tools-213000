@@ -20,4 +20,7 @@ jobs:
             exit 1
           fi
 
-      - run: node bot/index.mjs
+      - name: Run Binance bot
+  env:
+    BINANCE_SQUARE_OPENAPI_KEY: ${{ secrets.BINANCE_SQUARE_OPENAPI_KEY }}
+  run: node bot/index.mjs
