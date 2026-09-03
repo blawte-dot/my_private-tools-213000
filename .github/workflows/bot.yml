@@ -1,11 +1,11 @@
-name: Binance Square Bot
+name: Binance Squst:
+    runs-on: ubuntE_OPENAPI_    BINANCE_SQUARE_OPENAPI_    BINANCE_SQUARE_OPENAPI_KEY: ${{ secrets.BINANCE_SQUARE_OPENAPI_KEY }}
 
-on:
-  workflow_dispatch:
+        steps:
+             ions/setupactions/checkout@v4
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test
-        run: echo "Binance Square Bot is ready"
+                   - uses: actions/setup-node@v4
+                           with:
+                                     node-version: 24
+
+                                           - run: node bot/index.mjs
