@@ -7,7 +7,7 @@ on:
     - cron: "17 * * * *"
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: binance-square-bot
@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -36,3 +38,17 @@ jobs:
           BINANCE_SQUARE_OPENAPI_KEY: ${{ secrets.BINANCE_SQUARE_OPENAPI_KEY }}
         run: |
           node bot/index.mjs
+
+      - name: Save bot history
+        run: |
+          git config user.name "binance-square-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/history.json
+
+          if git diff --cached --quiet; then
+            echo "No history changes to commit."
+          else
+            git commit -m "Update bot publishing history"
+            git push
+          fi
