@@ -1,17 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import sharp from "sharp";
 
 const API = "https://data-api.binance.vision";
 const ROOT = process.cwd();
+
 const HISTORY_FILE = path.join(ROOT, "data", "history.json");
-const CHART_FILE = path.join(ROOT, "bot", "latest-chart.png");
+const IMAGE_FILE = path.join(ROOT, "bot", "post-image.png");
 
 const SLOT_MS = 25 * 60 * 1000;
-
-function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
-}
 
 async function getJson(url, retries = 3) {
   for (let i = 0; i < retries; i++) {
@@ -20,26 +18,30 @@ async function getJson(url, retries = 3) {
         headers: { "User-Agent": "binance-square-bot/1.0" }
       });
 
-      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`);
+      }
 
       return await res.json();
-    } catch (e) {
-      if (i === retries - 1) throw e;
-      await sleep(1500);
+    } catch (err) {
+      if (i === retries - 1) throw err;
+      await new Promise(r => setTimeout(r, 1500));
     }
   }
-}
-
-function num(v) {
-  return Number(v);
 }
 
 function money(v) {
   const n = Number(v);
 
-  if (n >= 1000) return `$${n.toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
+  if (n >= 1000) {
+    return `$${n.toLocaleString("en-US", {
+      maximumFractionDigits: 2
+    })}`;
+  }
+
   if (n >= 1) return `$${n.toFixed(2)}`;
   if (n >= 0.01) return `$${n.toFixed(4)}`;
+
   return `$${n.toPrecision(5)}`;
 }
 
@@ -57,6 +59,7 @@ function sma(values, period) {
   if (values.length < period) return null;
 
   const slice = values.slice(-period);
+
   return slice.reduce((a, b) => a + b, 0) / period;
 }
 
@@ -64,8 +67,11 @@ function ema(values, period) {
   if (values.length < period) return null;
 
   const k = 2 / (period + 1);
-  let result = values.slice(0, period)
-    .reduce((a, b) => a + b, 0) / period;
+
+  let result =
+    values
+      .slice(0, period)
+      .reduce((a, b) => a + b, 0) / period;
 
   for (let i = period; i < values.length; i++) {
     result = values[i] * k + result * (1 - k);
@@ -96,23 +102,32 @@ function rsi(values, period = 14) {
     const gain = Math.max(diff, 0);
     const loss = Math.max(-diff, 0);
 
-    avgGain = ((avgGain * (period - 1)) + gain) / period;
-    avgLoss = ((avgLoss * (period - 1)) + loss) / period;
+    avgGain =
+      ((avgGain * (period - 1)) + gain) / period;
+
+    avgLoss =
+      ((avgLoss * (period - 1)) + loss) / period;
   }
 
   if (avgLoss === 0) return 100;
 
   const rs = avgGain / avgLoss;
+
   return 100 - (100 / (1 + rs));
 }
 
 function loadHistory() {
-  fs.mkdirSync(path.dirname(HISTORY_FILE), { recursive: true });
+  fs.mkdirSync(path.dirname(HISTORY_FILE), {
+    recursive: true
+  });
 
   if (!fs.existsSync(HISTORY_FILE)) return [];
 
   try {
-    const data = JSON.parse(fs.readFileSync(HISTORY_FILE, "utf8"));
+    const data = JSON.parse(
+      fs.readFileSync(HISTORY_FILE, "utf8")
+    );
+
     return Array.isArray(data) ? data : [];
   } catch {
     return [];
@@ -120,7 +135,9 @@ function loadHistory() {
 }
 
 function saveHistory(history) {
-  fs.mkdirSync(path.dirname(HISTORY_FILE), { recursive: true });
+  fs.mkdirSync(path.dirname(HISTORY_FILE), {
+    recursive: true
+  });
 
   fs.writeFileSync(
     HISTORY_FILE,
@@ -130,7 +147,9 @@ function saveHistory(history) {
 
 async function getSpotCoins() {
   const [exchangeInfo, tickers] = await Promise.all([
-    getJson(`${API}/api/v3/exchangeInfo?permissions=["SPOT"]`),
+    getJson(
+      `${API}/api/v3/exchangeInfo?permissions=["SPOT"]`
+    ),
     getJson(`${API}/api/v3/ticker/24hr`)
   ]);
 
@@ -157,20 +176,25 @@ async function getSpotCoins() {
     .map(t => ({
       symbol: t.symbol,
       asset: t.symbol.replace("USDT", ""),
-      price: num(t.lastPrice),
-      change: num(t.priceChangePercent),
-      volume: num(t.quoteVolume),
-      high: num(t.highPrice),
-      low: num(t.lowPrice)
+      price: Number(t.lastPrice),
+      change: Number(t.priceChangePercent),
+      volume: Number(t.quoteVolume),
+      high: Number(t.highPrice),
+      low: Number(t.lowPrice)
     }));
 }
 
 function chooseCoin(coins, history) {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = new Date()
+    .toISOString()
+    .slice(0, 10);
 
   const usedToday = new Set(
     history
-      .filter(x => x.date === today && x.type === "analysis")
+      .filter(x =>
+        x.date === today &&
+        x.type === "analysis"
+      )
       .map(x => x.asset)
   );
 
@@ -188,11 +212,10 @@ function chooseCoin(coins, history) {
       return scoreB - scoreA;
     });
 
-  if (candidates.length > 0) {
-    return candidates[0];
-  }
-
-  return [...coins].sort((a, b) => b.change - a.change)[0];
+  return candidates[0] ||
+    [...coins].sort((a, b) =>
+      b.change - a.change
+    )[0];
 }
 
 async function getKlines(symbol) {
@@ -202,11 +225,11 @@ async function getKlines(symbol) {
 
   return data.map(k => ({
     time: k[0],
-    open: num(k[1]),
-    high: num(k[2]),
-    low: num(k[3]),
-    close: num(k[4]),
-    volume: num(k[5])
+    open: Number(k[1]),
+    high: Number(k[2]),
+    low: Number(k[3]),
+    close: Number(k[4]),
+    volume: Number(k[5])
   }));
 }
 
@@ -217,18 +240,29 @@ function analysisText(coin, candles) {
 
   const ema20 = ema(closes, 20);
   const ema50 = ema(closes, 50);
+
   const sma20 = sma(closes, 20);
   const sma50 = sma(closes, 50);
 
   const rsi14 = rsi(closes, 14);
 
-  const high72 = Math.max(...candles.map(x => x.high));
-  const low72 = Math.min(...candles.map(x => x.low));
+  const high72 = Math.max(
+    ...candles.map(x => x.high)
+  );
+
+  const low72 = Math.min(
+    ...candles.map(x => x.low)
+  );
 
   const last20 = candles.slice(-20);
 
-  const support = Math.min(...last20.map(x => x.low));
-  const resistance = Math.max(...last20.map(x => x.high));
+  const support = Math.min(
+    ...last20.map(x => x.low)
+  );
+
+  const resistance = Math.max(
+    ...last20.map(x => x.high)
+  );
 
   let trend = "NEUTRAL";
 
@@ -246,15 +280,22 @@ function analysisText(coin, candles) {
   else if (rsi14 <= 48) momentum = "Negative";
 
   const trendEmoji =
-    trend === "BULLISH" ? "🟢" :
-    trend === "BEARISH" ? "🔴" : "🟡";
+    trend === "BULLISH"
+      ? "🟢"
+      : trend === "BEARISH"
+        ? "🔴"
+        : "🟡";
 
   const momentumEmoji =
-    momentum === "Strong" || momentum === "Positive" ? "📈" : "📉";
+    momentum === "Strong" ||
+    momentum === "Positive"
+      ? "📈"
+      : "📉";
 
-  const changeEmoji = coin.change >= 0 ? "🟢" : "🔴";
+  const changeEmoji =
+    coin.change >= 0 ? "🟢" : "🔴";
 
-  const text = `📊 $${coin.asset} Technical Analysis
+  return `📊 $${coin.asset} Technical Analysis
 
 💰 Price: ${money(price)}
 ${changeEmoji} 24H Change: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%
@@ -284,29 +325,13 @@ Watch the reaction around ${money(support)}–${money(resistance)} and whether v
 A breakout above ${money(resistance)} with stronger volume could improve the short-term structure. 🚀
 
 🐻 Bearish Scenario
-A break below ${money(support)} could increase selling pressure and weaken momentum. ⚠️
+A break below ${money(support)} could increase selling pressure. ⚠️
 
 🧠 This is market analysis, not financial advice.
 
 🤔 What level are you watching next for $${coin.asset}?
 
 #Crypto #Binance #${coin.asset} #TechnicalAnalysis`;
-
-  return {
-    text,
-    stats: {
-      price,
-      ema20,
-      ema50,
-      sma20,
-      sma50,
-      rsi14,
-      support,
-      resistance,
-      high72,
-      low72
-    }
-  };
 }
 
 function topMoversPost(coins) {
@@ -315,47 +340,65 @@ function topMoversPost(coins) {
     .slice(0, 5);
 
   const lines = movers.map((c, i) => {
-    return `${i + 1}. 🟢 $${c.asset} **+${c.change.toFixed(2)}%**
-   📊 Volume: ${compact(c.volume)}`;
+    const emoji =
+      c.change >= 0 ? "🟢" : "🔴";
+
+    return `${i + 1}. ${emoji} $${c.asset} ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%
+📊 Volume: ${compact(c.volume)}`;
   });
 
   const lead = movers[0];
 
-  return `🔥 Binance Spot — Top Gainers
+  return `🔥 Binance Spot — Top Movers
 
 📈 The strongest Binance Spot movers right now:
 
 ${lines.join("\n\n")}
 
-👀 Strong percentage gains can attract attention, but momentum should be evaluated together with volume, liquidity and market structure.
+🔎 Percentage gains are more useful when viewed together with volume, liquidity and market structure.
 
-⚡ The leading mover is $${lead.asset} at +${lead.change.toFixed(2)}%.
+⚡ Leading mover: $${lead.asset} at ${lead.change >= 0 ? "+" : ""}${lead.change.toFixed(2)}%
 
-🤔 Which mover has the most interesting setup to you?
+👀 Which mover are you watching?
+
+🤔 Which one has the most interesting setup?
 
 #Crypto #Binance #Altcoins #MarketUpdate`;
 }
 
 function marketUpdatePost(coins) {
-  const btc = coins.find(x => x.asset === "BTC");
-  const eth = coins.find(x => x.asset === "ETH");
+  const btc = coins.find(
+    x => x.asset === "BTC"
+  );
+
+  const eth = coins.find(
+    x => x.asset === "ETH"
+  );
 
   const top = [...coins]
     .sort((a, b) => b.change - a.change)[0];
 
   return `🌐 Binance Spot Market Update
 
-₿ $BTC: ${btc ? `${btc.change >= 0 ? "🟢" : "🔴"} ${btc.change >= 0 ? "+" : ""}${btc.change.toFixed(2)}%` : "N/A"}
+₿ $BTC:
+${btc
+      ? `${btc.change >= 0 ? "🟢" : "🔴"} ${btc.change >= 0 ? "+" : ""}${btc.change.toFixed(2)}%`
+      : "N/A"}
 
-♦️ $ETH: ${eth ? `${eth.change >= 0 ? "🟢" : "🔴"} ${eth.change >= 0 ? "+" : ""}${eth.change.toFixed(2)}%` : "N/A"}
+♦️ $ETH:
+${eth
+      ? `${eth.change >= 0 ? "🟢" : "🔴"} ${eth.change >= 0 ? "+" : ""}${eth.change.toFixed(2)}%`
+      : "N/A"}
 
 🔥 Top mover: $${top.asset}
-${top.change >= 0 ? "📈" : "📉"} 24H: ${top.change >= 0 ? "+" : ""}${top.change.toFixed(2)}%
+📈 24H Change: ${top.change >= 0 ? "+" : ""}${top.change.toFixed(2)}%
 💰 Volume: ${compact(top.volume)}
 
-🔎 Market conditions can change quickly, so volume and price structure remain important when evaluating momentum.
+🔎 Volume and price structure remain important when evaluating momentum.
 
-👀 What are you watching most closely today?
+👀 Market conditions can change quickly.
+
+🤔 What are you watching most closely?
 
 #Crypto #Binance #Bitcoin #MarketUpdate`;
 }
@@ -375,14 +418,174 @@ Because price alone isn't enough.
 📈 Higher-timeframe structure
 ⚡ Momentum
 
-⚠️ A breakout with weak participation can quickly become a false breakout.
+⚠️ A breakout with weak participation can become a false breakout.
 
 🧠 The goal is to evaluate the whole structure rather than one candle.
 
-🤔 What confirmation do you usually look for before trusting a breakout?
+👀 Confirmation matters.
+
+🤔 What confirmation do you usually look for?
 
 #CryptoEducation #Binance #Trading #TechnicalAnalysis`;
 }
+
+/* ================================
+   AUTOMATIC IMAGE GENERATOR
+================================ */
+
+async function createInfoImage({
+  title,
+  subtitle,
+  lines = [],
+  positive = false
+}) {
+  const width = 1400;
+  const height = 800;
+
+  const accent = positive
+    ? "#22c55e"
+    : "#facc15";
+
+  const lineSvg = lines
+    .slice(0, 8)
+    .map((line, i) => {
+      const y = 260 + i * 55;
+
+      return `
+      <text
+        x="90"
+        y="${y}"
+        fill="#e5e7eb"
+        font-size="28"
+        font-family="Arial">
+        ${escapeXml(line)}
+      </text>`;
+    })
+    .join("");
+
+  const svg = `
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="${width}"
+    height="${height}"
+    viewBox="0 0 ${width} ${height}">
+
+    <rect
+      width="100%"
+      height="100%"
+      fill="#111827"/>
+
+    <rect
+      x="60"
+      y="60"
+      width="1280"
+      height="680"
+      rx="28"
+      fill="#1f2937"
+      stroke="#374151"
+      stroke-width="2"/>
+
+    <rect
+      x="90"
+      y="100"
+      width="10"
+      height="100"
+      rx="5"
+      fill="${accent}"/>
+
+    <text
+      x="135"
+      y="140"
+      fill="#ffffff"
+      font-size="46"
+      font-family="Arial"
+      font-weight="bold">
+      ${escapeXml(title)}
+    </text>
+
+    <text
+      x="135"
+      y="185"
+      fill="#9ca3af"
+      font-size="24"
+      font-family="Arial">
+      ${escapeXml(subtitle)}
+    </text>
+
+    ${lineSvg}
+
+    <text
+      x="90"
+      y="700"
+      fill="#6b7280"
+      font-size="18"
+      font-family="Arial">
+      Binance Spot Market Data
+    </text>
+
+  </svg>
+  `;
+
+  fs.mkdirSync(path.dirname(IMAGE_FILE), {
+    recursive: true
+  });
+
+  await sharp(Buffer.from(svg))
+    .png()
+    .toFile(IMAGE_FILE);
+
+  return IMAGE_FILE;
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+/* ================================
+   REAL TECHNICAL CHART
+================================ */
+
+async function createAnalysisChart(symbol) {
+  const chartPath = path.join(
+    ROOT,
+    "bot",
+    "analysis-chart.png"
+  );
+
+  try {
+    execFileSync(
+      "node",
+      [
+        path.join(ROOT, "bot", "chart.mjs"),
+        symbol,
+        chartPath
+      ],
+      {
+        cwd: ROOT,
+        stdio: "inherit"
+      }
+    );
+
+    if (fs.existsSync(chartPath)) {
+      return chartPath;
+    }
+  } catch {
+    console.log(
+      "Technical chart failed. Using automatic info image."
+    );
+  }
+
+  return null;
+}
+
+/* ================================
+   FIND BINANCE POSTER
+================================ */
 
 function findPoster() {
   const locations = [
@@ -395,30 +598,43 @@ function findPoster() {
   for (const location of locations) {
     const full = path.join(ROOT, location);
 
-    if (fs.existsSync(full)) return full;
+    if (fs.existsSync(full)) {
+      return full;
+    }
   }
 
-  throw new Error("Binance Square post-image.mjs was not found.");
+  throw new Error(
+    "Binance Square post-image.mjs was not found."
+  );
 }
 
-function publish(text, imagePath = null) {
+/* ================================
+   PUBLISH
+================================ */
+
+function publish(text, imagePath) {
   const poster = findPoster();
 
-  const args = [
-    poster,
-    "--text",
-    text
-  ];
-
-  if (imagePath && fs.existsSync(imagePath)) {
-    args.push("--images", imagePath);
+  if (!imagePath || !fs.existsSync(imagePath)) {
+    throw new Error(
+      "A valid image is required for Binance Square."
+    );
   }
 
-  console.log("Publishing to Binance Square...");
+  console.log(
+    "Publishing with image:",
+    imagePath
+  );
 
   execFileSync(
     "node",
-    args,
+    [
+      poster,
+      "--text",
+      text,
+      "--images",
+      imagePath
+    ],
     {
       cwd: ROOT,
       env: process.env,
@@ -427,27 +643,9 @@ function publish(text, imagePath = null) {
   );
 }
 
-async function createChart(symbol) {
-  try {
-    execFileSync(
-      "node",
-      [
-        path.join(ROOT, "bot", "chart.mjs"),
-        symbol,
-        CHART_FILE
-      ],
-      {
-        cwd: ROOT,
-        stdio: "inherit"
-      }
-    );
-
-    return fs.existsSync(CHART_FILE) ? CHART_FILE : null;
-  } catch (e) {
-    console.log("Chart generation failed. Publishing without image.");
-    return null;
-  }
-}
+/* ================================
+   MAIN
+================================ */
 
 async function main() {
   console.log("================================");
@@ -456,77 +654,172 @@ async function main() {
 
   const history = loadHistory();
 
-  const slot = Math.floor(Date.now() / SLOT_MS);
+  const slot = Math.floor(
+    Date.now() / SLOT_MS
+  );
 
-  if (history.some(x => x.slot === slot)) {
-    console.log("This 25-minute slot was already published.");
+  if (
+    history.some(
+      x => x.slot === slot
+    )
+  ) {
+    console.log(
+      "This 25-minute slot was already published."
+    );
     return;
   }
 
   const coins = await getSpotCoins();
 
   if (!coins.length) {
-    throw new Error("No eligible Binance Spot USDT coins found.");
+    throw new Error(
+      "No eligible Binance Spot USDT coins found."
+    );
   }
 
-  const slotInCycle = ((slot % 5) + 5) % 5;
+  const slotInCycle =
+    ((slot % 5) + 5) % 5;
 
   let type;
   let text;
   let asset = null;
   let image = null;
 
+  /* 80% ANALYSIS */
+
   if (slotInCycle < 4) {
     type = "analysis";
 
-    const coin = chooseCoin(coins, history);
-
-    if (!coin) {
-      throw new Error("Could not select a coin.");
-    }
+    const coin = chooseCoin(
+      coins,
+      history
+    );
 
     asset = coin.asset;
 
-    const candles = await getKlines(coin.symbol);
+    const candles =
+      await getKlines(coin.symbol);
 
-    const result = analysisText(coin, candles);
+    text =
+      analysisText(
+        coin,
+        candles
+      );
 
-    text = result.text;
+    image =
+      await createAnalysisChart(
+        coin.symbol
+      );
 
-    image = await createChart(coin.symbol);
-  } else {
+    if (!image) {
+      image =
+        await createInfoImage({
+          title: `$${coin.asset} Technical Analysis`,
+          subtitle: "Binance Spot • 1H",
+          lines: [
+            `Price: ${money(coin.price)}`,
+            `24H Change: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%`,
+            `Volume: ${compact(coin.volume)}`,
+            `24H High: ${money(coin.high)}`,
+            `24H Low: ${money(coin.low)}`
+          ],
+          positive: coin.change >= 0
+        });
+    }
+  }
+
+  /* 20% OTHER */
+
+  else {
     type = "other";
 
-    const cycle = Math.floor(slot / 5);
+    const cycle =
+      Math.floor(slot / 5);
 
     if (cycle % 2 === 0) {
       text = topMoversPost(coins);
+
+      const movers = [...coins]
+        .sort(
+          (a, b) =>
+            b.change - a.change
+        )
+        .slice(0, 5);
+
+      image =
+        await createInfoImage({
+          title: "🔥 Binance Top Movers",
+          subtitle: "Binance Spot • 24H",
+          lines: movers.map(
+            (c, i) =>
+              `${i + 1}. $${c.asset}  ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
+          ),
+          positive: true
+        });
     } else {
       text = educationPost();
+
+      image =
+        await createInfoImage({
+          title: "📚 Crypto Education",
+          subtitle: "Understanding breakout confirmation",
+          lines: [
+            "🟢 Volume",
+            "🟢 Liquidity",
+            "🟢 Retests",
+            "📈 Market structure",
+            "⚡ Momentum",
+            "⚠️ Avoid relying on price alone"
+          ],
+          positive: false
+        });
     }
   }
 
   publish(text, image);
 
-  const entry = {
+  history.push({
     slot,
-    date: new Date().toISOString().slice(0, 10),
+    date: new Date()
+      .toISOString()
+      .slice(0, 10),
     time: new Date().toISOString(),
     type,
     asset
-  };
+  });
 
-  history.push(entry);
   saveHistory(history);
 
-  if (image && fs.existsSync(image)) {
+  if (
+    image &&
+    fs.existsSync(image)
+  ) {
     fs.unlinkSync(image);
   }
 
-  console.log("Published successfully.");
+  const analysisChart =
+    path.join(
+      ROOT,
+      "bot",
+      "analysis-chart.png"
+    );
+
+  if (
+    fs.existsSync(analysisChart)
+  ) {
+    fs.unlinkSync(analysisChart);
+  }
+
+  console.log(
+    "✅ Published successfully."
+  );
 }
 
 main().catch(err => {
-  console.error(err);
+  console.error(
+    "❌ Bot failed:",
+    err
+  );
+
   process.exit(1);
 });
