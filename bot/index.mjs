@@ -4,6 +4,8 @@ import { execFileSync } from "node:child_process";
 import sharp from "sharp";
 
 const API = "https://data-api.binance.vision";
+const GDELT = "https://api.gdeltproject.org/api/v2/doc/doc";
+
 const ROOT = process.cwd();
 
 const HISTORY_FILE = path.join(ROOT, "data", "history.json");
@@ -15,7 +17,9 @@ async function getJson(url, retries = 3) {
   for (let i = 0; i < retries; i++) {
     try {
       const res = await fetch(url, {
-        headers: { "User-Agent": "binance-square-bot/1.0" }
+        headers: {
+          "User-Agent": "binance-square-bot/2.0"
+        }
       });
 
       if (!res.ok) {
@@ -30,8 +34,59 @@ async function getJson(url, retries = 3) {
   }
 }
 
+async function downloadImage(url, output) {
+  if (!url || !/^https?:\/\//i.test(url)) {
+    return false;
+  }
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (compatible; BinanceSquareBot/2.0)"
+      }
+    });
+
+    if (!res.ok) {
+      throw new Error(`Image ${res.status}`);
+    }
+
+    const contentType =
+      res.headers.get("content-type") || "";
+
+    if (!contentType.startsWith("image/")) {
+      throw new Error("URL is not an image");
+    }
+
+    const buffer = Buffer.from(
+      await res.arrayBuffer()
+    );
+
+    await sharp(buffer)
+      .resize(1400, 800, {
+        fit: "cover",
+        position: "attention"
+      })
+      .jpeg({
+        quality: 90
+      })
+      .toFile(output);
+
+    return true;
+  } catch (err) {
+    console.log(
+      "News image download failed:",
+      err.message
+    );
+
+    return false;
+  }
+}
+
 function money(v) {
   const n = Number(v);
+
+  if (!Number.isFinite(n)) return "$0";
 
   if (n >= 1000) {
     return `$${n.toLocaleString("en-US", {
@@ -48,9 +103,17 @@ function money(v) {
 function compact(v) {
   const n = Number(v);
 
-  if (n >= 1e9) return `$${(n / 1e9).toFixed(2)}B`;
-  if (n >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
-  if (n >= 1e3) return `$${(n / 1e3).toFixed(1)}K`;
+  if (n >= 1e9) {
+    return `$${(n / 1e9).toFixed(2)}B`;
+  }
+
+  if (n >= 1e6) {
+    return `$${(n / 1e6).toFixed(1)}M`;
+  }
+
+  if (n >= 1e3) {
+    return `$${(n / 1e3).toFixed(1)}K`;
+  }
 
   return `$${n.toFixed(0)}`;
 }
@@ -60,7 +123,10 @@ function sma(values, period) {
 
   const slice = values.slice(-period);
 
-  return slice.reduce((a, b) => a + b, 0) / period;
+  return (
+    slice.reduce((a, b) => a + b, 0) /
+    period
+  );
 }
 
 function ema(values, period) {
@@ -71,10 +137,13 @@ function ema(values, period) {
   let result =
     values
       .slice(0, period)
-      .reduce((a, b) => a + b, 0) / period;
+      .reduce((a, b) => a + b, 0) /
+    period;
 
   for (let i = period; i < values.length; i++) {
-    result = values[i] * k + result * (1 - k);
+    result =
+      values[i] * k +
+      result * (1 - k);
   }
 
   return result;
@@ -87,97 +156,129 @@ function rsi(values, period = 14) {
   let losses = 0;
 
   for (let i = 1; i <= period; i++) {
-    const diff = values[i] - values[i - 1];
+    const diff =
+      values[i] - values[i - 1];
 
-    if (diff >= 0) gains += diff;
-    else losses -= diff;
+    if (diff >= 0) {
+      gains += diff;
+    } else {
+      losses -= diff;
+    }
   }
 
   let avgGain = gains / period;
   let avgLoss = losses / period;
 
-  for (let i = period + 1; i < values.length; i++) {
-    const diff = values[i] - values[i - 1];
+  for (
+    let i = period + 1;
+    i < values.length;
+    i++
+  ) {
+    const diff =
+      values[i] - values[i - 1];
 
     const gain = Math.max(diff, 0);
     const loss = Math.max(-diff, 0);
 
     avgGain =
-      ((avgGain * (period - 1)) + gain) / period;
+      ((avgGain * (period - 1)) + gain) /
+      period;
 
     avgLoss =
-      ((avgLoss * (period - 1)) + loss) / period;
+      ((avgLoss * (period - 1)) + loss) /
+      period;
   }
 
   if (avgLoss === 0) return 100;
 
   const rs = avgGain / avgLoss;
 
-  return 100 - (100 / (1 + rs));
+  return 100 - 100 / (1 + rs);
 }
 
 function loadHistory() {
-  fs.mkdirSync(path.dirname(HISTORY_FILE), {
-    recursive: true
-  });
+  fs.mkdirSync(
+    path.dirname(HISTORY_FILE),
+    { recursive: true }
+  );
 
-  if (!fs.existsSync(HISTORY_FILE)) return [];
+  if (!fs.existsSync(HISTORY_FILE)) {
+    return [];
+  }
 
   try {
     const data = JSON.parse(
-      fs.readFileSync(HISTORY_FILE, "utf8")
+      fs.readFileSync(
+        HISTORY_FILE,
+        "utf8"
+      )
     );
 
-    return Array.isArray(data) ? data : [];
+    return Array.isArray(data)
+      ? data
+      : [];
   } catch {
     return [];
   }
 }
 
 function saveHistory(history) {
-  fs.mkdirSync(path.dirname(HISTORY_FILE), {
-    recursive: true
-  });
+  fs.mkdirSync(
+    path.dirname(HISTORY_FILE),
+    { recursive: true }
+  );
 
   fs.writeFileSync(
     HISTORY_FILE,
-    JSON.stringify(history.slice(-1000), null, 2)
+    JSON.stringify(
+      history.slice(-1000),
+      null,
+      2
+    )
   );
 }
 
 async function getSpotCoins() {
-  const [exchangeInfo, tickers] = await Promise.all([
-    getJson(
-      `${API}/api/v3/exchangeInfo?permissions=["SPOT"]`
-    ),
-    getJson(`${API}/api/v3/ticker/24hr`)
-  ]);
-
-  const tradingSymbols = new Set(
-    exchangeInfo.symbols
-      .filter(s =>
-        s.status === "TRADING" &&
-        s.quoteAsset === "USDT" &&
-        (
-          s.isSpotTradingAllowed === true ||
-          s.permissions?.includes("SPOT")
-        )
+  const [exchangeInfo, tickers] =
+    await Promise.all([
+      getJson(
+        `${API}/api/v3/exchangeInfo?permissions=SPOT`
+      ),
+      getJson(
+        `${API}/api/v3/ticker/24hr`
       )
-      .map(s => s.symbol)
-  );
+    ]);
+
+  const tradingSymbols =
+    new Set(
+      exchangeInfo.symbols
+        .filter(s =>
+          s.status === "TRADING" &&
+          s.quoteAsset === "USDT" &&
+          s.isSpotTradingAllowed === true
+        )
+        .map(s => s.symbol)
+    );
 
   return tickers
     .filter(t =>
       tradingSymbols.has(t.symbol) &&
       t.symbol.endsWith("USDT") &&
-      !/(UP|DOWN|BULL|BEAR)USDT$/.test(t.symbol) &&
+      !/(UP|DOWN|BULL|BEAR)USDT$/.test(
+        t.symbol
+      ) &&
       Number(t.quoteVolume) >= 5_000_000
     )
     .map(t => ({
       symbol: t.symbol,
-      asset: t.symbol.replace("USDT", ""),
+      asset: t.symbol.replace(
+        "USDT",
+        ""
+      ),
       price: Number(t.lastPrice),
-      change: Number(t.priceChangePercent),
+      change: Number(
+        t.priceChangePercent
+      ),
       volume: Number(t.quoteVolume),
       high: Number(t.highPrice),
       low: Number(t.lowPrice)
@@ -185,42 +286,58 @@ async function getSpotCoins() {
 }
 
 function chooseCoin(coins, history) {
-  const today = new Date()
-    .toISOString()
-    .slice(0, 10);
+  const today =
+    new Date()
+      .toISOString()
+      .slice(0, 10);
 
-  const usedToday = new Set(
-    history
-      .filter(x =>
-        x.date === today &&
-        x.type === "analysis"
+  const usedToday =
+    new Set(
+      history
+        .filter(x =>
+          x.date === today &&
+          x.type === "analysis"
+        )
+        .map(x => x.asset)
+    );
+
+  const candidates =
+    coins
+      .filter(c =>
+        !usedToday.has(c.asset)
       )
-      .map(x => x.asset)
+      .sort((a, b) => {
+        const scoreA =
+          Math.max(a.change, 0) *
+          Math.log10(
+            Math.max(a.volume, 1)
+          );
+
+        const scoreB =
+          Math.max(b.change, 0) *
+          Math.log10(
+            Math.max(b.volume, 1)
+          );
+
+        return scoreB - scoreA;
+      });
+
+  return (
+    candidates[0] ||
+    [...coins].sort(
+      (a, b) =>
+        b.change - a.change
+    )[0]
   );
-
-  const candidates = coins
-    .filter(c => !usedToday.has(c.asset))
-    .sort((a, b) => {
-      const scoreA =
-        Math.max(a.change, 0) *
-        Math.log10(Math.max(a.volume, 1));
-
-      const scoreB =
-        Math.max(b.change, 0) *
-        Math.log10(Math.max(b.volume, 1));
-
-      return scoreB - scoreA;
-    });
-
-  return candidates[0] ||
-    [...coins].sort((a, b) =>
-      b.change - a.change
-    )[0];
 }
 
-async function getKlines(symbol) {
+async function getKlines(
+  symbol,
+  interval = "1h",
+  limit = 100
+) {
   const data = await getJson(
-    `${API}/api/v3/klines?symbol=${symbol}&interval=1h&limit=72`
+    `${API}/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
   );
 
   return data.map(k => ({
@@ -233,51 +350,87 @@ async function getKlines(symbol) {
   }));
 }
 
-function analysisText(coin, candles) {
-  const closes = candles.map(x => x.close);
+function analysisText(
+  coin,
+  candles
+) {
+  const closes =
+    candles.map(x => x.close);
 
-  const price = closes.at(-1);
+  const price =
+    closes.at(-1);
 
-  const ema20 = ema(closes, 20);
-  const ema50 = ema(closes, 50);
+  const ema20 =
+    ema(closes, 20);
 
-  const sma20 = sma(closes, 20);
-  const sma50 = sma(closes, 50);
+  const ema50 =
+    ema(closes, 50);
 
-  const rsi14 = rsi(closes, 14);
+  const sma20 =
+    sma(closes, 20);
 
-  const high72 = Math.max(
-    ...candles.map(x => x.high)
-  );
+  const sma50 =
+    sma(closes, 50);
 
-  const low72 = Math.min(
-    ...candles.map(x => x.low)
-  );
+  const rsi14 =
+    rsi(closes, 14);
 
-  const last20 = candles.slice(-20);
+  const high72 =
+    Math.max(
+      ...candles.map(
+        x => x.high
+      )
+    );
 
-  const support = Math.min(
-    ...last20.map(x => x.low)
-  );
+  const low72 =
+    Math.min(
+      ...candles.map(
+        x => x.low
+      )
+    );
 
-  const resistance = Math.max(
-    ...last20.map(x => x.high)
-  );
+  const last20 =
+    candles.slice(-20);
+
+  const support =
+    Math.min(
+      ...last20.map(
+        x => x.low
+      )
+    );
+
+  const resistance =
+    Math.max(
+      ...last20.map(
+        x => x.high
+      )
+    );
 
   let trend = "NEUTRAL";
 
-  if (price > ema20 && ema20 > ema50) {
+  if (
+    price > ema20 &&
+    ema20 > ema50
+  ) {
     trend = "BULLISH";
-  } else if (price < ema20 && ema20 < ema50) {
+  } else if (
+    price < ema20 &&
+    ema20 < ema50
+  ) {
     trend = "BEARISH";
   }
 
   let momentum = "Neutral";
 
-  if (rsi14 >= 60) momentum = "Strong";
-  else if (rsi14 >= 52) momentum = "Positive";
-  else if (rsi14 <= 40) momentum = "Weak";
-  else if (rsi14 <= 48) momentum = "Negative";
+  if (rsi14 >= 60) {
+    momentum = "Strong";
+  } else if (rsi14 >= 52) {
+    momentum = "Positive";
+  } else if (rsi14 <= 40) {
+    momentum = "Weak";
+  } else if (rsi14 <= 48) {
+    momentum = "Negative";
+  }
 
   const trendEmoji =
     trend === "BULLISH"
@@ -293,7 +446,9 @@ function analysisText(coin, candles) {
       : "📉";
 
   const changeEmoji =
-    coin.change >= 0 ? "🟢" : "🔴";
+    coin.change >= 0
+      ? "🟢"
+      : "🔴";
 
   return `📊 $${coin.asset} Technical Analysis
 
@@ -313,13 +468,12 @@ ${momentumEmoji} Momentum: ${momentum}
 • SMA50: ${money(sma50)}
 
 📍 Key Levels
-🟢 Support 1: ${money(support)}
-🟢 72H Support: ${money(low72)}
-🔴 Resistance 1: ${money(resistance)}
-🔴 72H Resistance: ${money(high72)}
+🟢 Support: ${money(support)}
+🟢 72H Low: ${money(low72)}
+🔴 Resistance: ${money(resistance)}
+🔴 72H High: ${money(high72)}
 
-👀 What to watch
-Watch the reaction around ${money(support)}–${money(resistance)} and whether volume expands during the next breakout attempt.
+👀 Watch the reaction between ${money(support)} and ${money(resistance)}.
 
 🐂 Bullish Scenario
 A breakout above ${money(resistance)} with stronger volume could improve the short-term structure. 🚀
@@ -327,243 +481,223 @@ A breakout above ${money(resistance)} with stronger volume could improve the sho
 🐻 Bearish Scenario
 A break below ${money(support)} could increase selling pressure. ⚠️
 
-🧠 This is market analysis, not financial advice.
+🧠 Market analysis only — not financial advice.
 
-🤔 What level are you watching next for $${coin.asset}?
+🤔 What level are you watching for $${coin.asset}?
 
 #Crypto #Binance #${coin.asset} #TechnicalAnalysis`;
 }
 
 function topMoversPost(coins) {
-  const movers = [...coins]
-    .sort((a, b) => b.change - a.change)
-    .slice(0, 5);
+  const movers =
+    [...coins]
+      .sort(
+        (a, b) =>
+          b.change - a.change
+      )
+      .slice(0, 5);
 
-  const lines = movers.map((c, i) => {
-    const emoji =
-      c.change >= 0 ? "🟢" : "🔴";
-
-    return `${i + 1}. ${emoji} $${c.asset} ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%
-📊 Volume: ${compact(c.volume)}`;
-  });
+  const lines =
+    movers.map(
+      (c, i) =>
+        `${i + 1}. ${c.change >= 0 ? "🟢" : "🔴"} $${c.asset} ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
+    );
 
   const lead = movers[0];
 
   return `🔥 Binance Spot — Top Movers
 
-📈 The strongest Binance Spot movers right now:
+📈 Strongest movers right now:
 
-${lines.join("\n\n")}
+${lines.join("\n")}
 
-🔎 Percentage gains are more useful when viewed together with volume, liquidity and market structure.
+📊 These moves should be evaluated with volume and liquidity, not percentage change alone.
 
-⚡ Leading mover: $${lead.asset} at ${lead.change >= 0 ? "+" : ""}${lead.change.toFixed(2)}%
+⚡ Leading mover: $${lead.asset} ${lead.change >= 0 ? "+" : ""}${lead.change.toFixed(2)}%
 
-👀 Which mover are you watching?
+👀 Which mover has the most interesting setup?
 
-🤔 Which one has the most interesting setup?
+🤔 Which one are you watching?
 
 #Crypto #Binance #Altcoins #MarketUpdate`;
 }
 
-function marketUpdatePost(coins) {
-  const btc = coins.find(
-    x => x.asset === "BTC"
-  );
+function educationPost(topic) {
+  if (topic === "rsi") {
+    return `📚 Crypto Education — RSI
 
-  const eth = coins.find(
-    x => x.asset === "ETH"
-  );
+⚡ RSI helps measure momentum.
 
-  const top = [...coins]
-    .sort((a, b) => b.change - a.change)[0];
+🟢 Above 70: strong momentum / potentially overextended
+🟡 Around 50: balanced momentum
+🔴 Below 30: weak momentum / potentially oversold
 
-  return `🌐 Binance Spot Market Update
+📊 RSI should not be used alone.
 
-₿ $BTC:
-${btc
-      ? `${btc.change >= 0 ? "🟢" : "🔴"} ${btc.change >= 0 ? "+" : ""}${btc.change.toFixed(2)}%`
-      : "N/A"}
+🔎 Price structure, volume and trend can provide important confirmation.
 
-♦️ $ETH:
-${eth
-      ? `${eth.change >= 0 ? "🟢" : "🔴"} ${eth.change >= 0 ? "+" : ""}${eth.change.toFixed(2)}%`
-      : "N/A"}
+👀 The key is context.
 
-🔥 Top mover: $${top.asset}
-📈 24H Change: ${top.change >= 0 ? "+" : ""}${top.change.toFixed(2)}%
-💰 Volume: ${compact(top.volume)}
+🤔 Do you use RSI with another indicator?
 
-🔎 Volume and price structure remain important when evaluating momentum.
+#CryptoEducation #Binance #RSI #TechnicalAnalysis`;
+  }
 
-👀 Market conditions can change quickly.
+  if (topic === "breakout") {
+    return `📚 Crypto Education — Breakouts
 
-🤔 What are you watching most closely?
+🚀 A move above resistance is not automatically a confirmed breakout.
 
-#Crypto #Binance #Bitcoin #MarketUpdate`;
-}
+📊 Traders often watch:
 
-function educationPost() {
-  return `📚 Crypto Education
-
-🔎 Why can a breakout fail even when price moves above resistance?
-
-Because price alone isn't enough.
-
-📊 Traders often look for confirmation from:
-
-🟢 Trading volume
-🟢 Liquidity
-🟢 Retests
-📈 Higher-timeframe structure
+🟢 Volume expansion
+🟢 Candle close
+🟢 Retest of resistance
 ⚡ Momentum
+🔎 Higher-timeframe structure
 
-⚠️ A breakout with weak participation can become a false breakout.
+⚠️ Weak volume can increase the chance of a false breakout.
 
-🧠 The goal is to evaluate the whole structure rather than one candle.
+🤔 What confirmation do you wait for?
 
-👀 Confirmation matters.
+#CryptoEducation #Binance #Trading #Breakout`;
+  }
 
-🤔 What confirmation do you usually look for?
+  return `📚 Crypto Education — Candlesticks
 
-#CryptoEducation #Binance #Trading #TechnicalAnalysis`;
+🟢 Bullish candle: buyers controlled the period.
+
+🔴 Bearish candle: sellers controlled the period.
+
+📍 The wick shows where price traded but failed to hold.
+
+📊 Candle patterns become more useful when combined with:
+
+🔎 Support/resistance
+📈 Trend
+⚡ Volume
+👀 Higher-timeframe structure
+
+🤔 Which candle pattern do you watch most?
+
+#CryptoEducation #Binance #Candlesticks #Trading`;
 }
 
-/* ================================
-   AUTOMATIC IMAGE GENERATOR
-================================ */
+async function getNews() {
+  const queries = [
+    `"bitcoin" OR "ethereum" OR "cryptocurrency" OR "crypto market"`,
+    `"donald trump" AND (bitcoin OR crypto OR cryptocurrency)`,
+    `"federal reserve" AND (bitcoin OR crypto OR cryptocurrency)`,
+    `("bitcoin ETF" OR "ethereum ETF" OR "crypto ETF")`,
+    `("interest rates" OR inflation) AND (bitcoin OR crypto)`
+  ];
 
-async function createInfoImage({
-  title,
-  subtitle,
-  lines = [],
-  positive = false
-}) {
-  const width = 1400;
-  const height = 800;
+  const results = [];
 
-  const accent = positive
-    ? "#22c55e"
-    : "#facc15";
+  for (const query of queries) {
+    try {
+      const url =
+        `${GDELT}?query=${encodeURIComponent(query)}&mode=artlist&format=json&maxrecords=10&timespan=6h&sort=datedesc`;
 
-  const lineSvg = lines
-    .slice(0, 8)
-    .map((line, i) => {
-      const y = 260 + i * 55;
+      const data =
+        await getJson(url);
 
-      return `
-      <text
-        x="90"
-        y="${y}"
-        fill="#e5e7eb"
-        font-size="28"
-        font-family="Arial">
-        ${escapeXml(line)}
-      </text>`;
-    })
-    .join("");
+      if (Array.isArray(data.articles)) {
+        results.push(
+          ...data.articles
+        );
+      }
+    } catch (err) {
+      console.log(
+        "News search failed:",
+        err.message
+      );
+    }
+  }
 
-  const svg = `
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="${width}"
-    height="${height}"
-    viewBox="0 0 ${width} ${height}">
+  const blocked = [
+    "war",
+    "warfare",
+    "missile",
+    "military",
+    "battle",
+    "weapon",
+    "airstrike",
+    "invasion",
+    "bombing"
+  ];
 
-    <rect
-      width="100%"
-      height="100%"
-      fill="#111827"/>
+  const filtered =
+    results.filter(article => {
+      const text =
+        `${article.title || ""} ${article.url || ""}`
+          .toLowerCase();
 
-    <rect
-      x="60"
-      y="60"
-      width="1280"
-      height="680"
-      rx="28"
-      fill="#1f2937"
-      stroke="#374151"
-      stroke-width="2"/>
+      return (
+        article.socialimage &&
+        !blocked.some(
+          word =>
+            text.includes(word)
+        )
+      );
+    });
 
-    <rect
-      x="90"
-      y="100"
-      width="10"
-      height="100"
-      rx="5"
-      fill="${accent}"/>
+  const unique =
+    new Map();
 
-    <text
-      x="135"
-      y="140"
-      fill="#ffffff"
-      font-size="46"
-      font-family="Arial"
-      font-weight="bold">
-      ${escapeXml(title)}
-    </text>
+  for (const article of filtered) {
+    const key =
+      article.url ||
+      article.title;
 
-    <text
-      x="135"
-      y="185"
-      fill="#9ca3af"
-      font-size="24"
-      font-family="Arial">
-      ${escapeXml(subtitle)}
-    </text>
+    if (!unique.has(key)) {
+      unique.set(key, article);
+    }
+  }
 
-    ${lineSvg}
+  return [
+    ...unique.values()
+  ].slice(0, 30);
+}
 
-    <text
-      x="90"
-      y="700"
-      fill="#6b7280"
-      font-size="18"
-      font-family="Arial">
-      Binance Spot Market Data
-    </text>
+async function createNewsImage(
+  article
+) {
+  const ok =
+    await downloadImage(
+      article.socialimage,
+      IMAGE_FILE
+    );
 
-  </svg>
-  `;
-
-  fs.mkdirSync(path.dirname(IMAGE_FILE), {
-    recursive: true
-  });
-
-  await sharp(Buffer.from(svg))
-    .png()
-    .toFile(IMAGE_FILE);
+  if (!ok) {
+    return null;
+  }
 
   return IMAGE_FILE;
 }
 
-function escapeXml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
-
-/* ================================
-   REAL TECHNICAL CHART
-================================ */
-
-async function createAnalysisChart(symbol) {
-  const chartPath = path.join(
-    ROOT,
-    "bot",
-    "analysis-chart.png"
-  );
+function createAnalysisChart(
+  symbol
+) {
+  const chartPath =
+    path.join(
+      ROOT,
+      "bot",
+      "analysis-chart.png"
+    );
 
   try {
     execFileSync(
       "node",
       [
-        path.join(ROOT, "bot", "chart.mjs"),
+        path.join(
+          ROOT,
+          "bot",
+          "chart.mjs"
+        ),
         symbol,
-        chartPath
+        chartPath,
+        "analysis"
       ],
       {
         cwd: ROOT,
@@ -571,21 +705,123 @@ async function createAnalysisChart(symbol) {
       }
     );
 
-    if (fs.existsSync(chartPath)) {
+    if (
+      fs.existsSync(chartPath)
+    ) {
       return chartPath;
     }
-  } catch {
+  } catch (err) {
     console.log(
-      "Technical chart failed. Using automatic info image."
+      "Chart generation failed:",
+      err.message
     );
   }
 
   return null;
 }
 
-/* ================================
-   FIND BINANCE POSTER
-================================ */
+function createEducationImage(
+  topic
+) {
+  const imagePath =
+    path.join(
+      ROOT,
+      "bot",
+      "education.png"
+    );
+
+  try {
+    execFileSync(
+      "node",
+      [
+        path.join(
+          ROOT,
+          "bot",
+          "chart.mjs"
+        ),
+        topic,
+        imagePath,
+        "education"
+      ],
+      {
+        cwd: ROOT,
+        stdio: "inherit"
+      }
+    );
+
+    if (
+      fs.existsSync(imagePath)
+    ) {
+      return imagePath;
+    }
+  } catch (err) {
+    console.log(
+      "Education image failed:",
+      err.message
+    );
+  }
+
+  return null;
+}
+
+function createMoversImage(
+  coins
+) {
+  const imagePath =
+    path.join(
+      ROOT,
+      "bot",
+      "movers.png"
+    );
+
+  const movers =
+    [...coins]
+      .sort(
+        (a, b) =>
+          b.change - a.change
+      )
+      .slice(0, 5);
+
+  try {
+    execFileSync(
+      "node",
+      [
+        path.join(
+          ROOT,
+          "bot",
+          "chart.mjs"
+        ),
+        JSON.stringify(
+          movers.map(
+            x => ({
+              asset: x.asset,
+              change: x.change
+            })
+          )
+        ),
+        imagePath,
+        "movers"
+      ],
+      {
+        cwd: ROOT,
+        stdio: "inherit"
+      }
+    );
+
+    if (
+      fs.existsSync(imagePath)
+    ) {
+      return imagePath;
+    }
+  } catch (err) {
+    console.log(
+      "Movers image failed:",
+      err.message
+    );
+  }
+
+  return null;
+}
 
 function findPoster() {
   const locations = [
@@ -595,10 +831,18 @@ function findPoster() {
     "agent/skills/square-post/scripts/post-image.mjs"
   ];
 
-  for (const location of locations) {
-    const full = path.join(ROOT, location);
+  for (
+    const location of locations
+  ) {
+    const full =
+      path.join(
+        ROOT,
+        location
+      );
 
-    if (fs.existsSync(full)) {
+    if (
+      fs.existsSync(full)
+    ) {
       return full;
     }
   }
@@ -608,23 +852,21 @@ function findPoster() {
   );
 }
 
-/* ================================
-   PUBLISH
-================================ */
+function publish(
+  text,
+  imagePath
+) {
+  const poster =
+    findPoster();
 
-function publish(text, imagePath) {
-  const poster = findPoster();
-
-  if (!imagePath || !fs.existsSync(imagePath)) {
+  if (
+    !imagePath ||
+    !fs.existsSync(imagePath)
+  ) {
     throw new Error(
-      "A valid image is required for Binance Square."
+      "A valid image is required."
     );
   }
-
-  console.log(
-    "Publishing with image:",
-    imagePath
-  );
 
   execFileSync(
     "node",
@@ -643,20 +885,56 @@ function publish(text, imagePath) {
   );
 }
 
-/* ================================
-   MAIN
-================================ */
+function cleanup() {
+  const files = [
+    IMAGE_FILE,
+    path.join(
+      ROOT,
+      "bot",
+      "analysis-chart.png"
+    ),
+    path.join(
+      ROOT,
+      "bot",
+      "education.png"
+    ),
+    path.join(
+      ROOT,
+      "bot",
+      "movers.png"
+    )
+  ];
+
+  for (
+    const file of files
+  ) {
+    if (
+      fs.existsSync(file)
+    ) {
+      fs.unlinkSync(file);
+    }
+  }
+}
 
 async function main() {
-  console.log("================================");
-  console.log("Binance Square Auto Bot");
-  console.log("================================");
-
-  const history = loadHistory();
-
-  const slot = Math.floor(
-    Date.now() / SLOT_MS
+  console.log(
+    "================================"
   );
+  console.log(
+    "Binance Square Auto Bot 2.0"
+  );
+  console.log(
+    "================================"
+  );
+
+  const history =
+    loadHistory();
+
+  const slot =
+    Math.floor(
+      Date.now() /
+      SLOT_MS
+    );
 
   if (
     history.some(
@@ -664,12 +942,13 @@ async function main() {
     )
   ) {
     console.log(
-      "This 25-minute slot was already published."
+      "This slot was already published."
     );
     return;
   }
 
-  const coins = await getSpotCoins();
+  const coins =
+    await getSpotCoins();
 
   if (!coins.length) {
     throw new Error(
@@ -677,6 +956,10 @@ async function main() {
     );
   }
 
+  /*
+   * 4 analysis slots + 1 other slot
+   * = approximately 80% analysis.
+   */
   const slotInCycle =
     ((slot % 5) + 5) % 5;
 
@@ -685,20 +968,26 @@ async function main() {
   let asset = null;
   let image = null;
 
-  /* 80% ANALYSIS */
-
-  if (slotInCycle < 4) {
+  if (
+    slotInCycle < 4
+  ) {
     type = "analysis";
 
-    const coin = chooseCoin(
-      coins,
-      history
-    );
+    const coin =
+      chooseCoin(
+        coins,
+        history
+      );
 
-    asset = coin.asset;
+    asset =
+      coin.asset;
 
     const candles =
-      await getKlines(coin.symbol);
+      await getKlines(
+        coin.symbol,
+        "1h",
+        100
+      );
 
     text =
       analysisText(
@@ -707,108 +996,130 @@ async function main() {
       );
 
     image =
-      await createAnalysisChart(
+      createAnalysisChart(
         coin.symbol
       );
-
-    if (!image) {
-      image =
-        await createInfoImage({
-          title: `$${coin.asset} Technical Analysis`,
-          subtitle: "Binance Spot • 1H",
-          lines: [
-            `Price: ${money(coin.price)}`,
-            `24H Change: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%`,
-            `Volume: ${compact(coin.volume)}`,
-            `24H High: ${money(coin.high)}`,
-            `24H Low: ${money(coin.low)}`
-          ],
-          positive: coin.change >= 0
-        });
-    }
-  }
-
-  /* 20% OTHER */
-
-  else {
+  } else {
     type = "other";
 
     const cycle =
-      Math.floor(slot / 5);
+      Math.floor(
+        slot / 5
+      );
 
-    if (cycle % 2 === 0) {
-      text = topMoversPost(coins);
+    /*
+     * Other content rotation:
+     * News → Movers → Education
+     */
+    const mode =
+      cycle % 3;
 
-      const movers = [...coins]
-        .sort(
-          (a, b) =>
-            b.change - a.change
-        )
-        .slice(0, 5);
+    if (mode === 0) {
+      const news =
+        await getNews();
+
+      if (news.length) {
+        const article =
+          news[0];
+
+        text = `📰 Crypto News Update
+
+🔎 ${article.title}
+
+🌐 Source: ${article.domain || "News source"}
+
+📊 This development may be relevant to crypto-market sentiment and should be considered alongside price action and volume.
+
+👀 The market can react differently depending on the details and follow-up developments.
+
+🤔 How do you think this could affect the crypto market?
+
+#CryptoNews #Binance #Bitcoin #CryptoMarket`;
+
+        image =
+          await createNewsImage(
+            article
+          );
+      }
+
+      if (!text || !image) {
+        text =
+          topMoversPost(
+            coins
+          );
+
+        image =
+          createMoversImage(
+            coins
+          );
+      }
+    } else if (
+      mode === 1
+    ) {
+      text =
+        topMoversPost(
+          coins
+        );
 
       image =
-        await createInfoImage({
-          title: "🔥 Binance Top Movers",
-          subtitle: "Binance Spot • 24H",
-          lines: movers.map(
-            (c, i) =>
-              `${i + 1}. $${c.asset}  ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
-          ),
-          positive: true
-        });
+        createMoversImage(
+          coins
+        );
     } else {
-      text = educationPost();
+      const topics = [
+        "candlesticks",
+        "breakout",
+        "rsi"
+      ];
+
+      const topic =
+        topics[
+          cycle % topics.length
+        ];
+
+      text =
+        educationPost(
+          topic
+        );
 
       image =
-        await createInfoImage({
-          title: "📚 Crypto Education",
-          subtitle: "Understanding breakout confirmation",
-          lines: [
-            "🟢 Volume",
-            "🟢 Liquidity",
-            "🟢 Retests",
-            "📈 Market structure",
-            "⚡ Momentum",
-            "⚠️ Avoid relying on price alone"
-          ],
-          positive: false
-        });
+        createEducationImage(
+          topic
+        );
     }
   }
 
-  publish(text, image);
+  if (
+    !image ||
+    !fs.existsSync(image)
+  ) {
+    throw new Error(
+      "Could not create a valid post image."
+    );
+  }
+
+  publish(
+    text,
+    image
+  );
 
   history.push({
     slot,
-    date: new Date()
-      .toISOString()
-      .slice(0, 10),
-    time: new Date().toISOString(),
+    date:
+      new Date()
+        .toISOString()
+        .slice(0, 10),
+    time:
+      new Date().toISOString(),
     type,
     asset
   });
 
-  saveHistory(history);
+  saveHistory(
+    history
+  );
 
-  if (
-    image &&
-    fs.existsSync(image)
-  ) {
-    fs.unlinkSync(image);
-  }
-
-  const analysisChart =
-    path.join(
-      ROOT,
-      "bot",
-      "analysis-chart.png"
-    );
-
-  if (
-    fs.existsSync(analysisChart)
-  ) {
-    fs.unlinkSync(analysisChart);
-  }
+  cleanup();
 
   console.log(
     "✅ Published successfully."
