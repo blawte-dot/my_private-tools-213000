@@ -4,86 +4,103 @@ import { execFileSync } from "node:child_process";
 
 const BINANCE = "https://data-api.binance.vision";
 const ROOT = process.cwd();
-const HISTORY_FILE = path.join(ROOT, "data", "history.json");
 
-const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+const HISTORY = path.join(ROOT, "data", "history.json");
 
-async function get(url, options = {}) {
-  const res = await fetch(url, {
-    ...options,
+const MIN_VOLUME = 5_000_000;
+const SLOT_MS = 25 * 60 * 1000;
+
+async function api(url) {
+  const r = await fetch(url, {
     headers: {
-      "User-Agent": "binance-square-bot/1.0",
-      ...(options.headers || {})
+      "User-Agent": "binance-square-bot/1.0"
     }
   });
 
-  if (!res.ok) throw new Error(`HTTP ${res.status}: ${url}`);
-  return res.json();
+  if (!r.ok) {
+    throw new Error(`Binance API error ${r.status}`);
+  }
+
+  return r.json();
 }
 
-function num(v) {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : 0;
+function n(v) {
+  const x = Number(v);
+  return Number.isFinite(x) ? x : 0;
 }
 
-function money(v) {
-  const n = num(v);
-  if (n >= 1_000_000_000) return `$${(n / 1e9).toFixed(2)}B`;
-  if (n >= 1_000_000) return `$${(n / 1e6).toFixed(2)}M`;
-  if (n >= 1000) return `$${(n / 1000).toFixed(1)}K`;
-  if (n >= 1) return `$${n.toFixed(2)}`;
-  return `$${n.toPrecision(4)}`;
+function fmtPrice(v) {
+  const x = n(v);
+
+  if (x >= 1000) return x.toLocaleString(undefined, {
+    maximumFractionDigits: 2
+  });
+
+  if (x >= 1) return x.toFixed(4);
+
+  if (x >= 0.01) return x.toFixed(5);
+
+  return x.toPrecision(5);
 }
 
-function price(v) {
-  const n = num(v);
-  if (n >= 1000) return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
-  if (n >= 1) return n.toFixed(4);
-  if (n >= 0.01) return n.toFixed(5);
-  return n.toPrecision(5);
+function fmtMoney(v) {
+  const x = n(v);
+
+  if (x >= 1e9) return `$${(x / 1e9).toFixed(2)}B`;
+  if (x >= 1e6) return `$${(x / 1e6).toFixed(2)}M`;
+  if (x >= 1e3) return `$${(x / 1e3).toFixed(1)}K`;
+
+  return `$${x.toFixed(2)}`;
+}
+
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function currentSlot() {
+  return Math.floor(Date.now() / SLOT_MS);
 }
 
 function loadHistory() {
   try {
-    return JSON.parse(fs.readFileSync(HISTORY_FILE, "utf8"));
+    return JSON.parse(fs.readFileSync(HISTORY, "utf8"));
   } catch {
     return [];
   }
 }
 
 function saveHistory(history) {
-  fs.mkdirSync(path.dirname(HISTORY_FILE), { recursive: true });
-  fs.writeFileSync(HISTORY_FILE, JSON.stringify(history.slice(-500), null, 2));
+  fs.mkdirSync(path.dirname(HISTORY), { recursive: true });
+
+  fs.writeFileSync(
+    HISTORY,
+    JSON.stringify(history.slice(-1000), null, 2)
+  );
 }
 
-function todayUTC() {
-  return new Date().toISOString().slice(0, 10);
+function alreadyPosted(history, slot) {
+  return history.some(x => x.slot === slot);
 }
 
-function usedToday(history) {
-  const today = todayUTC();
+function usedCoinsToday(history) {
+  const d = today();
+
   return new Set(
     history
-      .filter(x => x.date === today)
+      .filter(x => x.date === d)
       .map(x => x.symbol)
       .filter(Boolean)
   );
 }
 
-function sma(values, period) {
-  if (values.length < period) return null;
-  const a = values.slice(-period);
-  return a.reduce((x, y) => x + y, 0) / period;
-}
-
-async function getMarket() {
-  const [info, tickers] = await Promise.all([
-    get(`${BINANCE}/api/v3/exchangeInfo`),
-    get(`${BINANCE}/api/v3/ticker/24hr`)
+async function getSpotCoins() {
+  const [exchange, tickers] = await Promise.all([
+    api(`${BINANCE}/api/v3/exchangeInfo`),
+    api(`${BINANCE}/api/v3/ticker/24hr`)
   ]);
 
-  const spot = new Set(
-    info.symbols
+  const tradable = new Set(
+    exchange.symbols
       .filter(s =>
         s.status === "TRADING" &&
         s.quoteAsset === "USDT" &&
@@ -94,238 +111,390 @@ async function getMarket() {
 
   return tickers
     .filter(t =>
-      spot.has(t.symbol) &&
-      !t.symbol.endsWith("UPUSDT") &&
-      !t.symbol.endsWith("DOWNUSDT") &&
-      num(t.quoteVolume) >= 5_000_000
+      tradable.has(t.symbol) &&
+      n(t.quoteVolume) >= MIN_VOLUME &&
+      !t.symbol.includes("UP") &&
+      !t.symbol.includes("DOWN") &&
+      !t.symbol.includes("BULL") &&
+      !t.symbol.includes("BEAR")
     )
     .map(t => ({
       symbol: t.symbol,
-      asset: t.symbol.replace("USDT", ""),
-      price: num(t.lastPrice),
-      change: num(t.priceChangePercent),
-      volume: num(t.quoteVolume),
-      high: num(t.highPrice),
-      low: num(t.lowPrice),
-      trades: num(t.count)
+      asset: t.symbol.replace(/USDT$/, ""),
+      price: n(t.lastPrice),
+      change: n(t.priceChangePercent),
+      volume: n(t.quoteVolume),
+      high: n(t.highPrice),
+      low: n(t.lowPrice),
+      trades: n(t.count)
     }));
 }
 
-async function getKlines(symbol) {
-  const data = await get(
-    `${BINANCE}/api/v3/klines?symbol=${symbol}&interval=1h&limit=48`
+async function getCandles(symbol) {
+  const data = await api(
+    `${BINANCE}/api/v3/klines?symbol=${symbol}USDT&interval=1h&limit=72`
   );
 
   return data.map(k => ({
-    time: k[0],
-    open: num(k[1]),
-    high: num(k[2]),
-    low: num(k[3]),
-    close: num(k[4]),
-    volume: num(k[5])
+    time: n(k[0]),
+    open: n(k[1]),
+    high: n(k[2]),
+    low: n(k[3]),
+    close: n(k[4]),
+    volume: n(k[5])
   }));
 }
 
-function scoreCoin(c) {
-  const momentum = Math.max(c.change, 0);
-  const volumeScore = Math.log10(Math.max(c.volume, 1));
-  return momentum * volumeScore;
+function sma(values, period) {
+  if (values.length < period) return null;
+
+  const a = values.slice(-period);
+
+  return a.reduce((sum, value) => sum + value, 0) / period;
+}
+
+function ema(values, period) {
+  if (values.length < period) return null;
+
+  const multiplier = 2 / (period + 1);
+
+  let result =
+    values
+      .slice(0, period)
+      .reduce((a, b) => a + b, 0) / period;
+
+  for (let i = period; i < values.length; i++) {
+    result =
+      (values[i] - result) * multiplier + result;
+  }
+
+  return result;
+}
+
+function rsi(values, period = 14) {
+  if (values.length <= period) return null;
+
+  let gains = 0;
+  let losses = 0;
+
+  for (let i = 1; i <= period; i++) {
+    const change = values[i] - values[i - 1];
+
+    if (change >= 0) gains += change;
+    else losses -= change;
+  }
+
+  let avgGain = gains / period;
+  let avgLoss = losses / period;
+
+  for (let i = period + 1; i < values.length; i++) {
+    const change = values[i] - values[i - 1];
+
+    const gain = Math.max(change, 0);
+    const loss = Math.max(-change, 0);
+
+    avgGain =
+      ((avgGain * (period - 1)) + gain) / period;
+
+    avgLoss =
+      ((avgLoss * (period - 1)) + loss) / period;
+  }
+
+  if (avgLoss === 0) return 100;
+
+  const rs = avgGain / avgLoss;
+
+  return 100 - (100 / (1 + rs));
 }
 
 function chooseCoin(coins, history) {
-  const used = usedToday(history);
+  const used = usedCoinsToday(history);
 
-  const candidates = coins
-    .filter(c => c.change > 1)
-    .sort((a, b) => scoreCoin(b) - scoreCoin(a));
+  const scored = coins
+    .map(c => {
+      const momentum = Math.max(c.change, 0);
+      const volume = Math.log10(Math.max(c.volume, 1));
 
-  const fresh = candidates.find(c => !used.has(c.asset));
-  return fresh || candidates[0];
+      return {
+        ...c,
+        score: momentum * volume
+      };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  const unused = scored.filter(c => !used.has(c.asset));
+
+  return unused[0] || scored[0];
 }
 
-function trend(closes) {
-  const s8 = sma(closes, 8);
-  const s20 = sma(closes, 20);
+function marketDirection(closes) {
+  const e20 = ema(closes, 20);
+  const e50 = ema(closes, 50);
+  const last = closes.at(-1);
 
-  if (s8 > s20) return "bullish";
-  if (s8 < s20) return "bearish";
-  return "neutral";
+  if (last > e20 && e20 > e50) return "BULLISH";
+  if (last < e20 && e20 < e50) return "BEARISH";
+
+  return "MIXED";
+}
+
+function technicalPost(coin, candles) {
+  const closes = candles.map(x => x.close);
+
+  const last = closes.at(-1);
+
+  const sma20 = sma(closes, 20);
+  const sma50 = sma(closes, 50);
+
+  const ema20 = ema(closes, 20);
+  const ema50 = ema(closes, 50);
+
+  const rsi14 = rsi(closes, 14);
+
+  const high24 = Math.max(...candles.slice(-24).map(x => x.high));
+  const low24 = Math.min(...candles.slice(-24).map(x => x.low));
+
+  const high72 = Math.max(...candles.map(x => x.high));
+  const low72 = Math.min(...candles.map(x => x.low));
+
+  const direction = marketDirection(closes);
+
+  let rsiText = "neutral";
+
+  if (rsi14 >= 70) rsiText = "overbought";
+  else if (rsi14 <= 30) rsiText = "oversold";
+
+  const aboveEma20 = last > ema20;
+
+  const momentum =
+    direction === "BULLISH"
+      ? "bullish"
+      : direction === "BEARISH"
+        ? "bearish"
+        : "mixed";
+
+  return `📊 $${coin.asset} Technical Analysis
+
+Price: $${fmtPrice(last)}
+24H: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%
+24H Volume: ${fmtMoney(coin.volume)}
+
+📈 Market structure
+Trend: ${direction}
+Momentum: ${momentum}
+RSI(14): ${rsi14?.toFixed(1)} — ${rsiText}
+
+Moving averages:
+• EMA20: $${fmtPrice(ema20)}
+• EMA50: $${fmtPrice(ema50)}
+• SMA20: $${fmtPrice(sma20)}
+• SMA50: $${fmtPrice(sma50)}
+
+📍 Key levels
+24H High: $${fmtPrice(high24)}
+24H Low: $${fmtPrice(low24)}
+72H Resistance: $${fmtPrice(high72)}
+72H Support: $${fmtPrice(low72)}
+
+🔎 What to watch
+
+${aboveEma20
+  ? `$${coin.asset} is currently above EMA20, keeping short-term momentum constructive.`
+  : `$${coin.asset} is currently below EMA20, so short-term momentum remains under pressure.`}
+
+🐂 Bull scenario:
+A move above the recent resistance with stronger volume could confirm improving momentum.
+
+🐻 Bear scenario:
+A break below the recent support could weaken the current structure.
+
+This is market analysis, not financial advice.
+
+What level are you watching next for $${coin.asset}?
+
+#Crypto #Binance #${coin.asset} #TechnicalAnalysis`;
+}
+
+function topMoversPost(coins) {
+  const gainers = [...coins]
+    .filter(x => x.change > 0)
+    .sort((a, b) => b.change - a.change)
+    .slice(0, 7);
+
+  return `🔥 Binance Spot — Top Gainers
+
+${gainers.map((x, i) =>
+  `${i + 1}. $${x.asset}  +${x.change.toFixed(2)}%
+   Volume: ${fmtMoney(x.volume)}`
+).join("\n\n")}
+
+Strong percentage gains can attract attention, but momentum should be evaluated together with volume, liquidity and market structure.
+
+Which $TOKEN is showing the most interesting setup to you?
+
+#Crypto #Binance #Altcoins #MarketUpdate`;
+}
+
+function educationPost() {
+  return `📚 Crypto Education
+
+Why can a breakout fail even when the price moves above resistance?
+
+Because price alone is not enough.
+
+Traders often look for confirmation from:
+
+• Trading volume
+• Liquidity
+• Retests
+• Higher-timeframe structure
+• Momentum indicators
+
+A breakout with weak participation can quickly turn into a false breakout.
+
+The important question is not only "Did price break resistance?"
+
+It is also:
+
+"Did the market support the move?"
+
+What confirmation do you usually look for?
+
+#CryptoEducation #Binance #Trading #TechnicalAnalysis`;
 }
 
 async function createChart(symbol) {
-  const chart = path.join(ROOT, "bot", "chart.mjs");
-  const output = path.join(ROOT, "bot", `${symbol}-${Date.now()}.png`);
+  const script = path.join(ROOT, "bot", "chart.mjs");
+
+  const output = path.join(
+    ROOT,
+    "bot",
+    `${symbol}-${Date.now()}.png`
+  );
 
   execFileSync(
     process.execPath,
-    [chart, symbol, output],
+    [script, symbol, output],
     { stdio: "inherit" }
   );
 
   return output;
 }
 
-function postText(c, candles) {
-  const closes = candles.map(x => x.close);
-  const sma8 = sma(closes, 8);
-  const sma20 = sma(closes, 20);
-  const hi = Math.max(...candles.map(x => x.high));
-  const lo = Math.min(...candles.map(x => x.low));
-  const t = trend(closes);
-
-  const direction =
-    t === "bullish"
-      ? "Short-term momentum is bullish"
-      : t === "bearish"
-        ? "Short-term momentum is weakening"
-        : "Short-term momentum is mixed";
-
-  const resistance = hi;
-  const support = lo;
-
-  return `📊 $${c.asset} — 48H Technical Watch
-
-Price: $${price(c.price)}
-24H change: ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%
-24H volume: ${money(c.volume)}
-
-${direction}.
-
-48H range:
-• High: $${price(resistance)}
-• Low: $${price(support)}
-
-Moving averages:
-• SMA 8H: $${price(sma8)}
-• SMA 20H: $${price(sma20)}
-
-🔎 Key levels
-Support: $${price(support)}
-Resistance: $${price(resistance)}
-
-🐂 Bull case:
-A sustained move above resistance with strong volume could strengthen the current momentum.
-
-🐻 Bear case:
-A loss of support could signal a deeper pullback and weaker short-term structure.
-
-This is market analysis, not financial advice.
-
-What level would you watch next for $${c.asset}?
-
-#Crypto #Binance #${c.asset} #TechnicalAnalysis`;
-}
-
-function postMarketUpdate(coins) {
-  const top = [...coins].sort((a, b) => b.change - a.change).slice(0, 5);
-
-  return `🔥 Binance Spot — Top Movers
-
-${top.map((x, i) =>
-  `${i + 1}. $${x.asset}: ${x.change >= 0 ? "+" : ""}${x.change.toFixed(2)}% | Volume ${money(x.volume)}`
-).join("\n")}
-
-The strongest movers are showing elevated momentum, but percentage gains alone do not confirm a sustainable trend.
-
-Always check volume, liquidity and market structure before drawing conclusions.
-
-Which mover are you watching today?
-
-#Crypto #Binance #MarketUpdate #Altcoins`;
-}
-
-function postEducation() {
-  return `📚 Crypto Education: Why volume matters
-
-Price tells you where the market moved.
-
-Volume tells you how much activity supported that move.
-
-A breakout with expanding volume can be more meaningful than the same breakout on weak volume. But volume by itself is not a guarantee that a move will continue.
-
-A useful checklist:
-
-• Price direction
-• Volume trend
-• Support/resistance
-• Liquidity
-• Higher-timeframe structure
-
-Which indicator do you rely on most when confirming a breakout?
-
-#CryptoEducation #Binance #Trading #Crypto`;
-}
-
-async function main() {
-  const history = loadHistory();
-  const coins = await getMarket();
-
-  if (!coins.length) throw new Error("No Binance Spot USDT markets found.");
-
-  const coin = chooseCoin(coins, history);
-  const candles = await getKlines(coin.symbol);
-
-  const hour = new Date().getUTCHours();
-
-  let text;
-  let image = null;
-
-  // Rotate content so the account does not publish the same type every hour.
-  if (hour % 6 === 0) {
-    text = postMarketUpdate(coins);
-  } else if (hour % 7 === 0) {
-    text = postEducation();
-  } else {
-    text = postText(coin, candles);
-    image = await createChart(coin.symbol);
-  }
-
-  // Locate the official Binance Square posting script.
-  const candidates = [
+function findPoster() {
+  const possible = [
     ".agents/skills/binance/square-post/scripts/post-image.mjs",
     "agent/skills/binance/square-post/scripts/post-image.mjs",
     ".agents/skills/square-post/scripts/post-image.mjs",
     "agent/skills/square-post/scripts/post-image.mjs"
   ];
 
-  const poster = candidates
+  return possible
     .map(x => path.join(ROOT, x))
     .find(fs.existsSync);
+}
+
+async function main() {
+  const history = loadHistory();
+
+  const slot = currentSlot();
+
+  if (alreadyPosted(history, slot)) {
+    console.log("Already published in this 25-minute slot.");
+    return;
+  }
+
+  const coins = await getSpotCoins();
+
+  if (!coins.length) {
+    throw new Error("No suitable Binance Spot markets found.");
+  }
+
+  const coin = chooseCoin(coins, history);
+
+  const candles = await getCandles(coin.symbol);
+
+  /*
+    80% technical analysis
+    20% other crypto content
+
+    4 analysis slots
+    1 other-content slot
+  */
+
+  const mode = slot % 5;
+
+  let text;
+  let image = null;
+  let type;
+
+  if (mode < 4) {
+    text = technicalPost(coin, candles);
+
+    image = await createChart(coin.asset);
+
+    type = "technical-analysis";
+  } else {
+    const contentType = Math.floor(slot / 5) % 2;
+
+    if (contentType === 0) {
+      text = topMoversPost(coins);
+      type = "market-update";
+    } else {
+      text = educationPost();
+      type = "education";
+    }
+  }
+
+  const poster = findPoster();
 
   if (!poster) {
-    throw new Error("Official Binance Square post-image.mjs was not found.");
+    throw new Error(
+      "Binance Square post-image.mjs was not found."
+    );
   }
 
-  const args = ["--text", text];
+  const args = [
+    "--text",
+    text
+  ];
 
-  if (image && fs.existsSync(image)) {
-    args.push("--images", image);
+  if (image) {
+    args.push(
+      "--images",
+      image
+    );
   }
 
-  execFileSync(process.execPath, [poster, ...args], {
-    stdio: "inherit",
-    env: process.env
-  });
+  console.log(`Publishing ${type}...`);
+
+  execFileSync(
+    process.execPath,
+    [poster, ...args],
+    {
+      stdio: "inherit",
+      env: process.env
+    }
+  );
 
   history.push({
-    date: todayUTC(),
+    slot,
+    date: today(),
     timestamp: new Date().toISOString(),
     symbol: coin.asset,
-    type: image ? "technical-analysis" : "market-content"
+    type
   });
 
   saveHistory(history);
 
-  if (image) {
-    try {
-      fs.unlinkSync(image);
-    } catch {}
+  if (image && fs.existsSync(image)) {
+    fs.unlinkSync(image);
   }
 
-  await sleep(500);
+  console.log("Published successfully.");
 }
 
-main().catch(err => {
-  console.error(err);
+main().catch(error => {
+  console.error(error);
   process.exit(1);
 });
