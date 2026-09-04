@@ -1,326 +1,331 @@
-import fs from "fs";
-import path from "path";
-import { execFileSync } from "child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { execFileSync } from "node:child_process";
 
+const BINANCE = "https://data-api.binance.vision";
 const ROOT = process.cwd();
-const BASE = "https://data-api.binance.vision";
-
 const HISTORY_FILE = path.join(ROOT, "data", "history.json");
-const CHART_FILE = path.join(ROOT, "bot", "chart.mjs");
+
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+async function get(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      "User-Agent": "binance-square-bot/1.0",
+      ...(options.headers || {})
+    }
+  });
+
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${url}`);
+  return res.json();
+}
+
+function num(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function money(v) {
+  const n = num(v);
+  if (n >= 1_000_000_000) return `$${(n / 1e9).toFixed(2)}B`;
+  if (n >= 1_000_000) return `$${(n / 1e6).toFixed(2)}M`;
+  if (n >= 1000) return `$${(n / 1000).toFixed(1)}K`;
+  if (n >= 1) return `$${n.toFixed(2)}`;
+  return `$${n.toPrecision(4)}`;
+}
+
+function price(v) {
+  const n = num(v);
+  if (n >= 1000) return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  if (n >= 1) return n.toFixed(4);
+  if (n >= 0.01) return n.toFixed(5);
+  return n.toPrecision(5);
+}
 
 function loadHistory() {
   try {
-    return JSON.parse(
-      fs.readFileSync(HISTORY_FILE, "utf8")
-    );
+    return JSON.parse(fs.readFileSync(HISTORY_FILE, "utf8"));
   } catch {
     return [];
   }
 }
 
 function saveHistory(history) {
-  fs.mkdirSync(
-    path.dirname(HISTORY_FILE),
-    { recursive: true }
-  );
+  fs.mkdirSync(path.dirname(HISTORY_FILE), { recursive: true });
+  fs.writeFileSync(HISTORY_FILE, JSON.stringify(history.slice(-500), null, 2));
+}
 
-  fs.writeFileSync(
-    HISTORY_FILE,
-    JSON.stringify(history, null, 2)
+function todayUTC() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function usedToday(history) {
+  const today = todayUTC();
+  return new Set(
+    history
+      .filter(x => x.date === today)
+      .map(x => x.symbol)
+      .filter(Boolean)
   );
 }
 
-async function api(endpoint) {
-  const response = await fetch(`${BASE}${endpoint}`);
-
-  if (!response.ok) {
-    throw new Error(
-      `Binance API error: ${response.status}`
-    );
-  }
-
-  return response.json();
+function sma(values, period) {
+  if (values.length < period) return null;
+  const a = values.slice(-period);
+  return a.reduce((x, y) => x + y, 0) / period;
 }
 
-function findScript(name) {
-  const candidates = [
-    path.join(
-      ROOT,
-      `.agents/skills/square-post/scripts/${name}`
-    ),
-    path.join(
-      ROOT,
-      `agent/skills/square-post/scripts/${name}`
-    ),
-    path.join(
-      ROOT,
-      `../.agents/skills/square-post/scripts/${name}`
-    ),
-    path.join(
-      ROOT,
-      `../agent/skills/square-post/scripts/${name}`
+async function getMarket() {
+  const [info, tickers] = await Promise.all([
+    get(`${BINANCE}/api/v3/exchangeInfo`),
+    get(`${BINANCE}/api/v3/ticker/24hr`)
+  ]);
+
+  const spot = new Set(
+    info.symbols
+      .filter(s =>
+        s.status === "TRADING" &&
+        s.quoteAsset === "USDT" &&
+        s.isSpotTradingAllowed === true
+      )
+      .map(s => s.symbol)
+  );
+
+  return tickers
+    .filter(t =>
+      spot.has(t.symbol) &&
+      !t.symbol.endsWith("UPUSDT") &&
+      !t.symbol.endsWith("DOWNUSDT") &&
+      num(t.quoteVolume) >= 5_000_000
     )
-  ];
-
-  for (const file of candidates) {
-    if (fs.existsSync(file)) {
-      return file;
-    }
-  }
-
-  throw new Error(`${name} not found`);
+    .map(t => ({
+      symbol: t.symbol,
+      asset: t.symbol.replace("USDT", ""),
+      price: num(t.lastPrice),
+      change: num(t.priceChangePercent),
+      volume: num(t.quoteVolume),
+      high: num(t.highPrice),
+      low: num(t.lowPrice),
+      trades: num(t.count)
+    }));
 }
 
-function createChart(symbol, output) {
+async function getKlines(symbol) {
+  const data = await get(
+    `${BINANCE}/api/v3/klines?symbol=${symbol}&interval=1h&limit=48`
+  );
+
+  return data.map(k => ({
+    time: k[0],
+    open: num(k[1]),
+    high: num(k[2]),
+    low: num(k[3]),
+    close: num(k[4]),
+    volume: num(k[5])
+  }));
+}
+
+function scoreCoin(c) {
+  const momentum = Math.max(c.change, 0);
+  const volumeScore = Math.log10(Math.max(c.volume, 1));
+  return momentum * volumeScore;
+}
+
+function chooseCoin(coins, history) {
+  const used = usedToday(history);
+
+  const candidates = coins
+    .filter(c => c.change > 1)
+    .sort((a, b) => scoreCoin(b) - scoreCoin(a));
+
+  const fresh = candidates.find(c => !used.has(c.asset));
+  return fresh || candidates[0];
+}
+
+function trend(closes) {
+  const s8 = sma(closes, 8);
+  const s20 = sma(closes, 20);
+
+  if (s8 > s20) return "bullish";
+  if (s8 < s20) return "bearish";
+  return "neutral";
+}
+
+async function createChart(symbol) {
+  const chart = path.join(ROOT, "bot", "chart.mjs");
+  const output = path.join(ROOT, "bot", `${symbol}-${Date.now()}.png`);
+
   execFileSync(
     process.execPath,
-    [CHART_FILE, symbol, output],
-    {
-      stdio: "inherit"
-    }
+    [chart, symbol, output],
+    { stdio: "inherit" }
   );
+
+  return output;
 }
 
-function publishImage(script, text, image) {
-  execFileSync(
-    process.execPath,
-    [
-      script,
-      "--text",
-      text,
-      "--images",
-      image
-    ],
-    {
-      stdio: "inherit",
-      env: process.env
-    }
-  );
+function postText(c, candles) {
+  const closes = candles.map(x => x.close);
+  const sma8 = sma(closes, 8);
+  const sma20 = sma(closes, 20);
+  const hi = Math.max(...candles.map(x => x.high));
+  const lo = Math.min(...candles.map(x => x.low));
+  const t = trend(closes);
+
+  const direction =
+    t === "bullish"
+      ? "Short-term momentum is bullish"
+      : t === "bearish"
+        ? "Short-term momentum is weakening"
+        : "Short-term momentum is mixed";
+
+  const resistance = hi;
+  const support = lo;
+
+  return `📊 $${c.asset} — 48H Technical Watch
+
+Price: $${price(c.price)}
+24H change: ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%
+24H volume: ${money(c.volume)}
+
+${direction}.
+
+48H range:
+• High: $${price(resistance)}
+• Low: $${price(support)}
+
+Moving averages:
+• SMA 8H: $${price(sma8)}
+• SMA 20H: $${price(sma20)}
+
+🔎 Key levels
+Support: $${price(support)}
+Resistance: $${price(resistance)}
+
+🐂 Bull case:
+A sustained move above resistance with strong volume could strengthen the current momentum.
+
+🐻 Bear case:
+A loss of support could signal a deeper pullback and weaker short-term structure.
+
+This is market analysis, not financial advice.
+
+What level would you watch next for $${c.asset}?
+
+#Crypto #Binance #${c.asset} #TechnicalAnalysis`;
 }
 
-function formatPrice(value) {
-  if (value >= 1000) return value.toFixed(0);
-  if (value >= 1) return value.toFixed(2);
-  if (value >= 0.01) return value.toFixed(4);
-  return value.toFixed(6);
+function postMarketUpdate(coins) {
+  const top = [...coins].sort((a, b) => b.change - a.change).slice(0, 5);
+
+  return `🔥 Binance Spot — Top Movers
+
+${top.map((x, i) =>
+  `${i + 1}. $${x.asset}: ${x.change >= 0 ? "+" : ""}${x.change.toFixed(2)}% | Volume ${money(x.volume)}`
+).join("\n")}
+
+The strongest movers are showing elevated momentum, but percentage gains alone do not confirm a sustainable trend.
+
+Always check volume, liquidity and market structure before drawing conclusions.
+
+Which mover are you watching today?
+
+#Crypto #Binance #MarketUpdate #Altcoins`;
+}
+
+function postEducation() {
+  return `📚 Crypto Education: Why volume matters
+
+Price tells you where the market moved.
+
+Volume tells you how much activity supported that move.
+
+A breakout with expanding volume can be more meaningful than the same breakout on weak volume. But volume by itself is not a guarantee that a move will continue.
+
+A useful checklist:
+
+• Price direction
+• Volume trend
+• Support/resistance
+• Liquidity
+• Higher-timeframe structure
+
+Which indicator do you rely on most when confirming a breakout?
+
+#CryptoEducation #Binance #Trading #Crypto`;
 }
 
 async function main() {
   const history = loadHistory();
+  const coins = await getMarket();
 
-  const today =
-    new Date().toISOString().slice(0, 10);
+  if (!coins.length) throw new Error("No Binance Spot USDT markets found.");
 
-  const usedToday = new Set(
-    history
-      .filter(item => item.date === today)
-      .map(item => item.symbol)
-  );
+  const coin = chooseCoin(coins, history);
+  const candles = await getKlines(coin.symbol);
 
-  const exchangeInfo =
-    await api("/api/v3/exchangeInfo");
+  const hour = new Date().getUTCHours();
 
-  const tickers =
-    await api("/api/v3/ticker/24hr");
+  let text;
+  let image = null;
 
-  const tradable = new Set(
-    exchangeInfo.symbols
-      .filter(symbol =>
-        symbol.status === "TRADING" &&
-        symbol.quoteAsset === "USDT" &&
-        symbol.isSpotTradingAllowed === true
-      )
-      .map(symbol => symbol.baseAsset)
-  );
-
-  const candidates = tickers
-    .filter(ticker => {
-      if (!ticker.symbol.endsWith("USDT")) {
-        return false;
-      }
-
-      const base =
-        ticker.symbol.replace("USDT", "");
-
-      const change =
-        Number(ticker.priceChangePercent);
-
-      const volume =
-        Number(ticker.quoteVolume);
-
-      return (
-        tradable.has(base) &&
-        !usedToday.has(base) &&
-        change > 1 &&
-        volume >= 5000000
-      );
-    })
-    .sort((a, b) => {
-      const scoreA =
-        Number(a.priceChangePercent) *
-        Math.log10(
-          Math.max(Number(a.quoteVolume), 1)
-        );
-
-      const scoreB =
-        Number(b.priceChangePercent) *
-        Math.log10(
-          Math.max(Number(b.quoteVolume), 1)
-        );
-
-      return scoreB - scoreA;
-    });
-
-  if (!candidates.length) {
-    throw new Error(
-      "No suitable Binance Spot coin found"
-    );
+  // Rotate content so the account does not publish the same type every hour.
+  if (hour % 6 === 0) {
+    text = postMarketUpdate(coins);
+  } else if (hour % 7 === 0) {
+    text = postEducation();
+  } else {
+    text = postText(coin, candles);
+    image = await createChart(coin.symbol);
   }
 
-  const selected = candidates[0];
+  // Locate the official Binance Square posting script.
+  const candidates = [
+    ".agents/skills/binance/square-post/scripts/post-image.mjs",
+    "agent/skills/binance/square-post/scripts/post-image.mjs",
+    ".agents/skills/square-post/scripts/post-image.mjs",
+    "agent/skills/square-post/scripts/post-image.mjs"
+  ];
 
-  const symbol =
-    selected.symbol.replace("USDT", "");
+  const poster = candidates
+    .map(x => path.join(ROOT, x))
+    .find(fs.existsSync);
 
-  const price =
-    Number(selected.lastPrice);
-
-  const change =
-    Number(selected.priceChangePercent);
-
-  const volume =
-    Number(selected.quoteVolume);
-
-  const high =
-    Number(selected.highPrice);
-
-  const low =
-    Number(selected.lowPrice);
-
-  const klines = await api(
-    `/api/v3/klines?symbol=${selected.symbol}&interval=1h&limit=48`
-  );
-
-  const closes =
-    klines.map(k => Number(k[4]));
-
-  const sma = period => {
-    const values =
-      closes.slice(-period);
-
-    return (
-      values.reduce(
-        (sum, value) => sum + value,
-        0
-      ) / values.length
-    );
-  };
-
-  const sma8 = sma(8);
-  const sma20 = sma(20);
-
-  const recentHigh =
-    Math.max(...closes);
-
-  const recentLow =
-    Math.min(...closes);
-
-  let bias = "Mixed";
-
-  if (sma8 > sma20 && change > 0) {
-    bias = "Bullish";
-  } else if (
-    sma8 < sma20 &&
-    change < 0
-  ) {
-    bias = "Bearish";
+  if (!poster) {
+    throw new Error("Official Binance Square post-image.mjs was not found.");
   }
 
-  const bullishScenario =
-    `A break above $${formatPrice(recentHigh)} could strengthen momentum.`;
+  const args = ["--text", text];
 
-  const bearishScenario =
-    `A move below $${formatPrice(recentLow)} could increase downside risk.`;
+  if (image && fs.existsSync(image)) {
+    args.push("--images", image);
+  }
 
-  const question =
-    bias === "Bullish"
-      ? `Can $${symbol} break the recent high?`
-      : `Can $${symbol} recover its short-term trend?`;
-
-  const text = `🔥 $${symbol} — Binance Market Update
-
-$${symbol} is showing ${change >= 0 ? "positive" : "negative"} momentum on Binance Spot.
-
-💰 Price: $${formatPrice(price)}
-📈 24H Change: ${change >= 0 ? "+" : ""}${change.toFixed(2)}%
-💧 24H Volume: $${(volume / 1000000).toFixed(1)}M
-🔺 24H High: $${formatPrice(high)}
-🔻 24H Low: $${formatPrice(low)}
-
-📊 Technical Snapshot
-
-• SMA 8: $${formatPrice(sma8)}
-• SMA 20: $${formatPrice(sma20)}
-• 48H High: $${formatPrice(recentHigh)}
-• 48H Low: $${formatPrice(recentLow)}
-• Bias: ${bias}
-
-🟢 Bullish scenario:
-${bullishScenario}
-
-🔴 Risk scenario:
-${bearishScenario}
-
-🎯 Key level:
-$${formatPrice(recentHigh)}
-
-❓ ${question}
-
-#${symbol} #Crypto #Binance #Trading
-
-⚠️ Market analysis only. Not financial advice.`;
-
-  const chartPath =
-    path.join(
-      ROOT,
-      `chart-${symbol}-${Date.now()}.png`
-    );
-
-  createChart(
-    symbol,
-    chartPath
-  );
-
-  const imageScript =
-    findScript("post-image.mjs");
-
-  publishImage(
-    imageScript,
-    text,
-    chartPath
-  );
-
-  try {
-    fs.unlinkSync(chartPath);
-  } catch {}
+  execFileSync(process.execPath, [poster, ...args], {
+    stdio: "inherit",
+    env: process.env
+  });
 
   history.push({
-    date: today,
+    date: todayUTC(),
     timestamp: new Date().toISOString(),
-    symbol,
-    type: "technical_analysis",
-    price,
-    change
+    symbol: coin.asset,
+    type: image ? "technical-analysis" : "market-content"
   });
 
   saveHistory(history);
 
-  console.log(
-    `Published $${symbol} successfully.`
-  );
+  if (image) {
+    try {
+      fs.unlinkSync(image);
+    } catch {}
+  }
+
+  await sleep(500);
 }
 
-main().catch(error => {
-  console.error(error);
+main().catch(err => {
+  console.error(err);
   process.exit(1);
 });
