@@ -29,6 +29,10 @@ jobs:
         with:
           node-version: 22
 
+      - name: Install chart renderer
+        run: |
+          npm install sharp
+
       - name: Install Binance Square Skill
         run: |
           npx skills add binance/binance-skills-hub --skill square-post --agent '*' -y
