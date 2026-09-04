@@ -7,156 +7,225 @@ const symbol = process.argv[2];
 const output = process.argv[3];
 
 if (!symbol || !output) {
-  console.error("Usage: node chart.mjs SYMBOL OUTPUT.png");
-  process.exit(1);
+  throw new Error(
+    "Usage: node chart.mjs SYMBOL OUTPUT.png"
+  );
 }
 
 async function get(url) {
   const r = await fetch(url);
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+
+  if (!r.ok) {
+    throw new Error(`Binance API ${r.status}`);
+  }
+
   return r.json();
 }
 
-const data = await get(
-  `${BINANCE}/api/v3/klines?symbol=${symbol}USDT&interval=1h&limit=48`
+const raw = await get(
+  `${BINANCE}/api/v3/klines?symbol=${symbol}USDT&interval=1h&limit=72`
 );
 
-const candles = data.map(k => ({
+const candles = raw.map(k => ({
   open: Number(k[1]),
   high: Number(k[2]),
   low: Number(k[3]),
   close: Number(k[4])
 }));
 
-const width = 1400;
-const height = 800;
-const left = 80;
-const right = 40;
-const top = 80;
-const bottom = 100;
+const width = 1500;
+const height = 850;
 
-const chartW = width - left - right;
-const chartH = height - top - bottom;
+const left = 90;
+const right = 100;
+const top = 90;
+const bottom = 110;
 
-const highs = candles.map(x => x.high);
-const lows = candles.map(x => x.low);
+const chartWidth = width - left - right;
+const chartHeight = height - top - bottom;
 
-const max = Math.max(...highs);
-const min = Math.min(...lows);
-const range = max - min || 1;
+const high = Math.max(...candles.map(x => x.high));
+const low = Math.min(...candles.map(x => x.low));
 
-const x = i => left + (i / (candles.length - 1)) * chartW;
-const y = p => top + ((max - p) / range) * chartH;
+const range = high - low || 1;
 
-const bodyW = Math.max(8, chartW / candles.length * 0.55);
+const x = i =>
+  left +
+  (i / (candles.length - 1)) *
+  chartWidth;
 
-function sma(i, period) {
-  if (i < period - 1) return null;
-  let sum = 0;
-  for (let j = i - period + 1; j <= i; j++) {
-    sum += candles[j].close;
+const y = price =>
+  top +
+  ((high - price) / range) *
+  chartHeight;
+
+function sma(index, period) {
+  if (index < period - 1) return null;
+
+  let total = 0;
+
+  for (
+    let i = index - period + 1;
+    i <= index;
+    i++
+  ) {
+    total += candles[i].close;
   }
-  return sum / period;
+
+  return total / period;
 }
 
 let svg = `
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="${width}" height="${height}"
-     viewBox="0 0 ${width} ${height}">
+<svg
+xmlns="http://www.w3.org/2000/svg"
+width="${width}"
+height="${height}"
+viewBox="0 0 ${width} ${height}">
+
 <rect width="100%" height="100%" fill="#0b0e11"/>
 
-<text x="${left}" y="42"
-      fill="#f0b90b"
-      font-size="30"
-      font-family="Arial"
-      font-weight="bold">$${symbol} / USDT — 48H</text>
+<text
+x="${left}"
+y="45"
+fill="#f0b90b"
+font-family="Arial"
+font-size="32"
+font-weight="bold">
+$${symbol} / USDT
+</text>
 
-<text x="${left}" y="70"
-      fill="#9aa4ad"
-      font-size="16"
-      font-family="Arial">Binance Spot • 1H Candles</text>
+<text
+x="${left}"
+y="75"
+fill="#9aa4ad"
+font-family="Arial"
+font-size="17">
+Binance Spot • 1H • 72 Candles
+</text>
 `;
 
-for (let i = 0; i <= 5; i++) {
-  const gy = top + (chartH / 5) * i;
-  const value = max - (range / 5) * i;
+for (let i = 0; i <= 6; i++) {
+  const gy =
+    top +
+    (chartHeight / 6) * i;
+
+  const value =
+    high -
+    (range / 6) * i;
 
   svg += `
-  <line x1="${left}" y1="${gy}" x2="${width - right}" y2="${gy}"
-        stroke="#252a30" stroke-width="1"/>
-  <text x="${width - right + 5}" y="${gy + 5}"
-        fill="#7d8790" font-size="14" font-family="Arial">
-        ${value.toPrecision(6)}
-  </text>`;
+<line
+x1="${left}"
+y1="${gy}"
+x2="${width - right}"
+y2="${gy}"
+stroke="#24282d"
+stroke-width="1"/>
+
+<text
+x="${width - right + 10}"
+y="${gy + 5}"
+fill="#7d8790"
+font-family="Arial"
+font-size="14">
+${value.toPrecision(7)}
+</text>
+`;
 }
+
+const candleWidth =
+  (chartWidth / candles.length) * 0.58;
 
 for (let i = 0; i < candles.length; i++) {
   const c = candles[i];
+
   const cx = x(i);
 
-  const up = c.close >= c.open;
-  const bodyTop = y(Math.max(c.open, c.close));
-  const bodyBottom = y(Math.min(c.open, c.close));
-  const bodyHeight = Math.max(2, bodyBottom - bodyTop);
+  const bullish =
+    c.close >= c.open;
+
+  const candleColor =
+    bullish ? "#0ecb81" : "#f6465d";
+
+  const bodyTop =
+    y(Math.max(c.open, c.close));
+
+  const bodyBottom =
+    y(Math.min(c.open, c.close));
+
+  const bodyHeight =
+    Math.max(2, bodyBottom - bodyTop);
 
   svg += `
-  <line x1="${cx}" y1="${y(c.high)}"
-        x2="${cx}" y2="${y(c.low)}"
-        stroke="${up ? "#0ecb81" : "#f6465d"}"
-        stroke-width="2"/>
+<line
+x1="${cx}"
+y1="${y(c.high)}"
+x2="${cx}"
+y2="${y(c.low)}"
+stroke="${candleColor}"
+stroke-width="2"/>
 
-  <rect x="${cx - bodyW / 2}"
-        y="${bodyTop}"
-        width="${bodyW}"
-        height="${bodyHeight}"
-        fill="${up ? "#0ecb81" : "#f6465d"}"
-        rx="1"/>`;
+<rect
+x="${cx - candleWidth / 2}"
+y="${bodyTop}"
+width="${candleWidth}"
+height="${bodyHeight}"
+fill="${candleColor}"
+rx="1"/>
+`;
 }
 
 let smaPath = "";
 
 for (let i = 0; i < candles.length; i++) {
-  const s = sma(i, 20);
-  if (s == null) continue;
+  const value = sma(i, 20);
 
-  smaPath += `${smaPath ? " L" : "M"} ${x(i)} ${y(s)}`;
+  if (value == null) continue;
+
+  smaPath +=
+    `${smaPath ? " L" : "M"} ${x(i)} ${y(value)}`;
 }
 
 svg += `
-<path d="${smaPath}"
-      fill="none"
-      stroke="#f0b90b"
-      stroke-width="3"/>`;
+<path
+d="${smaPath}"
+fill="none"
+stroke="#f0b90b"
+stroke-width="3"/>
 
-const current = candles[candles.length - 1].close;
-
-svg += `
-<line x1="${left}" y1="${y(current)}"
-      x2="${width - right}" y2="${y(current)}"
-      stroke="#ffffff"
-      stroke-width="1"
-      stroke-dasharray="7 7"/>
-
-<text x="${left}"
-      y="${height - 45}"
-      fill="#d1d5db"
-      font-size="18"
-      font-family="Arial">
-Current: ${current.toPrecision(8)}
+<text
+x="${left}"
+y="${height - 55}"
+fill="#f0b90b"
+font-family="Arial"
+font-size="17">
+SMA20
 </text>
 
-<text x="${width - 330}"
-      y="${height - 45}"
-      fill="#f0b90b"
-      font-size="16"
-      font-family="Arial">
-Yellow = SMA20
+<text
+x="${left + 100}"
+y="${height - 55}"
+fill="#cbd5e1"
+font-family="Arial"
+font-size="17">
+Current: ${candles.at(-1).close.toPrecision(8)}
 </text>
 
-</svg>`;
+</svg>
+`;
 
-fs.mkdirSync(new URL(".", `file://${output}`).pathname, { recursive: true });
+fs.mkdirSync(
+  new URL(
+    "./",
+    `file://${output}`
+  ).pathname,
+  { recursive: true }
+);
 
-await sharp(Buffer.from(svg)).png().toFile(output);
+await sharp(
+  Buffer.from(svg)
+)
+  .png()
+  .toFile(output);
 
 console.log(`Chart created: ${output}`);
