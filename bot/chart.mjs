@@ -1,230 +1,216 @@
 import fs from "node:fs";
+import path from "node:path";
 import sharp from "sharp";
 
-const BINANCE = "https://data-api.binance.vision";
+const API = "https://data-api.binance.vision";
 
 const symbol = process.argv[2];
 const output = process.argv[3];
 
 if (!symbol || !output) {
-  throw new Error(
-    "Usage: node chart.mjs SYMBOL OUTPUT.png"
-  );
+  throw new Error("Usage: node chart.mjs BTCUSDT output.png");
 }
 
-async function get(url) {
-  const r = await fetch(url);
+async function getJson(url) {
+  const res = await fetch(url);
 
-  if (!r.ok) {
-    throw new Error(`Binance API ${r.status}`);
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText}`);
   }
 
-  return r.json();
+  return res.json();
 }
 
-const raw = await get(
-  `${BINANCE}/api/v3/klines?symbol=${symbol}USDT&interval=1h&limit=72`
+function sma(values, period) {
+  return values.map((_, i) => {
+    if (i < period - 1) return null;
+
+    const slice = values.slice(i - period + 1, i + 1);
+
+    return slice.reduce((a, b) => a + b, 0) / period;
+  });
+}
+
+const data = await getJson(
+  `${API}/api/v3/klines?symbol=${symbol}&interval=1h&limit=72`
 );
 
-const candles = raw.map(k => ({
+const candles = data.map(k => ({
   open: Number(k[1]),
   high: Number(k[2]),
   low: Number(k[3]),
   close: Number(k[4])
 }));
 
-const width = 1500;
-const height = 850;
+const closes = candles.map(x => x.close);
+const ma = sma(closes, 20);
 
-const left = 90;
-const right = 100;
-const top = 90;
-const bottom = 110;
+const width = 1400;
+const height = 800;
 
-const chartWidth = width - left - right;
-const chartHeight = height - top - bottom;
+const left = 80;
+const right = 40;
+const top = 70;
+const bottom = 100;
+
+const chartW = width - left - right;
+const chartH = height - top - bottom;
 
 const high = Math.max(...candles.map(x => x.high));
 const low = Math.min(...candles.map(x => x.low));
 
 const range = high - low || 1;
 
-const x = i =>
-  left +
-  (i / (candles.length - 1)) *
-  chartWidth;
-
-const y = price =>
-  top +
-  ((high - price) / range) *
-  chartHeight;
-
-function sma(index, period) {
-  if (index < period - 1) return null;
-
-  let total = 0;
-
-  for (
-    let i = index - period + 1;
-    i <= index;
-    i++
-  ) {
-    total += candles[i].close;
-  }
-
-  return total / period;
+function y(price) {
+  return top + ((high - price) / range) * chartH;
 }
+
+const candleWidth = chartW / candles.length;
 
 let svg = `
-<svg
-xmlns="http://www.w3.org/2000/svg"
-width="${width}"
-height="${height}"
-viewBox="0 0 ${width} ${height}">
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="${width}"
+     height="${height}"
+     viewBox="0 0 ${width} ${height}">
 
-<rect width="100%" height="100%" fill="#0b0e11"/>
+<rect width="100%" height="100%" fill="#111827"/>
 
-<text
-x="${left}"
-y="45"
-fill="#f0b90b"
-font-family="Arial"
-font-size="32"
-font-weight="bold">
-$${symbol} / USDT
+<text x="80" y="42"
+      fill="#ffffff"
+      font-size="30"
+      font-family="Arial"
+      font-weight="bold">
+$${symbol.replace("USDT", "")} • 1H Technical Chart
 </text>
 
-<text
-x="${left}"
-y="75"
-fill="#9aa4ad"
-font-family="Arial"
-font-size="17">
-Binance Spot • 1H • 72 Candles
+<text x="80" y="70"
+      fill="#9ca3af"
+      font-size="16"
+      font-family="Arial">
+Binance Spot • 72 hours • SMA20
 </text>
 `;
 
-for (let i = 0; i <= 6; i++) {
-  const gy =
-    top +
-    (chartHeight / 6) * i;
-
-  const value =
-    high -
-    (range / 6) * i;
+for (let i = 0; i <= 5; i++) {
+  const yy = top + (chartH / 5) * i;
 
   svg += `
-<line
-x1="${left}"
-y1="${gy}"
-x2="${width - right}"
-y2="${gy}"
-stroke="#24282d"
-stroke-width="1"/>
+  <line
+    x1="${left}"
+    y1="${yy}"
+    x2="${width - right}"
+    y2="${yy}"
+    stroke="#374151"
+    stroke-width="1"
+  />
+  `;
 
-<text
-x="${width - right + 10}"
-y="${gy + 5}"
-fill="#7d8790"
-font-family="Arial"
-font-size="14">
-${value.toPrecision(7)}
-</text>
-`;
-}
-
-const candleWidth =
-  (chartWidth / candles.length) * 0.58;
-
-for (let i = 0; i < candles.length; i++) {
-  const c = candles[i];
-
-  const cx = x(i);
-
-  const bullish =
-    c.close >= c.open;
-
-  const candleColor =
-    bullish ? "#0ecb81" : "#f6465d";
-
-  const bodyTop =
-    y(Math.max(c.open, c.close));
-
-  const bodyBottom =
-    y(Math.min(c.open, c.close));
-
-  const bodyHeight =
-    Math.max(2, bodyBottom - bodyTop);
+  const value = high - (range / 5) * i;
 
   svg += `
-<line
-x1="${cx}"
-y1="${y(c.high)}"
-x2="${cx}"
-y2="${y(c.low)}"
-stroke="${candleColor}"
-stroke-width="2"/>
-
-<rect
-x="${cx - candleWidth / 2}"
-y="${bodyTop}"
-width="${candleWidth}"
-height="${bodyHeight}"
-fill="${candleColor}"
-rx="1"/>
-`;
+  <text
+    x="${width - right - 5}"
+    y="${yy - 8}"
+    fill="#9ca3af"
+    font-size="14"
+    text-anchor="end"
+    font-family="Arial">
+    ${value.toFixed(value < 1 ? 5 : 2)}
+  </text>
+  `;
 }
 
-let smaPath = "";
+candles.forEach((c, i) => {
+  const x = left + i * candleWidth + candleWidth / 2;
 
-for (let i = 0; i < candles.length; i++) {
-  const value = sma(i, 20);
+  const bullish = c.close >= c.open;
 
-  if (value == null) continue;
+  const bodyTop = y(Math.max(c.open, c.close));
+  const bodyBottom = y(Math.min(c.open, c.close));
 
-  smaPath +=
-    `${smaPath ? " L" : "M"} ${x(i)} ${y(value)}`;
-}
+  const bodyHeight = Math.max(2, bodyBottom - bodyTop);
+
+  const wickTop = y(c.high);
+  const wickBottom = y(c.low);
+
+  const fill = bullish ? "#22c55e" : "#ef4444";
+
+  svg += `
+  <line
+    x1="${x}"
+    y1="${wickTop}"
+    x2="${x}"
+    y2="${wickBottom}"
+    stroke="${fill}"
+    stroke-width="2"
+  />
+
+  <rect
+    x="${x - candleWidth * 0.32}"
+    y="${bodyTop}"
+    width="${candleWidth * 0.64}"
+    height="${bodyHeight}"
+    fill="${fill}"
+    rx="2"
+  />
+  `;
+});
+
+let maPath = "";
+
+ma.forEach((value, i) => {
+  if (value === null) return;
+
+  const x = left + i * candleWidth + candleWidth / 2;
+  const yy = y(value);
+
+  maPath += maPath
+    ? ` L ${x} ${yy}`
+    : `M ${x} ${yy}`;
+});
 
 svg += `
 <path
-d="${smaPath}"
-fill="none"
-stroke="#f0b90b"
-stroke-width="3"/>
+  d="${maPath}"
+  fill="none"
+  stroke="#facc15"
+  stroke-width="4"
+/>
+
+<line
+  x1="${left}"
+  y1="${height - bottom}"
+  x2="${width - right}"
+  y2="${height - bottom}"
+  stroke="#6b7280"
+  stroke-width="2"
+/>
 
 <text
-x="${left}"
-y="${height - 55}"
-fill="#f0b90b"
-font-family="Arial"
-font-size="17">
-SMA20
+  x="${left}"
+  y="${height - 45}"
+  fill="#9ca3af"
+  font-size="15"
+  font-family="Arial">
+Real Binance market data
 </text>
 
 <text
-x="${left + 100}"
-y="${height - 55}"
-fill="#cbd5e1"
-font-family="Arial"
-font-size="17">
-Current: ${candles.at(-1).close.toPrecision(8)}
+  x="${width - right}"
+  y="${height - 45}"
+  fill="#facc15"
+  font-size="15"
+  text-anchor="end"
+  font-family="Arial">
+SMA20
 </text>
 
 </svg>
 `;
 
-fs.mkdirSync(
-  new URL(
-    "./",
-    `file://${output}`
-  ).pathname,
-  { recursive: true }
-);
+fs.mkdirSync(path.dirname(output), { recursive: true });
 
-await sharp(
-  Buffer.from(svg)
-)
+await sharp(Buffer.from(svg))
   .png()
   .toFile(output);
 
