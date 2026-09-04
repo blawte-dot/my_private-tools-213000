@@ -16,11 +16,9 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-
     timeout-minutes: 15
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -45,7 +43,6 @@ jobs:
       - name: Run Binance Square Bot
         env:
           BINANCE_SQUARE_OPENAPI_KEY: ${{ secrets.BINANCE_SQUARE_OPENAPI_KEY }}
-
         run: |
           node bot/index.mjs
 
