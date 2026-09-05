@@ -126,7 +126,79 @@ function linePath(points) {
     .join(" ");
 }
 
-function createAnalysisSvg(symbol, candles) {
+async function fetchCoinIcon(asset) {
+  const symbol = asset.toLowerCase();
+  const url = `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/${symbol}.png`;
+
+  try {
+    const res = await fetch(url);
+
+    if (!res.ok) return null;
+
+    const buffer = Buffer.from(await res.arrayBuffer());
+
+    return `data:image/png;base64,${buffer.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
+function coinBadgeSvg(asset, iconDataUri, cx, cy, r) {
+  if (iconDataUri) {
+    return `
+      <defs>
+        <clipPath id="coinIconClip">
+          <circle cx="${cx}" cy="${cy}" r="${r}" />
+        </clipPath>
+      </defs>
+      <image
+        href="${iconDataUri}"
+        x="${cx - r}"
+        y="${cy - r}"
+        width="${r * 2}"
+        height="${r * 2}"
+        clip-path="url(#coinIconClip)"
+      />
+      <circle
+        cx="${cx}"
+        cy="${cy}"
+        r="${r}"
+        fill="none"
+        stroke="#F0B90B"
+        stroke-width="2"
+      />
+    `;
+  }
+
+  /*
+   * No public icon found for this ticker (common for
+   * low-cap/obscure coins) — fall back to a lettered badge
+   * instead of leaving a blank gap.
+   */
+  return `
+    <circle
+      cx="${cx}"
+      cy="${cy}"
+      r="${r}"
+      fill="#2B3139"
+      stroke="#F0B90B"
+      stroke-width="2"
+    />
+    <text
+      x="${cx}"
+      y="${cy + 8}"
+      text-anchor="middle"
+      fill="#F0B90B"
+      font-size="22"
+      font-family="Arial"
+      font-weight="bold"
+    >
+      ${escapeXml(asset.slice(0, 1))}
+    </text>
+  `;
+}
+
+function createAnalysisSvg(symbol, candles, iconDataUri) {
   const closes = candles.map(c => c.close);
 
   const sma20 = sma(closes, 20);
@@ -422,9 +494,11 @@ function createAnalysisSvg(symbol, candles) {
   />
 
   <!-- Header -->
+  ${coinBadgeSvg(titleSymbol, iconDataUri, 55, 50, 28)}
+
   <text
-    x="70"
-    y="58"
+    x="98"
+    y="46"
     fill="#F0F0F0"
     font-size="34"
     font-family="Arial"
@@ -434,8 +508,8 @@ function createAnalysisSvg(symbol, candles) {
   </text>
 
   <text
-    x="70"
-    y="94"
+    x="98"
+    y="80"
     fill="#848E9C"
     font-size="20"
     font-family="Arial"
@@ -444,8 +518,8 @@ function createAnalysisSvg(symbol, candles) {
   </text>
 
   <text
-    x="310"
-    y="94"
+    x="338"
+    y="80"
     fill="${changeColor}"
     font-size="20"
     font-family="Arial"
@@ -1104,10 +1178,14 @@ async function main() {
       );
     }
 
+    const asset = symbol.replace("USDT", "");
+    const iconDataUri = await fetchCoinIcon(asset);
+
     const svg =
       createAnalysisSvg(
         symbol,
-        candles
+        candles,
+        iconDataUri
       );
 
     await saveSvgAsPng(
