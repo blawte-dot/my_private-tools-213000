@@ -8,9 +8,11 @@ const GDELT = "https://api.gdeltproject.org/api/v2/doc/doc";
 
 const ROOT = process.cwd();
 const HISTORY_FILE = path.join(ROOT, "data", "history.json");
+const HEALTH_FILE = path.join(ROOT, "data", "health.json");
 const IMAGE_FILE = path.join(ROOT, "bot", "post-image.png");
 
 const POST_INTERVAL_MS = 25 * 60 * 1000;
+const HISTORY_MAX_RECORDS = 500;
 
 async function getJson(url, retries = 3) {
   for (let i = 0; i < retries; i++) {
@@ -187,8 +189,74 @@ function saveHistory(history) {
 
   fs.writeFileSync(
     HISTORY_FILE,
-    JSON.stringify(history.slice(-1000), null, 2)
+    JSON.stringify(
+      history.slice(-HISTORY_MAX_RECORDS),
+      null,
+      2
+    )
   );
+}
+
+/*
+ * Lightweight health/monitoring file.
+ * Kept separate from history so it stays tiny
+ * and reflects the bot's operational status,
+ * including failed attempts (which never enter
+ * history, since history only records confirmed
+ * successful publications).
+ */
+function loadHealth() {
+  try {
+    return JSON.parse(
+      fs.readFileSync(HEALTH_FILE, "utf8")
+    );
+  } catch {
+    return {
+      lastSuccessfulPost: null,
+      lastFailedAttempt: null,
+      lastFailureReason: null,
+      consecutiveFailures: 0
+    };
+  }
+}
+
+function saveHealth(health) {
+  fs.mkdirSync(path.dirname(HEALTH_FILE), {
+    recursive: true
+  });
+
+  fs.writeFileSync(
+    HEALTH_FILE,
+    JSON.stringify(health, null, 2)
+  );
+}
+
+function recordSuccess(now) {
+  const health = loadHealth();
+
+  health.lastSuccessfulPost = now;
+  health.lastFailedAttempt = null;
+  health.lastFailureReason = null;
+  health.consecutiveFailures = 0;
+  health.nextExpectedPublish = new Date(
+    new Date(now).getTime() + POST_INTERVAL_MS
+  ).toISOString();
+
+  saveHealth(health);
+}
+
+function recordFailure(err) {
+  const health = loadHealth();
+  const now = new Date().toISOString();
+
+  health.lastFailedAttempt = now;
+  health.lastFailureReason = String(
+    err && err.message ? err.message : err
+  ).slice(0, 300);
+  health.consecutiveFailures =
+    (health.consecutiveFailures || 0) + 1;
+
+  saveHealth(health);
 }
 
 /*
@@ -485,6 +553,105 @@ ${lines.join("\n")}
 #Crypto #Binance #Altcoins #MarketUpdate`;
 }
 
+function marketUpdatePost(coins) {
+  const btc = coins.find(c => c.asset === "BTC");
+  const eth = coins.find(c => c.asset === "ETH");
+
+  const totalVolume = coins.reduce(
+    (sum, c) => sum + c.volume,
+    0
+  );
+
+  const advancing = coins.filter(
+    c => c.change > 0
+  ).length;
+
+  const declining = coins.length - advancing;
+
+  const bias =
+    advancing > declining * 1.3
+      ? "Broad-based buying pressure"
+      : declining > advancing * 1.3
+        ? "Broad-based selling pressure"
+        : "Mixed, range-bound conditions";
+
+  const lines = [btc, eth]
+    .filter(Boolean)
+    .map(
+      c =>
+        `${c.change >= 0 ? "🟢" : "🔴"} $${c.asset}: ${money(c.price)} (${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%)`
+    );
+
+  return `🌐 Crypto Market Update
+
+${lines.join("\n")}
+
+📊 Total tracked Spot volume (24h): ${compact(totalVolume)}
+⚖️ Breadth: ${advancing} up / ${declining} down among liquid USDT pairs
+🔎 Reading: ${bias}
+
+🧠 Broad market conditions can shift quickly — treat this as a snapshot, not a forecast.
+
+🤔 Is the tape confirming your bias right now?
+
+#Crypto #Binance #MarketUpdate #Bitcoin`;
+}
+
+function bullBearPost(coin, candles) {
+  const closes = candles.map(x => x.close);
+  const price = closes.at(-1);
+
+  const last20 = candles.slice(-20);
+  const support = Math.min(...last20.map(x => x.low));
+  const resistance = Math.max(
+    ...last20.map(x => x.high)
+  );
+
+  return `⚖️ $${coin.asset} — Bull vs Bear
+
+💰 Price: ${money(price)}
+${coin.change >= 0 ? "🟢" : "🔴"} 24H Change: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%
+
+🐂 Bull Case
+A reclaim and 4H close above ${money(resistance)} with rising volume would favor continuation, keeping the higher-timeframe structure constructive.
+
+🐻 Bear Case
+A 4H close below ${money(support)} would weaken the structure and put a deeper retracement back in focus.
+
+🧭 Neither scenario is guaranteed — price action around these two levels is the tiebreaker.
+
+🧠 Analysis and scenarios only — not financial advice.
+
+🤔 Which side of this range are you leaning toward?
+
+#Crypto #Binance #${coin.asset} #MarketStructure`;
+}
+
+function whatToWatchPost(coins) {
+  const watch = [...coins]
+    .sort((a, b) => b.volume - a.volume)
+    .slice(0, 5);
+
+  const lines = watch.map(
+    c =>
+      `• $${c.asset} — ${compact(c.volume)} 24h vol, ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
+  );
+
+  return `👀 What to Watch — Next Few Hours
+
+The most liquid Spot pairs right now, worth keeping on the radar for follow-through or reversal:
+
+${lines.join("\n")}
+
+📊 High liquidity means moves here tend to carry more weight for short-term market structure.
+
+🧠 Levels can shift fast — this list reflects current conditions, not a prediction.
+
+🤔 Which of these are you tracking?
+
+#Crypto #Binance #Watchlist #CryptoMarket`;
+}
+
 function educationPost(topic) {
   if (topic === "rsi") {
     return `📚 Crypto Education — RSI
@@ -584,7 +751,13 @@ async function getNews() {
     "weapon",
     "airstrike",
     "invasion",
-    "bombing"
+    "bombing",
+    "conflict",
+    "ceasefire",
+    "troops",
+    "terrorist",
+    "genocide",
+    "airbase"
   ];
 
   const filtered = results.filter(article => {
@@ -697,6 +870,46 @@ function createMoversImage(coins) {
   );
 }
 
+function createMarketSnapshotImage(coins) {
+  const btc = coins.find(c => c.asset === "BTC");
+  const eth = coins.find(c => c.asset === "ETH");
+
+  const others = [...coins]
+    .filter(c => c.asset !== "BTC" && c.asset !== "ETH")
+    .sort((a, b) => b.volume - a.volume)
+    .slice(0, 3);
+
+  const snapshot = [btc, eth, ...others].filter(Boolean);
+
+  return runChart(
+    JSON.stringify(
+      snapshot.map(x => ({
+        asset: x.asset,
+        change: x.change
+      }))
+    ),
+    path.join(ROOT, "bot", "snapshot.png"),
+    "movers"
+  );
+}
+
+function createWatchlistImage(coins) {
+  const watch = [...coins]
+    .sort((a, b) => b.volume - a.volume)
+    .slice(0, 5);
+
+  return runChart(
+    JSON.stringify(
+      watch.map(x => ({
+        asset: x.asset,
+        change: x.change
+      }))
+    ),
+    path.join(ROOT, "bot", "watchlist.png"),
+    "movers"
+  );
+}
+
 function findPoster() {
   const locations = [
     ".agents/skills/binance/square-post/scripts/post-image.mjs",
@@ -767,6 +980,16 @@ function cleanup() {
       ROOT,
       "bot",
       "movers.png"
+    ),
+    path.join(
+      ROOT,
+      "bot",
+      "snapshot.png"
+    ),
+    path.join(
+      ROOT,
+      "bot",
+      "watchlist.png"
     )
   ];
 
@@ -873,7 +1096,7 @@ async function main() {
       );
 
     const mode =
-      otherNumber % 3;
+      otherNumber % 6;
 
     if (mode === 0) {
       const news =
@@ -924,7 +1147,7 @@ async function main() {
         createMoversImage(
           coins
         );
-    } else {
+    } else if (mode === 2) {
       const topics = [
         "candlesticks",
         "breakout",
@@ -946,6 +1169,23 @@ async function main() {
         createEducationImage(
           topic
         );
+    } else if (mode === 3) {
+      text = marketUpdatePost(coins);
+      image = createMarketSnapshotImage(coins);
+    } else if (mode === 4) {
+      const coin = chooseCoin(coins, history);
+
+      const candles = await getKlines(
+        coin.symbol,
+        "4h",
+        100
+      );
+
+      text = bullBearPost(coin, candles);
+      image = createAnalysisChart(coin.symbol);
+    } else {
+      text = whatToWatchPost(coins);
+      image = createWatchlistImage(coins);
     }
   }
 
@@ -982,6 +1222,8 @@ async function main() {
 
   saveHistory(history);
 
+  recordSuccess(now);
+
   cleanup();
 
   console.log(
@@ -997,6 +1239,8 @@ main().catch(err => {
     "❌ Bot failed:",
     err
   );
+
+  recordFailure(err);
 
   process.exit(1);
 });
