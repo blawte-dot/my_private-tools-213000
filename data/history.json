@@ -124,5 +124,12 @@
     "type": "analysis",
     "asset": "1000CAT",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T16:55:21.038Z",
+    "type": "analysis",
+    "asset": "MUBARAK",
+    "published": true
   }
 ]
