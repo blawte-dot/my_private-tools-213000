@@ -173,5 +173,12 @@
     "type": "analysis",
     "asset": "AR",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T20:20:24.422Z",
+    "type": "analysis",
+    "asset": "ARB",
+    "published": true
   }
 ]
