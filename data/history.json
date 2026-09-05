@@ -208,5 +208,12 @@
     "type": "analysis",
     "asset": "FF",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T22:45:24.390Z",
+    "type": "analysis",
+    "asset": "LTC",
+    "published": true
   }
 ]
