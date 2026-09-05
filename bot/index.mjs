@@ -9,7 +9,6 @@ const GDELT = "https://api.gdeltproject.org/api/v2/doc/doc";
 const ROOT = process.cwd();
 const HISTORY_FILE = path.join(ROOT, "data", "history.json");
 const HEALTH_FILE = path.join(ROOT, "data", "health.json");
-const CAMPAIGN_FILE = path.join(ROOT, "data", "campaign.json");
 const IMAGE_FILE = path.join(ROOT, "bot", "post-image.png");
 
 /*
@@ -28,39 +27,6 @@ function randomPostIntervalMs() {
     Math.random() *
       (MAX_POST_INTERVAL_MS - MIN_POST_INTERVAL_MS)
   );
-}
-
-/*
- * Optional campaign tag, edited manually in data/campaign.json
- * whenever an official Binance Square hashtag/coin-tag campaign
- * is active. There is no public API to detect these
- * automatically, so this is a deliberate manual switch rather
- * than a scraped/guessed value.
- */
-function loadCampaignTag() {
-  try {
-    const data = JSON.parse(
-      fs.readFileSync(CAMPAIGN_FILE, "utf8")
-    );
-
-    if (!data || data.active !== true) return null;
-
-    const parts = [data.hashtag, data.coinTag].filter(
-      Boolean
-    );
-
-    return parts.length ? parts.join(" ") : null;
-  } catch {
-    return null;
-  }
-}
-
-function withCampaignTag(text) {
-  const tag = loadCampaignTag();
-
-  if (!tag || text.includes(tag)) return text;
-
-  return `${text}\n\n${tag}`;
 }
 
 async function getJson(url, retries = 3) {
@@ -1248,8 +1214,6 @@ async function main() {
       "Could not create a valid post image."
     );
   }
-
-  text = withCampaignTag(text);
 
   /*
    * Publish FIRST.
