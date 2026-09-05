@@ -1,0 +1,6 @@
+{
+  "active": false,
+  "hashtag": null,
+  "coinTag": null,
+  "note": "Set active to true and fill hashtag and/or coinTag (e.g. \"#CryptoUsersHit18M\", \"$BTC\") whenever an official Binance Square campaign is running, and the bot will append it to every post. Set active back to false when the campaign ends. There is no automatic detection of campaigns."
+}

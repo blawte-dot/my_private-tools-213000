@@ -9,10 +9,59 @@ const GDELT = "https://api.gdeltproject.org/api/v2/doc/doc";
 const ROOT = process.cwd();
 const HISTORY_FILE = path.join(ROOT, "data", "history.json");
 const HEALTH_FILE = path.join(ROOT, "data", "health.json");
+const CAMPAIGN_FILE = path.join(ROOT, "data", "campaign.json");
 const IMAGE_FILE = path.join(ROOT, "bot", "post-image.png");
 
-const POST_INTERVAL_MS = 25 * 60 * 1000;
+/*
+ * Randomized 20-32 min window instead of a fixed 25 min.
+ * A perfectly constant cadence is itself a bot fingerprint;
+ * jitter makes the timing look human without changing the
+ * intended ~25 min average.
+ */
+const MIN_POST_INTERVAL_MS = 20 * 60 * 1000;
+const MAX_POST_INTERVAL_MS = 32 * 60 * 1000;
 const HISTORY_MAX_RECORDS = 500;
+
+function randomPostIntervalMs() {
+  return (
+    MIN_POST_INTERVAL_MS +
+    Math.random() *
+      (MAX_POST_INTERVAL_MS - MIN_POST_INTERVAL_MS)
+  );
+}
+
+/*
+ * Optional campaign tag, edited manually in data/campaign.json
+ * whenever an official Binance Square hashtag/coin-tag campaign
+ * is active. There is no public API to detect these
+ * automatically, so this is a deliberate manual switch rather
+ * than a scraped/guessed value.
+ */
+function loadCampaignTag() {
+  try {
+    const data = JSON.parse(
+      fs.readFileSync(CAMPAIGN_FILE, "utf8")
+    );
+
+    if (!data || data.active !== true) return null;
+
+    const parts = [data.hashtag, data.coinTag].filter(
+      Boolean
+    );
+
+    return parts.length ? parts.join(" ") : null;
+  } catch {
+    return null;
+  }
+}
+
+function withCampaignTag(text) {
+  const tag = loadCampaignTag();
+
+  if (!tag || text.includes(tag)) return text;
+
+  return `${text}\n\n${tag}`;
+}
 
 async function getJson(url, retries = 3) {
   for (let i = 0; i < retries; i++) {
@@ -239,7 +288,8 @@ function recordSuccess(now) {
   health.lastFailureReason = null;
   health.consecutiveFailures = 0;
   health.nextExpectedPublish = new Date(
-    new Date(now).getTime() + POST_INTERVAL_MS
+    new Date(now).getTime() +
+      (MIN_POST_INTERVAL_MS + MAX_POST_INTERVAL_MS) / 2
   ).toISOString();
 
   saveHealth(health);
@@ -300,8 +350,9 @@ function canPublish(history) {
   }
 
   const elapsed = Date.now() - lastTime;
+  const threshold = randomPostIntervalMs();
 
-  if (elapsed >= POST_INTERVAL_MS) {
+  if (elapsed >= threshold) {
     return {
       allowed: true,
       remaining: 0
@@ -310,7 +361,7 @@ function canPublish(history) {
 
   return {
     allowed: false,
-    remaining: POST_INTERVAL_MS - elapsed
+    remaining: threshold - elapsed
   };
 }
 
@@ -1197,6 +1248,8 @@ async function main() {
       "Could not create a valid post image."
     );
   }
+
+  text = withCampaignTag(text);
 
   /*
    * Publish FIRST.
