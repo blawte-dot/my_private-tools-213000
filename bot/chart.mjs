@@ -5,7 +5,8 @@ const API = "https://data-api.binance.vision";
 
 const WIDTH = 1400;
 const HEIGHT = 850;
-const ANALYSIS_HEIGHT = 940;
+const ANALYSIS_BASE_HEIGHT = 1075;
+const ORDER_BOOK_EXTRA_HEIGHT = 355;
 
 async function getJson(url) {
   const res = await fetch(url, {
@@ -34,6 +35,37 @@ async function getKlines(symbol) {
     close: Number(k[4]),
     volume: Number(k[5])
   }));
+}
+
+/*
+ * Real, public order-book snapshot — the same data anyone sees
+ * in the app's own "Order Book" tab, via Binance's public depth
+ * endpoint (no auth, no trading access). Returns null on any
+ * failure so the caller can simply omit this section rather
+ * than ever show placeholder/fake book data.
+ */
+async function getOrderBook(symbol) {
+  try {
+    const data = await getJson(
+      `${API}/api/v3/depth?symbol=${symbol}&limit=5`
+    );
+
+    const bids = data.bids.map(([price, qty]) => ({
+      price: Number(price),
+      qty: Number(qty)
+    }));
+
+    const asks = data.asks.map(([price, qty]) => ({
+      price: Number(price),
+      qty: Number(qty)
+    }));
+
+    if (!bids.length || !asks.length) return null;
+
+    return { bids, asks };
+  } catch {
+    return null;
+  }
 }
 
 function sma(values, period) {
@@ -209,7 +241,7 @@ function coinBadgeSvg(asset, iconDataUri, cx, cy, r) {
   `;
 }
 
-function createAnalysisSvg(symbol, candles, iconDataUri) {
+function createAnalysisSvg(symbol, candles, iconDataUri, orderBook) {
   const closes = candles.map(c => c.close);
 
   const sma20 = sma(closes, 20);
@@ -545,16 +577,121 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
 
   const currentPriceY = y(last.close);
 
+  /*
+   * Decorative rows below the chart, matching the native app's
+   * layout: an indicator-tab row and a period-performance row.
+   * These are inert labels only (no functionality implied) —
+   * the period row intentionally shows "--" for every column
+   * since we don't compute historical period returns, exactly
+   * like the app itself shows "--" for thinly-traded assets
+   * rather than a fabricated number.
+   */
+  const indicatorTabsSvg = [
+    "MA", "EMA", "BOLL", "SAR", "AVL", "SUPER", "VOL", "MACD"
+  ]
+    .map((label, i) => `
+      <text x="${70 + i * 78}" y="965" fill="#848E9C" font-size="15" font-family="Arial">${label}</text>
+    `)
+    .join("");
+
+  const periodLabelsSvg = [
+    "Today", "7 Days", "30 Days", "90 Days", "180 Days", "1 Year"
+  ]
+    .map((label, i) => `
+      <text x="${70 + i * 105}" y="1015" fill="#848E9C" font-size="14" font-family="Arial">${label}</text>
+      <text x="${70 + i * 105}" y="1040" fill="#5E6673" font-size="14" font-family="Arial">--</text>
+    `)
+    .join("");
+
+  /*
+   * Order book: real public depth data (bids/asks) for this
+   * symbol when available, from the same public endpoint the
+   * app itself reads — otherwise this whole block is simply
+   * omitted rather than showing placeholder numbers.
+   */
+  let orderBookSvg = "";
+
+  const hasOrderBook = Boolean(
+    orderBook &&
+      orderBook.bids.length &&
+      orderBook.asks.length
+  );
+
+  if (hasOrderBook) {
+    const bidTotal = orderBook.bids.reduce((s, b) => s + b.qty, 0);
+    const askTotal = orderBook.asks.reduce((s, a) => s + a.qty, 0);
+    const total = bidTotal + askTotal || 1;
+
+    const bidPct = (bidTotal / total) * 100;
+    const askPct = 100 - bidPct;
+
+    const barY = 1130;
+    const barWidth = 1230;
+    const bidBarWidth = (bidPct / 100) * barWidth;
+
+    const rows = Math.min(
+      5,
+      orderBook.bids.length,
+      orderBook.asks.length
+    );
+
+    let rowsSvg = "";
+
+    for (let i = 0; i < rows; i++) {
+      const bid = orderBook.bids[i];
+      const ask = orderBook.asks[i];
+      const rowY = 1195 + i * 26;
+
+      rowsSvg += `
+        <text x="70" y="${rowY}" fill="#848E9C" font-size="14" font-family="Arial">${escapeXml(bid.qty.toFixed(2))}</text>
+        <text x="450" y="${rowY}" text-anchor="end" fill="#0ECB81" font-size="15" font-family="Arial" font-weight="bold">${escapeXml(formatPrice(bid.price))}</text>
+        <text x="530" y="${rowY}" fill="#F6465D" font-size="15" font-family="Arial" font-weight="bold">${escapeXml(formatPrice(ask.price))}</text>
+        <text x="1300" y="${rowY}" text-anchor="end" fill="#848E9C" font-size="14" font-family="Arial">${escapeXml(ask.qty.toFixed(2))}</text>
+      `;
+    }
+
+    orderBookSvg = `
+      <line x1="0" y1="1060" x2="${WIDTH}" y2="1060" stroke="#1E2329" stroke-width="1" />
+
+      <text x="70" y="1092" fill="#F0F0F0" font-size="18" font-family="Arial" font-weight="bold">Order Book</text>
+      <text x="220" y="1092" fill="#848E9C" font-size="16" font-family="Arial">Depth</text>
+      <text x="290" y="1092" fill="#848E9C" font-size="16" font-family="Arial">Trades</text>
+
+      <text x="70" y="${barY - 12}" fill="#0ECB81" font-size="14" font-family="Arial">${bidPct.toFixed(1)}%</text>
+      <text x="1300" y="${barY - 12}" text-anchor="end" fill="#F6465D" font-size="14" font-family="Arial">${askPct.toFixed(1)}%</text>
+      <rect x="70" y="${barY}" width="${barWidth}" height="8" rx="4" fill="#F6465D" />
+      <rect x="70" y="${barY}" width="${bidBarWidth}" height="8" rx="4" fill="#0ECB81" />
+
+      <text x="70" y="1170" fill="#848E9C" font-size="14" font-family="Arial">Bid</text>
+      <text x="530" y="1170" fill="#848E9C" font-size="14" font-family="Arial">Ask</text>
+
+      ${rowsSvg}
+
+      <rect x="70" y="1329" width="590" height="52" rx="8" fill="#0ECB81" />
+      <text x="365" y="1363" text-anchor="middle" fill="#0B0E11" font-size="20" font-family="Arial" font-weight="bold">Buy</text>
+
+      <rect x="680" y="1329" width="590" height="52" rx="8" fill="#F6465D" />
+      <text x="975" y="1363" text-anchor="middle" fill="#0B0E11" font-size="20" font-family="Arial" font-weight="bold">Sell</text>
+    `;
+  }
+
+
+  const svgHeight =
+    ANALYSIS_BASE_HEIGHT +
+    (hasOrderBook ? ORDER_BOOK_EXTRA_HEIGHT : 0);
+
+  const footerY = svgHeight - 35;
+
   return `
 <svg
   xmlns="http://www.w3.org/2000/svg"
   width="${WIDTH}"
-  height="${ANALYSIS_HEIGHT}"
-  viewBox="0 0 ${WIDTH} ${ANALYSIS_HEIGHT}"
+  height="${svgHeight}"
+  viewBox="0 0 ${WIDTH} ${svgHeight}"
 >
   <rect
     width="${WIDTH}"
-    height="${ANALYSIS_HEIGHT}"
+    height="${svgHeight}"
     fill="#0B0E11"
   />
 
@@ -774,10 +911,21 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
   <rect x="280" y="340" width="12" height="12" fill="#3B82F6" />
   <text x="298" y="350" fill="#848E9C" font-size="14" font-family="Arial">EMA50</text>
 
+  <!-- Indicator tabs (decorative, matches app chrome) -->
+  <line x1="0" y1="945" x2="${WIDTH}" y2="945" stroke="#1E2329" stroke-width="1" />
+  ${indicatorTabsSvg}
+
+  <!-- Period performance row (placeholder dashes, not fabricated numbers) -->
+  <line x1="0" y1="995" x2="${WIDTH}" y2="995" stroke="#1E2329" stroke-width="1" />
+  ${periodLabelsSvg}
+
+  <!-- Order book (real public depth data when available) -->
+  ${orderBookSvg}
+
   <!-- Footer -->
   <text
     x="60"
-    y="900"
+    y="${footerY}"
     fill="#5E6673"
     font-size="13"
     font-family="Arial"
@@ -1260,12 +1408,14 @@ async function main() {
 
     const asset = symbol.replace("USDT", "");
     const iconDataUri = await fetchCoinIcon(asset);
+    const orderBook = await getOrderBook(symbol);
 
     const svg =
       createAnalysisSvg(
         symbol,
         candles,
-        iconDataUri
+        iconDataUri,
+        orderBook
       );
 
     await saveSvgAsPng(
