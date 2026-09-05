@@ -61,5 +61,12 @@
     "type": "analysis",
     "asset": "ZEN",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T11:44:09.081Z",
+    "type": "analysis",
+    "asset": "NOM",
+    "published": true
   }
 ]
