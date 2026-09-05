@@ -33,5 +33,12 @@
     "time": "2026-09-04T23:15:00.251Z",
     "type": "analysis",
     "asset": "ZEN"
+  },
+  {
+    "slot": 1192378,
+    "date": "2026-09-05",
+    "time": "2026-09-05T00:17:53.991Z",
+    "type": "analysis",
+    "asset": "MARSCOIN"
   }
 ]
