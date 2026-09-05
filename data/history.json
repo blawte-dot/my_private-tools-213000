@@ -68,5 +68,12 @@
     "type": "analysis",
     "asset": "NOM",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T12:10:20.071Z",
+    "type": "analysis",
+    "asset": "GIGGLE",
+    "published": true
   }
 ]
