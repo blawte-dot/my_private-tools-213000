@@ -131,5 +131,12 @@
     "type": "analysis",
     "asset": "MUBARAK",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T17:30:21.123Z",
+    "type": "analysis",
+    "asset": "币安人生",
+    "published": true
   }
 ]
