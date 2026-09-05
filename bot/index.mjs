@@ -7,18 +7,17 @@ const API = "https://data-api.binance.vision";
 const GDELT = "https://api.gdeltproject.org/api/v2/doc/doc";
 
 const ROOT = process.cwd();
-
 const HISTORY_FILE = path.join(ROOT, "data", "history.json");
 const IMAGE_FILE = path.join(ROOT, "bot", "post-image.png");
 
-const SLOT_MS = 25 * 60 * 1000;
+const POST_INTERVAL_MS = 25 * 60 * 1000;
 
 async function getJson(url, retries = 3) {
   for (let i = 0; i < retries; i++) {
     try {
       const res = await fetch(url, {
         headers: {
-          "User-Agent": "binance-square-bot/2.0"
+          "User-Agent": "binance-square-bot/3.0"
         }
       });
 
@@ -43,7 +42,7 @@ async function downloadImage(url, output) {
     const res = await fetch(url, {
       headers: {
         "User-Agent":
-          "Mozilla/5.0 (compatible; BinanceSquareBot/2.0)"
+          "Mozilla/5.0 (compatible; BinanceSquareBot/3.0)"
       }
     });
 
@@ -51,34 +50,25 @@ async function downloadImage(url, output) {
       throw new Error(`Image ${res.status}`);
     }
 
-    const contentType =
-      res.headers.get("content-type") || "";
+    const type = res.headers.get("content-type") || "";
 
-    if (!contentType.startsWith("image/")) {
+    if (!type.startsWith("image/")) {
       throw new Error("URL is not an image");
     }
 
-    const buffer = Buffer.from(
-      await res.arrayBuffer()
-    );
+    const buffer = Buffer.from(await res.arrayBuffer());
 
     await sharp(buffer)
       .resize(1400, 800, {
         fit: "cover",
         position: "attention"
       })
-      .jpeg({
-        quality: 90
-      })
+      .jpeg({ quality: 90 })
       .toFile(output);
 
     return true;
   } catch (err) {
-    console.log(
-      "News image download failed:",
-      err.message
-    );
-
+    console.log("Image download failed:", err.message);
     return false;
   }
 }
@@ -103,17 +93,9 @@ function money(v) {
 function compact(v) {
   const n = Number(v);
 
-  if (n >= 1e9) {
-    return `$${(n / 1e9).toFixed(2)}B`;
-  }
-
-  if (n >= 1e6) {
-    return `$${(n / 1e6).toFixed(1)}M`;
-  }
-
-  if (n >= 1e3) {
-    return `$${(n / 1e3).toFixed(1)}K`;
-  }
+  if (n >= 1e9) return `$${(n / 1e9).toFixed(2)}B`;
+  if (n >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
+  if (n >= 1e3) return `$${(n / 1e3).toFixed(1)}K`;
 
   return `$${n.toFixed(0)}`;
 }
@@ -123,10 +105,7 @@ function sma(values, period) {
 
   const slice = values.slice(-period);
 
-  return (
-    slice.reduce((a, b) => a + b, 0) /
-    period
-  );
+  return slice.reduce((a, b) => a + b, 0) / period;
 }
 
 function ema(values, period) {
@@ -135,15 +114,11 @@ function ema(values, period) {
   const k = 2 / (period + 1);
 
   let result =
-    values
-      .slice(0, period)
-      .reduce((a, b) => a + b, 0) /
+    values.slice(0, period).reduce((a, b) => a + b, 0) /
     period;
 
   for (let i = period; i < values.length; i++) {
-    result =
-      values[i] * k +
-      result * (1 - k);
+    result = values[i] * k + result * (1 - k);
   }
 
   return result;
@@ -156,37 +131,26 @@ function rsi(values, period = 14) {
   let losses = 0;
 
   for (let i = 1; i <= period; i++) {
-    const diff =
-      values[i] - values[i - 1];
+    const diff = values[i] - values[i - 1];
 
-    if (diff >= 0) {
-      gains += diff;
-    } else {
-      losses -= diff;
-    }
+    if (diff >= 0) gains += diff;
+    else losses -= diff;
   }
 
   let avgGain = gains / period;
   let avgLoss = losses / period;
 
-  for (
-    let i = period + 1;
-    i < values.length;
-    i++
-  ) {
-    const diff =
-      values[i] - values[i - 1];
+  for (let i = period + 1; i < values.length; i++) {
+    const diff = values[i] - values[i - 1];
 
     const gain = Math.max(diff, 0);
     const loss = Math.max(-diff, 0);
 
     avgGain =
-      ((avgGain * (period - 1)) + gain) /
-      period;
+      ((avgGain * (period - 1)) + gain) / period;
 
     avgLoss =
-      ((avgLoss * (period - 1)) + loss) /
-      period;
+      ((avgLoss * (period - 1)) + loss) / period;
   }
 
   if (avgLoss === 0) return 100;
@@ -197,10 +161,9 @@ function rsi(values, period = 14) {
 }
 
 function loadHistory() {
-  fs.mkdirSync(
-    path.dirname(HISTORY_FILE),
-    { recursive: true }
-  );
+  fs.mkdirSync(path.dirname(HISTORY_FILE), {
+    recursive: true
+  });
 
   if (!fs.existsSync(HISTORY_FILE)) {
     return [];
@@ -208,77 +171,111 @@ function loadHistory() {
 
   try {
     const data = JSON.parse(
-      fs.readFileSync(
-        HISTORY_FILE,
-        "utf8"
-      )
+      fs.readFileSync(HISTORY_FILE, "utf8")
     );
 
-    return Array.isArray(data)
-      ? data
-      : [];
+    return Array.isArray(data) ? data : [];
   } catch {
     return [];
   }
 }
 
 function saveHistory(history) {
-  fs.mkdirSync(
-    path.dirname(HISTORY_FILE),
-    { recursive: true }
-  );
+  fs.mkdirSync(path.dirname(HISTORY_FILE), {
+    recursive: true
+  });
 
   fs.writeFileSync(
     HISTORY_FILE,
-    JSON.stringify(
-      history.slice(-1000),
-      null,
-      2
-    )
+    JSON.stringify(history.slice(-1000), null, 2)
   );
 }
 
-async function getSpotCoins() {
-  const [exchangeInfo, tickers] =
-    await Promise.all([
-      getJson(
-        `${API}/api/v3/exchangeInfo?permissions=SPOT`
-      ),
-      getJson(
-        `${API}/api/v3/ticker/24hr`
-      )
-    ]);
-
-  const tradingSymbols =
-    new Set(
-      exchangeInfo.symbols
-        .filter(s =>
-          s.status === "TRADING" &&
-          s.quoteAsset === "USDT" &&
-          s.isSpotTradingAllowed === true
-        )
-        .map(s => s.symbol)
+/*
+ * Find the last SUCCESSFUL publication.
+ */
+function getLastPublished(history) {
+  const published = history
+    .filter(x => x && x.published === true && x.time)
+    .sort(
+      (a, b) =>
+        new Date(b.time).getTime() -
+        new Date(a.time).getTime()
     );
+
+  return published[0] || null;
+}
+
+/*
+ * 25-minute protection.
+ *
+ * The bot no longer depends on fixed time slots.
+ * If GitHub runs late, the next available run can publish.
+ */
+function canPublish(history) {
+  const last = getLastPublished(history);
+
+  if (!last) {
+    return {
+      allowed: true,
+      remaining: 0
+    };
+  }
+
+  const lastTime = new Date(last.time).getTime();
+
+  if (!Number.isFinite(lastTime)) {
+    return {
+      allowed: true,
+      remaining: 0
+    };
+  }
+
+  const elapsed = Date.now() - lastTime;
+
+  if (elapsed >= POST_INTERVAL_MS) {
+    return {
+      allowed: true,
+      remaining: 0
+    };
+  }
+
+  return {
+    allowed: false,
+    remaining: POST_INTERVAL_MS - elapsed
+  };
+}
+
+async function getSpotCoins() {
+  const [exchangeInfo, tickers] = await Promise.all([
+    getJson(
+      `${API}/api/v3/exchangeInfo?permissions=SPOT`
+    ),
+    getJson(`${API}/api/v3/ticker/24hr`)
+  ]);
+
+  const tradingSymbols = new Set(
+    exchangeInfo.symbols
+      .filter(s =>
+        s.status === "TRADING" &&
+        s.quoteAsset === "USDT" &&
+        s.isSpotTradingAllowed === true
+      )
+      .map(s => s.symbol)
+  );
 
   return tickers
     .filter(t =>
       tradingSymbols.has(t.symbol) &&
       t.symbol.endsWith("USDT") &&
-      !/(UP|DOWN|BULL|BEAR)USDT$/.test(
-        t.symbol
-      ) &&
+      !/(UP|DOWN|BULL|BEAR)USDT$/.test(t.symbol) &&
       Number(t.quoteVolume) >= 5_000_000
     )
     .map(t => ({
       symbol: t.symbol,
-      asset: t.symbol.replace(
-        "USDT",
-        ""
-      ),
+      asset: t.symbol.replace("USDT", ""),
       price: Number(t.lastPrice),
-      change: Number(
-        t.priceChangePercent
-      ),
+      change: Number(t.priceChangePercent),
       volume: Number(t.quoteVolume),
       high: Number(t.highPrice),
       low: Number(t.lowPrice)
@@ -286,54 +283,49 @@ async function getSpotCoins() {
 }
 
 function chooseCoin(coins, history) {
-  const today =
-    new Date()
-      .toISOString()
-      .slice(0, 10);
+  const today = new Date()
+    .toISOString()
+    .slice(0, 10);
 
-  const usedToday =
-    new Set(
-      history
-        .filter(x =>
-          x.date === today &&
-          x.type === "analysis"
-        )
-        .map(x => x.asset)
-    );
-
-  const candidates =
-    coins
-      .filter(c =>
-        !usedToday.has(c.asset)
+  const usedToday = new Set(
+    history
+      .filter(x =>
+        x.date === today &&
+        x.type === "analysis" &&
+        x.asset
       )
-      .sort((a, b) => {
-        const scoreA =
-          Math.max(a.change, 0) *
-          Math.log10(
-            Math.max(a.volume, 1)
-          );
+      .map(x => x.asset)
+  );
 
-        const scoreB =
-          Math.max(b.change, 0) *
-          Math.log10(
-            Math.max(b.volume, 1)
-          );
+  const candidates = coins
+    .filter(c => !usedToday.has(c.asset))
+    .sort((a, b) => {
+      const scoreA =
+        Math.max(a.change, 0) *
+        Math.log10(Math.max(a.volume, 1));
 
-        return scoreB - scoreA;
-      });
+      const scoreB =
+        Math.max(b.change, 0) *
+        Math.log10(Math.max(b.volume, 1));
+
+      return scoreB - scoreA;
+    });
 
   return (
     candidates[0] ||
     [...coins].sort(
-      (a, b) =>
-        b.change - a.change
+      (a, b) => b.change - a.change
     )[0]
   );
 }
 
+/*
+ * IMPORTANT:
+ * Technical analysis is now 4H.
+ */
 async function getKlines(
   symbol,
-  interval = "1h",
+  interval = "4h",
   limit = 100
 ) {
   const data = await getJson(
@@ -350,61 +342,36 @@ async function getKlines(
   }));
 }
 
-function analysisText(
-  coin,
-  candles
-) {
-  const closes =
-    candles.map(x => x.close);
+function analysisText(coin, candles) {
+  const closes = candles.map(x => x.close);
 
-  const price =
-    closes.at(-1);
+  const price = closes.at(-1);
 
-  const ema20 =
-    ema(closes, 20);
+  const ema20 = ema(closes, 20);
+  const ema50 = ema(closes, 50);
 
-  const ema50 =
-    ema(closes, 50);
+  const sma20 = sma(closes, 20);
+  const sma50 = sma(closes, 50);
 
-  const sma20 =
-    sma(closes, 20);
+  const rsi14 = rsi(closes, 14);
 
-  const sma50 =
-    sma(closes, 50);
+  const high100 = Math.max(
+    ...candles.map(x => x.high)
+  );
 
-  const rsi14 =
-    rsi(closes, 14);
+  const low100 = Math.min(
+    ...candles.map(x => x.low)
+  );
 
-  const high72 =
-    Math.max(
-      ...candles.map(
-        x => x.high
-      )
-    );
+  const last20 = candles.slice(-20);
 
-  const low72 =
-    Math.min(
-      ...candles.map(
-        x => x.low
-      )
-    );
+  const support = Math.min(
+    ...last20.map(x => x.low)
+  );
 
-  const last20 =
-    candles.slice(-20);
-
-  const support =
-    Math.min(
-      ...last20.map(
-        x => x.low
-      )
-    );
-
-  const resistance =
-    Math.max(
-      ...last20.map(
-        x => x.high
-      )
-    );
+  const resistance = Math.max(
+    ...last20.map(x => x.high)
+  );
 
   let trend = "NEUTRAL";
 
@@ -443,20 +410,21 @@ function analysisText(
     momentum === "Strong" ||
     momentum === "Positive"
       ? "📈"
-      : "📉";
+      : momentum === "Weak" ||
+        momentum === "Negative"
+        ? "📉"
+        : "🟡";
 
   const changeEmoji =
-    coin.change >= 0
-      ? "🟢"
-      : "🔴";
+    coin.change >= 0 ? "🟢" : "🔴";
 
-  return `📊 $${coin.asset} Technical Analysis
+  return `📊 $${coin.asset} — 4H Technical Analysis
 
 💰 Price: ${money(price)}
 ${changeEmoji} 24H Change: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%
 📊 24H Volume: ${compact(coin.volume)}
 
-🔎 Market Structure
+🔎 4H Market Structure
 ${trendEmoji} Trend: ${trend}
 ${momentumEmoji} Momentum: ${momentum}
 ⚡ RSI(14): ${rsi14.toFixed(1)}
@@ -467,19 +435,19 @@ ${momentumEmoji} Momentum: ${momentum}
 • SMA20: ${money(sma20)}
 • SMA50: ${money(sma50)}
 
-📍 Key Levels
+📍 Key 4H Levels
 🟢 Support: ${money(support)}
-🟢 72H Low: ${money(low72)}
+🟢 100-candle Low: ${money(low100)}
 🔴 Resistance: ${money(resistance)}
-🔴 72H High: ${money(high72)}
+🔴 100-candle High: ${money(high100)}
 
 👀 Watch the reaction between ${money(support)} and ${money(resistance)}.
 
 🐂 Bullish Scenario
-A breakout above ${money(resistance)} with stronger volume could improve the short-term structure. 🚀
+A confirmed 4H close above ${money(resistance)} with stronger volume could improve the structure. 🚀
 
 🐻 Bearish Scenario
-A break below ${money(support)} could increase selling pressure. ⚠️
+A 4H close below ${money(support)} could increase selling pressure. ⚠️
 
 🧠 Market analysis only — not financial advice.
 
@@ -489,19 +457,14 @@ A break below ${money(support)} could increase selling pressure. ⚠️
 }
 
 function topMoversPost(coins) {
-  const movers =
-    [...coins]
-      .sort(
-        (a, b) =>
-          b.change - a.change
-      )
-      .slice(0, 5);
+  const movers = [...coins]
+    .sort((a, b) => b.change - a.change)
+    .slice(0, 5);
 
-  const lines =
-    movers.map(
-      (c, i) =>
-        `${i + 1}. ${c.change >= 0 ? "🟢" : "🔴"} $${c.asset} ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
-    );
+  const lines = movers.map(
+    (c, i) =>
+      `${i + 1}. ${c.change >= 0 ? "🟢" : "🔴"} $${c.asset} ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
+  );
 
   const lead = movers[0];
 
@@ -511,7 +474,7 @@ function topMoversPost(coins) {
 
 ${lines.join("\n")}
 
-📊 These moves should be evaluated with volume and liquidity, not percentage change alone.
+📊 Percentage change should be evaluated with volume and liquidity, not alone.
 
 ⚡ Leading mover: $${lead.asset} ${lead.change >= 0 ? "+" : ""}${lead.change.toFixed(2)}%
 
@@ -526,7 +489,7 @@ function educationPost(topic) {
   if (topic === "rsi") {
     return `📚 Crypto Education — RSI
 
-⚡ RSI helps measure momentum.
+⚡ RSI measures momentum.
 
 🟢 Above 70: strong momentum / potentially overextended
 🟡 Around 50: balanced momentum
@@ -534,11 +497,11 @@ function educationPost(topic) {
 
 📊 RSI should not be used alone.
 
-🔎 Price structure, volume and trend can provide important confirmation.
+🔎 Price structure, volume and trend can provide confirmation.
 
-👀 The key is context.
+👀 Context matters.
 
-🤔 Do you use RSI with another indicator?
+🤔 Do you combine RSI with another indicator?
 
 #CryptoEducation #Binance #RSI #TechnicalAnalysis`;
   }
@@ -571,7 +534,7 @@ function educationPost(topic) {
 
 📍 The wick shows where price traded but failed to hold.
 
-📊 Candle patterns become more useful when combined with:
+📊 Candles become more useful with:
 
 🔎 Support/resistance
 📈 Trend
@@ -599,13 +562,10 @@ async function getNews() {
       const url =
         `${GDELT}?query=${encodeURIComponent(query)}&mode=artlist&format=json&maxrecords=10&timespan=6h&sort=datedesc`;
 
-      const data =
-        await getJson(url);
+      const data = await getJson(url);
 
       if (Array.isArray(data.articles)) {
-        results.push(
-          ...data.articles
-        );
+        results.push(...data.articles);
       }
     } catch (err) {
       console.log(
@@ -627,23 +587,18 @@ async function getNews() {
     "bombing"
   ];
 
-  const filtered =
-    results.filter(article => {
-      const text =
-        `${article.title || ""} ${article.url || ""}`
-          .toLowerCase();
+  const filtered = results.filter(article => {
+    const text =
+      `${article.title || ""} ${article.url || ""}`
+        .toLowerCase();
 
-      return (
-        article.socialimage &&
-        !blocked.some(
-          word =>
-            text.includes(word)
-        )
-      );
-    });
+    return (
+      article.socialimage &&
+      !blocked.some(word => text.includes(word))
+    );
+  });
 
-  const unique =
-    new Map();
+  const unique = new Map();
 
   for (const article of filtered) {
     const key =
@@ -655,172 +610,91 @@ async function getNews() {
     }
   }
 
-  return [
-    ...unique.values()
-  ].slice(0, 30);
+  return [...unique.values()].slice(0, 30);
 }
 
-async function createNewsImage(
-  article
-) {
-  const ok =
-    await downloadImage(
-      article.socialimage,
-      IMAGE_FILE
+async function createNewsImage(article) {
+  const ok = await downloadImage(
+    article.socialimage,
+    IMAGE_FILE
+  );
+
+  return ok ? IMAGE_FILE : null;
+}
+
+function runChart(input, output, mode) {
+  const chart = path.join(
+    ROOT,
+    "bot",
+    "chart.mjs"
+  );
+
+  try {
+    execFileSync(
+      "node",
+      [chart, input, output, mode],
+      {
+        cwd: ROOT,
+        stdio: "inherit"
+      }
     );
 
-  if (!ok) {
+    return fs.existsSync(output)
+      ? output
+      : null;
+  } catch (err) {
+    console.log(
+      `${mode} chart failed:`,
+      err.message
+    );
+
     return null;
   }
-
-  return IMAGE_FILE;
 }
 
-function createAnalysisChart(
-  symbol
-) {
-  const chartPath =
+function createAnalysisChart(symbol) {
+  return runChart(
+    symbol,
     path.join(
       ROOT,
       "bot",
       "analysis-chart.png"
-    );
-
-  try {
-    execFileSync(
-      "node",
-      [
-        path.join(
-          ROOT,
-          "bot",
-          "chart.mjs"
-        ),
-        symbol,
-        chartPath,
-        "analysis"
-      ],
-      {
-        cwd: ROOT,
-        stdio: "inherit"
-      }
-    );
-
-    if (
-      fs.existsSync(chartPath)
-    ) {
-      return chartPath;
-    }
-  } catch (err) {
-    console.log(
-      "Chart generation failed:",
-      err.message
-    );
-  }
-
-  return null;
+    ),
+    "analysis"
+  );
 }
 
-function createEducationImage(
-  topic
-) {
-  const imagePath =
+function createEducationImage(topic) {
+  return runChart(
+    topic,
     path.join(
       ROOT,
       "bot",
       "education.png"
-    );
-
-  try {
-    execFileSync(
-      "node",
-      [
-        path.join(
-          ROOT,
-          "bot",
-          "chart.mjs"
-        ),
-        topic,
-        imagePath,
-        "education"
-      ],
-      {
-        cwd: ROOT,
-        stdio: "inherit"
-      }
-    );
-
-    if (
-      fs.existsSync(imagePath)
-    ) {
-      return imagePath;
-    }
-  } catch (err) {
-    console.log(
-      "Education image failed:",
-      err.message
-    );
-  }
-
-  return null;
+    ),
+    "education"
+  );
 }
 
-function createMoversImage(
-  coins
-) {
-  const imagePath =
+function createMoversImage(coins) {
+  const movers = [...coins]
+    .sort((a, b) => b.change - a.change)
+    .slice(0, 5);
+
+  return runChart(
+    JSON.stringify(
+      movers.map(x => ({
+        asset: x.asset,
+        change: x.change
+      }))
+    ),
     path.join(
       ROOT,
       "bot",
       "movers.png"
-    );
-
-  const movers =
-    [...coins]
-      .sort(
-        (a, b) =>
-          b.change - a.change
-      )
-      .slice(0, 5);
-
-  try {
-    execFileSync(
-      "node",
-      [
-        path.join(
-          ROOT,
-          "bot",
-          "chart.mjs"
-        ),
-        JSON.stringify(
-          movers.map(
-            x => ({
-              asset: x.asset,
-              change: x.change
-            })
-          )
-        ),
-        imagePath,
-        "movers"
-      ],
-      {
-        cwd: ROOT,
-        stdio: "inherit"
-      }
-    );
-
-    if (
-      fs.existsSync(imagePath)
-    ) {
-      return imagePath;
-    }
-  } catch (err) {
-    console.log(
-      "Movers image failed:",
-      err.message
-    );
-  }
-
-  return null;
+    ),
+    "movers"
+  );
 }
 
 function findPoster() {
@@ -831,18 +705,13 @@ function findPoster() {
     "agent/skills/square-post/scripts/post-image.mjs"
   ];
 
-  for (
-    const location of locations
-  ) {
-    const full =
-      path.join(
-        ROOT,
-        location
-      );
+  for (const location of locations) {
+    const full = path.join(
+      ROOT,
+      location
+    );
 
-    if (
-      fs.existsSync(full)
-    ) {
+    if (fs.existsSync(full)) {
       return full;
     }
   }
@@ -852,12 +721,8 @@ function findPoster() {
   );
 }
 
-function publish(
-  text,
-  imagePath
-) {
-  const poster =
-    findPoster();
+function publish(text, imagePath) {
+  const poster = findPoster();
 
   if (
     !imagePath ||
@@ -905,50 +770,44 @@ function cleanup() {
     )
   ];
 
-  for (
-    const file of files
-  ) {
-    if (
-      fs.existsSync(file)
-    ) {
+  for (const file of files) {
+    if (fs.existsSync(file)) {
       fs.unlinkSync(file);
     }
   }
 }
 
 async function main() {
-  console.log(
-    "================================"
-  );
-  console.log(
-    "Binance Square Auto Bot 2.0"
-  );
-  console.log(
-    "================================"
-  );
+  console.log("================================");
+  console.log("Binance Square Auto Bot 3.0");
+  console.log("================================");
 
-  const history =
-    loadHistory();
+  const history = loadHistory();
 
-  const slot =
-    Math.floor(
-      Date.now() /
-      SLOT_MS
+  /*
+   * NEW:
+   * Check the actual last successful publication.
+   * No fixed 25-minute slots anymore.
+   */
+  const timing = canPublish(history);
+
+  if (!timing.allowed) {
+    const minutes = Math.ceil(
+      timing.remaining / 60000
     );
 
-  if (
-    history.some(
-      x => x.slot === slot
-    )
-  ) {
     console.log(
-      "This slot was already published."
+      `⏳ Too early. Next publication allowed in approximately ${minutes} minute(s).`
     );
+
     return;
   }
 
-  const coins =
-    await getSpotCoins();
+  console.log(
+    "✅ 25-minute interval reached. Preparing a new post..."
+  );
+
+  const coins = await getSpotCoins();
 
   if (!coins.length) {
     throw new Error(
@@ -957,20 +816,27 @@ async function main() {
   }
 
   /*
-   * 4 analysis slots + 1 other slot
-   * = approximately 80% analysis.
+   * 4 analysis posts + 1 other post.
+   * The cycle is based on SUCCESSFUL PUBLICATIONS,
+   * not on the clock.
+   *
+   * This keeps the 80/20 ratio even when GitHub
+   * delays a scheduled workflow.
    */
-  const slotInCycle =
-    ((slot % 5) + 5) % 5;
+  const successfulPosts =
+    history.filter(
+      x => x && x.published === true
+    ).length;
+
+  const position =
+    successfulPosts % 5;
 
   let type;
   let text;
   let asset = null;
   let image = null;
 
-  if (
-    slotInCycle < 4
-  ) {
+  if (position < 4) {
     type = "analysis";
 
     const coin =
@@ -979,13 +845,12 @@ async function main() {
         history
       );
 
-    asset =
-      coin.asset;
+    asset = coin.asset;
 
     const candles =
       await getKlines(
         coin.symbol,
-        "1h",
+        "4h",
         100
       );
 
@@ -1002,17 +867,13 @@ async function main() {
   } else {
     type = "other";
 
-    const cycle =
+    const otherNumber =
       Math.floor(
-        slot / 5
+        successfulPosts / 5
       );
 
-    /*
-     * Other content rotation:
-     * News → Movers → Education
-     */
     const mode =
-      cycle % 3;
+      otherNumber % 3;
 
     if (mode === 0) {
       const news =
@@ -1053,9 +914,7 @@ async function main() {
             coins
           );
       }
-    } else if (
-      mode === 1
-    ) {
+    } else if (mode === 1) {
       text =
         topMoversPost(
           coins
@@ -1074,7 +933,8 @@ async function main() {
 
       const topic =
         topics[
-          cycle % topics.length
+          otherNumber %
+          topics.length
         ];
 
       text =
@@ -1098,31 +958,37 @@ async function main() {
     );
   }
 
+  /*
+   * Publish FIRST.
+   *
+   * Only after publish() succeeds do we
+   * write published:true to history.
+   */
   publish(
     text,
     image
   );
 
+  const now =
+    new Date().toISOString();
+
   history.push({
-    slot,
-    date:
-      new Date()
-        .toISOString()
-        .slice(0, 10),
-    time:
-      new Date().toISOString(),
+    date: now.slice(0, 10),
+    time: now,
     type,
-    asset
+    asset,
+    published: true
   });
 
-  saveHistory(
-    history
-  );
+  saveHistory(history);
 
   cleanup();
 
   console.log(
     "✅ Published successfully."
+  );
+  console.log(
+    `🕐 Published at: ${now}`
   );
 }
 
