@@ -117,5 +117,12 @@
     "type": "other",
     "asset": null,
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T16:30:20.615Z",
+    "type": "analysis",
+    "asset": "1000CAT",
+    "published": true
   }
 ]
