@@ -166,5 +166,12 @@
     "type": "analysis",
     "asset": "SUSHI",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T19:55:20.919Z",
+    "type": "analysis",
+    "asset": "AR",
+    "published": true
   }
 ]
