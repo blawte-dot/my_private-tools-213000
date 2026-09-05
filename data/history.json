@@ -40,5 +40,12 @@
     "time": "2026-09-05T00:17:53.991Z",
     "type": "analysis",
     "asset": "MARSCOIN"
+  },
+  {
+    "slot": 1192388,
+    "date": "2026-09-05",
+    "time": "2026-09-05T04:39:31.413Z",
+    "type": "analysis",
+    "asset": "DASH"
   }
 ]
