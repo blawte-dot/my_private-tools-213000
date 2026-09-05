@@ -54,5 +54,12 @@
     "type": "analysis",
     "asset": "SNXXB",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T08:35:49.786Z",
+    "type": "analysis",
+    "asset": "ZEN",
+    "published": true
   }
 ]
