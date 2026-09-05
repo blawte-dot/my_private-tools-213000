@@ -75,5 +75,12 @@
     "type": "analysis",
     "asset": "GIGGLE",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T12:43:12.690Z",
+    "type": "other",
+    "asset": null,
+    "published": true
   }
 ]
