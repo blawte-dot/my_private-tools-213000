@@ -201,5 +201,12 @@
     "type": "analysis",
     "asset": "OP",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T22:15:20.334Z",
+    "type": "analysis",
+    "asset": "FF",
+    "published": true
   }
 ]
