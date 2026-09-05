@@ -159,5 +159,12 @@
     "type": "analysis",
     "asset": "UNI",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T19:25:22.279Z",
+    "type": "analysis",
+    "asset": "SUSHI",
+    "published": true
   }
 ]
