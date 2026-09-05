@@ -1,7 +1,7 @@
 {
-  "lastSuccessfulPost": "2026-09-05T14:35:20.481Z",
-  "lastFailedAttempt": "2026-09-05T15:50:21.555Z",
-  "lastFailureReason": "Command failed: node /home/runner/work/my_private-tools-213000/my_private-tools-213000/.agents/skills/square-post/scripts/post-image.mjs --text 🔥 Binance Spot — Top Movers\n\n📈 Strongest movers right now:\n\n1. 🟢 $MARSCOIN +35.50%\n2. 🟢 $DASH +31.97%\n3. 🟢 $TUT +25.04%\n4. 🟢 $币安人生 +21.09%\n5. 🟢 $TST ",
-  "consecutiveFailures": 11,
-  "nextExpectedPublish": "2026-09-05T15:01:20.481Z"
+  "lastSuccessfulPost": "2026-09-05T15:55:22.760Z",
+  "lastFailedAttempt": null,
+  "lastFailureReason": null,
+  "consecutiveFailures": 0,
+  "nextExpectedPublish": "2026-09-05T16:21:22.760Z"
 }
