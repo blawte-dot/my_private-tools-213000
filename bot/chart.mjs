@@ -5,6 +5,7 @@ const API = "https://data-api.binance.vision";
 
 const WIDTH = 1400;
 const HEIGHT = 850;
+const ANALYSIS_HEIGHT = 940;
 
 async function getJson(url) {
   const res = await fetch(url, {
@@ -117,6 +118,16 @@ function escapeXml(text) {
     .replace(/'/g, "&apos;");
 }
 
+function compactNumber(value) {
+  if (!Number.isFinite(value)) return "0";
+
+  if (value >= 1e9) return `${(value / 1e9).toFixed(2)}B`;
+  if (value >= 1e6) return `${(value / 1e6).toFixed(2)}M`;
+  if (value >= 1e3) return `${(value / 1e3).toFixed(2)}K`;
+
+  return value.toFixed(2);
+}
+
 function linePath(points) {
   return points
     .filter(p => p)
@@ -211,6 +222,9 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
   const highest = Math.max(...highs);
   const lowest = Math.min(...lows);
 
+  const highestIndex = highs.indexOf(highest);
+  const lowestIndex = lows.indexOf(lowest);
+
   const priceRange = highest - lowest;
 
   const padding = priceRange * 0.08;
@@ -219,12 +233,13 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
   const minPrice = Math.max(0, lowest - padding);
 
   /*
-   * Chart area.
+   * Chart area. Shifted down to make room for an
+   * app-style header/stats panel above it.
    */
   const left = 80;
-  const right = 1360;
-  const top = 130;
-  const bottom = 650;
+  const right = 1230;
+  const top = 350;
+  const bottom = 760;
 
   const chartWidth = right - left;
   const chartHeight = bottom - top;
@@ -355,8 +370,8 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
   /*
    * Volume.
    */
-  const volumeTop = 690;
-  const volumeBottom = 800;
+  const volumeTop = 780;
+  const volumeBottom = 860;
 
   const maxVolume = Math.max(
     ...candles.map(c => c.volume)
@@ -416,13 +431,45 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
         x="${right + 10}"
         y="${yy + 5}"
         fill="#848E9C"
-        font-size="18"
+        font-size="15"
         font-family="Arial"
       >
         ${escapeXml(formatPrice(price))}
       </text>
     `;
   }
+
+  /*
+   * Peak / trough callouts, like the native app labels
+   * the visible high and low on the price axis.
+   */
+  const peakLabelY = Math.max(top + 16, y(highest) - 12);
+  const troughLabelY = Math.min(bottom - 6, y(lowest) + 20);
+
+  const calloutSvg = `
+    <text
+      x="${x(highestIndex)}"
+      y="${peakLabelY}"
+      text-anchor="middle"
+      fill="#F0F0F0"
+      font-size="16"
+      font-family="Arial"
+      font-weight="bold"
+    >
+      ${escapeXml(formatPrice(highest))}
+    </text>
+    <text
+      x="${x(lowestIndex)}"
+      y="${troughLabelY}"
+      text-anchor="middle"
+      fill="#F0F0F0"
+      font-size="16"
+      font-family="Arial"
+      font-weight="bold"
+    >
+      ${escapeXml(formatPrice(lowest))}
+    </text>
+  `;
 
   /*
    * Time labels.
@@ -451,7 +498,7 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
     timeSvg += `
       <text
         x="${x(i)}"
-        y="830"
+        y="880"
         text-anchor="middle"
         fill="#848E9C"
         font-size="16"
@@ -464,10 +511,24 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
 
   const last = candles.at(-1);
 
+  /*
+   * "24H" stats computed from the last 6 candles of this
+   * same 4H series (6 x 4h = 24h) — real values from the
+   * data already fetched, not a separate API call.
+   */
+  const last24h = candles.slice(-6);
+  const openStart24h = last24h[0].open;
+
+  const high24h = Math.max(...last24h.map(c => c.high));
+  const low24h = Math.min(...last24h.map(c => c.low));
+  const volAsset24h = last24h.reduce((sum, c) => sum + c.volume, 0);
+  const volUsdt24h = last24h.reduce(
+    (sum, c) => sum + c.volume * c.close,
+    0
+  );
+
   const change =
-    ((last.close - candles[0].open) /
-      candles[0].open) *
-    100;
+    ((last.close - openStart24h) / openStart24h) * 100;
 
   const changeText =
     `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`;
@@ -477,62 +538,92 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
       ? "#0ECB81"
       : "#F6465D";
 
+  const tagLabel = change >= 0 ? "Gainer" : "Loser";
+
   const titleSymbol =
     symbol.replace("USDT", "");
+
+  const currentPriceY = y(last.close);
 
   return `
 <svg
   xmlns="http://www.w3.org/2000/svg"
   width="${WIDTH}"
-  height="${HEIGHT}"
-  viewBox="0 0 ${WIDTH} ${HEIGHT}"
+  height="${ANALYSIS_HEIGHT}"
+  viewBox="0 0 ${WIDTH} ${ANALYSIS_HEIGHT}"
 >
   <rect
     width="${WIDTH}"
-    height="${HEIGHT}"
+    height="${ANALYSIS_HEIGHT}"
     fill="#0B0E11"
   />
 
-  <!-- Header -->
-  ${coinBadgeSvg(titleSymbol, iconDataUri, 55, 50, 28)}
+  <!-- Fake app tab row -->
+  <text x="60" y="30" fill="#F0F0F0" font-size="17" font-family="Arial" font-weight="bold">Price</text>
+  <rect x="60" y="38" width="38" height="3" fill="#F0B90B" />
+  <text x="130" y="30" fill="#848E9C" font-size="17" font-family="Arial">Info</text>
+  <text x="190" y="30" fill="#848E9C" font-size="17" font-family="Arial">Data</text>
+  <text x="255" y="30" fill="#848E9C" font-size="17" font-family="Arial">Square</text>
+  <text x="335" y="30" fill="#848E9C" font-size="17" font-family="Arial">Trade-X</text>
+  <line x1="0" y1="52" x2="${WIDTH}" y2="52" stroke="#1E2329" stroke-width="1" />
 
-  <text
-    x="98"
-    y="46"
-    fill="#F0F0F0"
-    font-size="34"
-    font-family="Arial"
-    font-weight="bold"
-  >
+  <!-- Coin row -->
+  ${coinBadgeSvg(titleSymbol, iconDataUri, 78, 100, 30)}
+
+  <text x="122" y="92" fill="#F0F0F0" font-size="30" font-family="Arial" font-weight="bold">
     ${escapeXml(titleSymbol)}/USDT
   </text>
 
-  <text
-    x="98"
-    y="80"
-    fill="#848E9C"
-    font-size="20"
-    font-family="Arial"
-  >
-    Binance Spot • 4H
+  <text x="122" y="120" fill="#848E9C" font-size="18" font-family="Arial">
+    Binance Spot
   </text>
 
-  <text
-    x="338"
-    y="80"
-    fill="${changeColor}"
-    font-size="20"
-    font-family="Arial"
-    font-weight="bold"
-  >
+  <!-- Big price -->
+  <text x="60" y="205" fill="${changeColor}" font-size="56" font-family="Arial" font-weight="bold">
+    ${escapeXml(formatPrice(last.close))}
+  </text>
+
+  <text x="60" y="236" fill="${changeColor}" font-size="22" font-family="Arial" font-weight="bold">
     ${changeText}
   </text>
 
+  <rect x="60" y="248" width="92" height="30" rx="6" fill="${changeColor}" opacity="0.15" />
+  <text x="106" y="268" text-anchor="middle" fill="${changeColor}" font-size="16" font-family="Arial" font-weight="bold">
+    ${tagLabel}
+  </text>
+
+  <!-- 24H stats panel -->
+  <text x="950" y="150" fill="#848E9C" font-size="17" font-family="Arial">24H High</text>
+  <text x="1360" y="150" text-anchor="end" fill="#F0F0F0" font-size="17" font-family="Arial" font-weight="bold">${escapeXml(formatPrice(high24h))}</text>
+
+  <text x="950" y="180" fill="#848E9C" font-size="17" font-family="Arial">24H Low</text>
+  <text x="1360" y="180" text-anchor="end" fill="#F0F0F0" font-size="17" font-family="Arial" font-weight="bold">${escapeXml(formatPrice(low24h))}</text>
+
+  <text x="950" y="210" fill="#848E9C" font-size="17" font-family="Arial">24H Vol(${escapeXml(titleSymbol)})</text>
+  <text x="1360" y="210" text-anchor="end" fill="#F0F0F0" font-size="17" font-family="Arial" font-weight="bold">${escapeXml(compactNumber(volAsset24h))}</text>
+
+  <text x="950" y="240" fill="#848E9C" font-size="17" font-family="Arial">24H Vol(USDT)</text>
+  <text x="1360" y="240" text-anchor="end" fill="#F0F0F0" font-size="17" font-family="Arial" font-weight="bold">${escapeXml(compactNumber(volUsdt24h))}</text>
+
+  <!-- Timeframe tabs -->
+  <text x="60" y="300" fill="#848E9C" font-size="17" font-family="Arial">Time</text>
+  <text x="130" y="300" fill="#848E9C" font-size="17" font-family="Arial">15m</text>
+  <text x="190" y="300" fill="#848E9C" font-size="17" font-family="Arial">1h</text>
+  <text x="240" y="300" fill="#F0F0F0" font-size="17" font-family="Arial" font-weight="bold">4h</text>
+  <rect x="235" y="308" width="24" height="3" fill="#F0B90B" />
+  <text x="290" y="300" fill="#848E9C" font-size="17" font-family="Arial">1D</text>
+  <text x="340" y="300" fill="#848E9C" font-size="17" font-family="Arial">More</text>
+
+  <line x1="0" y1="330" x2="${WIDTH}" y2="330" stroke="#1E2329" stroke-width="1" />
+
+  <!-- Watermark -->
   <text
-    x="1120"
-    y="58"
-    fill="#F0B90B"
-    font-size="21"
+    x="${(left + right) / 2}"
+    y="${(top + bottom) / 2}"
+    text-anchor="middle"
+    fill="#F0F0F0"
+    opacity="0.045"
+    font-size="110"
     font-family="Arial"
     font-weight="bold"
   >
@@ -585,7 +676,7 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
     x="${left + 10}"
     y="${supportY - 10}"
     fill="#0ECB81"
-    font-size="18"
+    font-size="16"
     font-family="Arial"
     font-weight="bold"
   >
@@ -608,11 +699,44 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
     x="${left + 10}"
     y="${resistanceY - 10}"
     fill="#F6465D"
-    font-size="18"
+    font-size="16"
     font-family="Arial"
     font-weight="bold"
   >
     RESISTANCE ${escapeXml(formatPrice(resistance))}
+  </text>
+
+  <!-- Peak / trough callouts -->
+  ${calloutSvg}
+
+  <!-- Current-price dashed line + boxed label, like the app's live price marker -->
+  <line
+    x1="${x(candles.length - 1)}"
+    y1="${currentPriceY}"
+    x2="${right + 10}"
+    y2="${currentPriceY}"
+    stroke="#5E6673"
+    stroke-width="1"
+    stroke-dasharray="4 4"
+  />
+  <rect
+    x="${right + 10}"
+    y="${currentPriceY - 14}"
+    width="140"
+    height="28"
+    rx="4"
+    fill="${changeColor}"
+  />
+  <text
+    x="${right + 80}"
+    y="${currentPriceY + 5}"
+    text-anchor="middle"
+    fill="#0B0E11"
+    font-size="16"
+    font-family="Arial"
+    font-weight="bold"
+  >
+    ${escapeXml(formatPrice(last.close))}
   </text>
 
   <!-- Volume -->
@@ -627,9 +751,9 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
 
   <text
     x="${left}"
-    y="${volumeTop - 12}"
+    y="${volumeTop - 10}"
     fill="#848E9C"
-    font-size="17"
+    font-size="15"
     font-family="Arial"
   >
     VOLUME
@@ -641,74 +765,30 @@ function createAnalysisSvg(symbol, candles, iconDataUri) {
   ${timeSvg}
 
   <!-- Legend -->
-  <rect
-    x="70"
-    y="115"
-    width="14"
-    height="14"
-    fill="#F0B90B"
-  />
+  <rect x="90" y="340" width="12" height="12" fill="#F0B90B" />
+  <text x="108" y="350" fill="#848E9C" font-size="14" font-family="Arial">SMA20</text>
 
-  <text
-    x="92"
-    y="128"
-    fill="#848E9C"
-    font-size="15"
-    font-family="Arial"
-  >
-    SMA20
-  </text>
+  <rect x="185" y="340" width="12" height="12" fill="#8B5CF6" />
+  <text x="203" y="350" fill="#848E9C" font-size="14" font-family="Arial">EMA20</text>
 
-  <rect
-    x="175"
-    y="115"
-    width="14"
-    height="14"
-    fill="#8B5CF6"
-  />
-
-  <text
-    x="197"
-    y="128"
-    fill="#848E9C"
-    font-size="15"
-    font-family="Arial"
-  >
-    EMA20
-  </text>
-
-  <rect
-    x="280"
-    y="115"
-    width="14"
-    height="14"
-    fill="#3B82F6"
-  />
-
-  <text
-    x="302"
-    y="128"
-    fill="#848E9C"
-    font-size="15"
-    font-family="Arial"
-  >
-    EMA50
-  </text>
+  <rect x="280" y="340" width="12" height="12" fill="#3B82F6" />
+  <text x="298" y="350" fill="#848E9C" font-size="14" font-family="Arial">EMA50</text>
 
   <!-- Footer -->
   <text
-    x="70"
-    y="848"
+    x="60"
+    y="900"
     fill="#5E6673"
     font-size="13"
     font-family="Arial"
   >
-    Real Binance Spot market data • 4-hour candles
+    Real Binance Spot market data \u2022 4-hour candles \u2022 stats independently computed, not an official Binance screenshot
   </text>
 
 </svg>
 `;
 }
+
 
 function createEducationSvg(topic) {
   const common = `

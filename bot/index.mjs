@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import sharp from "sharp";
 
 const API = "https://data-api.binance.vision";
@@ -927,56 +927,148 @@ function createWatchlistImage(coins) {
   );
 }
 
-function findPoster() {
-  const locations = [
-    ".agents/skills/binance/square-post/scripts/post-image.mjs",
-    "agent/skills/binance/square-post/scripts/post-image.mjs",
-    ".agents/skills/square-post/scripts/post-image.mjs",
-    "agent/skills/square-post/scripts/post-image.mjs"
+/*
+ * Finds the official Binance Square Skill's scripts directory.
+ * The install command can place it under a few different
+ * relative paths depending on the agent invoking it, so we
+ * search for post-image.mjs specifically and derive the shared
+ * scripts directory from wherever it's actually found — rather
+ * than hard-coding one location and hoping it matches.
+ */
+function findSkillScriptsDir() {
+  const candidates = [
+    ".agents/skills/binance/square-post/scripts",
+    "agent/skills/binance/square-post/scripts",
+    ".agents/skills/square-post/scripts",
+    "agent/skills/square-post/scripts"
   ];
 
-  for (const location of locations) {
-    const full = path.join(
-      ROOT,
-      location
-    );
+  for (const location of candidates) {
+    const dir = path.join(ROOT, location);
+    const marker = path.join(dir, "post-image.mjs");
 
-    if (fs.existsSync(full)) {
-      return full;
+    if (fs.existsSync(marker)) {
+      return dir;
     }
   }
 
   throw new Error(
-    "Binance Square post-image.mjs was not found."
+    "Binance Square Skill scripts directory was not found " +
+      "(checked: " +
+      candidates.join(", ") +
+      ")."
   );
 }
 
-function publish(text, imagePath) {
-  const poster = findPoster();
+function redactSecret(text, secret) {
+  if (!secret) return text;
 
-  if (
-    !imagePath ||
-    !fs.existsSync(imagePath)
-  ) {
+  return text.split(secret).join("[REDACTED]");
+}
+
+/*
+ * Runs the official Binance Square Skill script and returns
+ * its captured stdout/stderr instead of just inheriting stdio,
+ * so a failure is diagnosable from the GitHub Actions log
+ * instead of surfacing only as a bare "exit code 1".
+ */
+function runSkillScript(scriptPath, args) {
+  const apiKey = process.env.BINANCE_SQUARE_OPENAPI_KEY;
+
+  if (!apiKey) {
     throw new Error(
-      "A valid image is required."
+      "BINANCE_SQUARE_OPENAPI_KEY is not set in the environment."
     );
   }
 
-  execFileSync(
+  const result = spawnSync(
     "node",
-    [
-      poster,
-      "--text",
-      text,
-      "--images",
-      imagePath
-    ],
+    [scriptPath, ...args],
     {
       cwd: ROOT,
       env: process.env,
-      stdio: "inherit"
+      encoding: "utf8"
     }
+  );
+
+  const stdout = redactSecret(
+    result.stdout || "",
+    apiKey
+  );
+  const stderr = redactSecret(
+    result.stderr || "",
+    apiKey
+  );
+
+  if (stdout.trim()) console.log(stdout.trim());
+  if (stderr.trim()) console.error(stderr.trim());
+
+  if (result.error) {
+    throw new Error(
+      `Failed to launch Binance Square Skill script: ${result.error.message}`
+    );
+  }
+
+  if (result.status !== 0) {
+    throw new Error(
+      "Binance Square publish failed.\n" +
+        `Exit code: ${result.status}\n` +
+        `stdout:\n${stdout.trim() || "(empty)"}\n\n` +
+        `stderr:\n${stderr.trim() || "(empty)"}`
+    );
+  }
+
+  return { stdout, stderr };
+}
+
+/*
+ * Publishes text content, optionally with 0-4 images.
+ *
+ * images: null/undefined/[] -> text-only post (post-text.mjs)
+ *         string             -> single image (back-compat)
+ *         string[] (1-4)     -> image post (post-image.mjs,
+ *                                comma-separated, official max is 4)
+ */
+function publish(text, images) {
+  const scriptsDir = findSkillScriptsDir();
+
+  const imageList = !images
+    ? []
+    : Array.isArray(images)
+      ? images
+      : [images];
+
+  if (imageList.length > 4) {
+    throw new Error(
+      "At most 4 images are supported per post."
+    );
+  }
+
+  for (const img of imageList) {
+    if (!img || !fs.existsSync(img)) {
+      throw new Error(
+        `Image path does not exist: ${img}`
+      );
+    }
+  }
+
+  console.log("Publishing Binance Square post...");
+  console.log(
+    imageList.length
+      ? `Images (${imageList.length}): ${imageList.join(", ")}`
+      : "Images: none (text-only post)"
+  );
+
+  if (imageList.length === 0) {
+    return runSkillScript(
+      path.join(scriptsDir, "post-text.mjs"),
+      ["--text", text]
+    );
+  }
+
+  return runSkillScript(
+    path.join(scriptsDir, "post-image.mjs"),
+    ["--text", text, "--images", imageList.join(",")]
   );
 }
 
@@ -1137,13 +1229,16 @@ async function main() {
 
 #CryptoNews #Binance #Bitcoin #CryptoMarket`;
 
+        /*
+         * Only attach an image when the article actually has
+         * a usable one. Otherwise this goes out as a text-only
+         * post instead of forcing an unrelated fallback image.
+         */
         image =
           await createNewsImage(
             article
           );
-      }
-
-      if (!text || !image) {
+      } else {
         text =
           topMoversPost(
             coins
@@ -1202,17 +1297,46 @@ async function main() {
       image = createAnalysisChart(coin.symbol);
     } else {
       text = whatToWatchPost(coins);
-      image = createWatchlistImage(coins);
+
+      const watchlistImg = createWatchlistImage(coins);
+
+      /*
+       * Two images for this one: the liquidity watchlist
+       * snapshot, plus a close-up analysis chart of the single
+       * highest-volume pick on that list — a concrete, natural
+       * use of the Skill's up-to-4-images support rather than
+       * attaching a second image for its own sake.
+       */
+      const topPick = [...coins].sort(
+        (a, b) => b.volume - a.volume
+      )[0];
+
+      const topPickImg = topPick
+        ? createAnalysisChart(topPick.symbol)
+        : null;
+
+      image = [watchlistImg, topPickImg].filter(Boolean);
     }
   }
 
-  if (
-    !image ||
-    !fs.existsSync(image)
-  ) {
-    throw new Error(
-      "Could not create a valid post image."
-    );
+  /*
+   * `image` may be: a single path (string), an array of paths
+   * (0-4), or null/undefined for a text-only post. Normalize
+   * and validate here, once, regardless of which branch above
+   * produced it.
+   */
+  const images = !image
+    ? []
+    : Array.isArray(image)
+      ? image.filter(Boolean)
+      : [image];
+
+  for (const img of images) {
+    if (!fs.existsSync(img)) {
+      throw new Error(
+        `Could not create a valid post image: ${img}`
+      );
+    }
   }
 
   /*
@@ -1223,7 +1347,7 @@ async function main() {
    */
   publish(
     text,
-    image
+    images
   );
 
   const now =
