@@ -89,5 +89,12 @@
     "type": "analysis",
     "asset": "TUT",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T13:35:19.778Z",
+    "type": "analysis",
+    "asset": "TST",
+    "published": true
   }
 ]
