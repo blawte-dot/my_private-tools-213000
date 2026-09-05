@@ -47,5 +47,12 @@
     "time": "2026-09-05T04:39:31.413Z",
     "type": "analysis",
     "asset": "DASH"
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T04:45:24.835Z",
+    "type": "analysis",
+    "asset": "SNXXB",
+    "published": true
   }
 ]
