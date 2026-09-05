@@ -222,5 +222,12 @@
     "type": "other",
     "asset": null,
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T23:45:23.944Z",
+    "type": "analysis",
+    "asset": "CHIP",
+    "published": true
   }
 ]
