@@ -103,5 +103,12 @@
     "type": "analysis",
     "asset": "ASTER",
     "published": true
+  },
+  {
+    "date": "2026-09-05",
+    "time": "2026-09-05T14:35:20.481Z",
+    "type": "analysis",
+    "asset": "NEAR",
+    "published": true
   }
 ]
