@@ -1,7 +1,7 @@
 {
   "lastSuccessfulPost": "2026-09-05T14:35:20.481Z",
-  "lastFailedAttempt": "2026-09-05T15:15:17.996Z",
-  "lastFailureReason": "Command failed: node /home/runner/work/my_private-tools-213000/my_private-tools-213000/.agents/skills/square-post/scripts/post-image.mjs --text 🔥 Binance Spot — Top Movers\n\n📈 Strongest movers right now:\n\n1. 🟢 $MARSCOIN +38.19%\n2. 🟢 $DASH +37.01%\n3. 🟢 $TUT +21.92%\n4. 🟢 $ZEN +19.57%\n5. 🟢 $NOM +",
-  "consecutiveFailures": 4,
+  "lastFailedAttempt": "2026-09-05T15:20:20.361Z",
+  "lastFailureReason": "Command failed: node /home/runner/work/my_private-tools-213000/my_private-tools-213000/.agents/skills/square-post/scripts/post-image.mjs --text 🔥 Binance Spot — Top Movers\n\n📈 Strongest movers right now:\n\n1. 🟢 $MARSCOIN +38.37%\n2. 🟢 $DASH +36.92%\n3. 🟢 $TUT +23.64%\n4. 🟢 $NOM +20.13%\n5. 🟢 $ZEN +",
+  "consecutiveFailures": 5,
   "nextExpectedPublish": "2026-09-05T15:01:20.481Z"
 }
