@@ -279,5 +279,15 @@
     "angle": 1,
     "media": "chart_only",
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T03:05:24.558Z",
+    "type": "analysis",
+    "asset": "UNI",
+    "subtype": null,
+    "angle": 2,
+    "media": "chart_plus_coin",
+    "published": true
   }
 ]
