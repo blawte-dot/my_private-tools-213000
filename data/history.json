@@ -421,5 +421,16 @@
     "media": null,
     "title": null,
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T15:25:23.997Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "bull_bear",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "published": true
   }
 ]
