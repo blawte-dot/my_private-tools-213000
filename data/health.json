@@ -1,7 +1,7 @@
 {
   "lastSuccessfulPost": "2026-09-06T08:40:24.313Z",
-  "lastFailedAttempt": "2026-09-06T09:30:18.350Z",
-  "lastFailureReason": "Binance Square publish failed.\nExit code: 1\nstdout:\nUploading: movers.png\n  Uploaded to S3, polling status...\n  Processing... (1/10)\n  Ready: https://public.bnbstatic.com/image/pgc/20260906/40153f5d13c049a39cc68f8f129e1313.png\nPublishing...\n\nstderr:\nFailed: API error [220095]: Coin pair count exceed",
-  "consecutiveFailures": 7,
+  "lastFailedAttempt": "2026-09-06T09:35:22.230Z",
+  "lastFailureReason": "Binance Square publish failed.\nExit code: 1\nstdout:\nUploading: movers.png\n  Uploaded to S3, polling status...\n  Processing... (1/10)\n  Ready: https://public.bnbstatic.com/image/pgc/20260906/e3203463104449be9d1a35e12300ceab.png\nPublishing...\n\nstderr:\nFailed: API error [220095]: Coin pair count exceed",
+  "consecutiveFailures": 8,
   "nextExpectedPublish": "2026-09-06T09:06:24.313Z"
 }
