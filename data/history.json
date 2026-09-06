@@ -309,5 +309,15 @@
     "angle": null,
     "media": null,
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T04:45:18.953Z",
+    "type": "analysis",
+    "asset": "RAY",
+    "subtype": null,
+    "angle": 1,
+    "media": "coin_only",
+    "published": true
   }
 ]
