@@ -399,5 +399,16 @@
     "angle": 2,
     "media": "chart_only",
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T09:40:14.683Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "poll",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "published": true
   }
 ]
