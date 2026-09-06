@@ -236,5 +236,12 @@
     "type": "analysis",
     "asset": "ARB",
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T00:45:15.011Z",
+    "type": "analysis",
+    "asset": "MARSCOIN",
+    "published": true
   }
 ]
