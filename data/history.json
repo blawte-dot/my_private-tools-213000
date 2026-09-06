@@ -259,5 +259,15 @@
     "subtype": "education",
     "angle": null,
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T02:15:16.647Z",
+    "type": "analysis",
+    "asset": "1000CAT",
+    "subtype": null,
+    "angle": 0,
+    "media": "no_image",
+    "published": true
   }
 ]
