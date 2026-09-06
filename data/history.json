@@ -454,5 +454,16 @@
     "media": null,
     "title": null,
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T17:27:51.870Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "published": true
   }
 ]
