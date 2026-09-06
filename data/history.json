@@ -476,5 +476,16 @@
     "media": null,
     "title": null,
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T18:55:19.812Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "education",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "published": true
   }
 ]
