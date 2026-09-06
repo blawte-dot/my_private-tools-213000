@@ -12,13 +12,14 @@ const HEALTH_FILE = path.join(ROOT, "data", "health.json");
 const IMAGE_FILE = path.join(ROOT, "bot", "post-image.png");
 
 /*
- * Randomized 20-32 min window instead of a fixed 25 min.
- * A perfectly constant cadence is itself a bot fingerprint;
- * jitter makes the timing look human without changing the
- * intended ~25 min average.
+ * Randomized 39-45 min window (spec: "39-45 minute schedule" as
+ * an editorial/operational cadence, not a claimed growth
+ * formula) instead of a fixed interval. A perfectly constant
+ * cadence is itself a bot fingerprint; jitter makes the timing
+ * look human without changing the intended pacing.
  */
-const MIN_POST_INTERVAL_MS = 20 * 60 * 1000;
-const MAX_POST_INTERVAL_MS = 32 * 60 * 1000;
+const MIN_POST_INTERVAL_MS = 39 * 60 * 1000;
+const MAX_POST_INTERVAL_MS = 45 * 60 * 1000;
 const HISTORY_MAX_RECORDS = 500;
 
 function randomPostIntervalMs() {
@@ -1202,16 +1203,15 @@ function createWatchlistImage(coins) {
  * the schedule silently drifting).
  */
 /*
- * Top-level type split. Previously a fixed 4:1 (80/20)
- * analysis:other ratio; now targets ~20 analysis posts out of
- * the roughly 47 posts/day this bot currently produces (the
- * requested "make analysis 20, split the rest yourself"),
- * i.e. ~43% analysis / 57% other — tracked adaptively the same
+ * Top-level type split. Targets ~15 analysis posts/day (revised
+ * down from the earlier ~20 request), against ~30 posts/day
+ * total at the 39-45 min interval (including polling overhead)
+ * — i.e. ~50% analysis / 50% other. Tracked adaptively the same
  * way as the other schedulers rather than a fixed cycle.
  */
 const POST_TYPE_TARGETS = [
-  { key: "analysis", weight: 43 },
-  { key: "other", weight: 57 }
+  { key: "analysis", weight: 50 },
+  { key: "other", weight: 50 }
 ];
 
 function selectPostType(history) {
@@ -1773,10 +1773,11 @@ async function main() {
   }
 
   /*
-   * Adaptive type split (~43% analysis / 57% other, i.e. about
-   * 20 analysis posts out of this bot's current ~47 posts/day),
-   * tracked over the same rolling window as the other
-   * schedulers rather than a fixed per-5-posts cycle.
+   * Adaptive type split (~50% analysis / 50% other, i.e. about
+   * 15 analysis posts out of this bot's ~30 posts/day at the
+   * 39-45 min interval), tracked over the same rolling window
+   * as the other schedulers rather than a fixed per-5-posts
+   * cycle.
    */
   let type = selectPostType(history);
   let text;
