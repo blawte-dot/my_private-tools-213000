@@ -580,9 +580,9 @@ function analysisText(coin, candles, angle) {
   }
 
   /*
-   * Volume trend: recent 5 candles vs the prior 15 — used
-   * only to decide whether to call out a conflict, not to
-   * force a single direction.
+   * Volume trend: recent 5 candles vs the prior 15 — used to
+   * decide whether to call out a conflict, and to describe
+   * "what changed" for that specific angle.
    */
   const recentVol =
     candles.slice(-5).reduce((s, c) => s + c.volume, 0) / 5;
@@ -597,29 +597,18 @@ function analysisText(coin, candles, angle) {
         ? "fading"
         : "steady";
 
-  const trendEmoji =
-    trend === "BULLISH"
-      ? "🟢"
-      : trend === "BEARISH"
-        ? "🔴"
-        : "🟡";
+  const volumeChangePct =
+    priorVol > 0
+      ? ((recentVol - priorVol) / priorVol) * 100
+      : 0;
 
-  const momentumEmoji =
-    momentum === "Strong" ||
-    momentum === "Positive"
-      ? "📈"
-      : momentum === "Weak" ||
-        momentum === "Negative"
-        ? "📉"
-        : "🟡";
-
-  const changeEmoji =
-    coin.change >= 0 ? "🟢" : "🔴";
+  const changeText =
+    `${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%`;
 
   /*
-   * When trend and momentum genuinely disagree, say so
-   * explicitly instead of forcing a single clean narrative —
-   * a real analyst would flag this rather than paper over it.
+   * When trend and momentum genuinely disagree, every angle
+   * needs to be able to say so — but each phrases it in its
+   * own words rather than sharing one fixed sentence.
    */
   const conflict =
     (trend === "BULLISH" &&
@@ -627,95 +616,132 @@ function analysisText(coin, candles, angle) {
     (trend === "BEARISH" &&
       (momentum === "Strong" || momentum === "Positive"));
 
-  const scenarioBlock = conflict
-    ? `⚖️ Mixed Signal
-Trend structure remains ${trend.toLowerCase()}, but RSI momentum is ${momentum.toLowerCase()} and volume is ${volumeTrend}, so the picture is mixed — continuation is possible, but conviction is lower and chasing this move carries more risk.`
-    : `🐂 Bullish Scenario
-A confirmed 4H close above ${money(resistance)} with stronger volume could improve the structure. 🚀
-
-🐻 Bearish Scenario
-A 4H close below ${money(support)} could increase selling pressure. ⚠️`;
-
-  const levelsBlock = `📍 Key 4H Levels
-🟢 Support: ${money(support)}
-🟢 100-candle Low: ${money(low100)}
-🔴 Resistance: ${money(resistance)}
-🔴 100-candle High: ${money(high100)}`;
-
-  const structureBlock = `🔎 4H Market Structure
-${trendEmoji} Trend: ${trend}
-${momentumEmoji} Momentum: ${momentum}
-⚡ RSI(14): ${rsi14.toFixed(1)}
-📊 Volume trend: ${volumeTrend}`;
-
-  const maBlock = `📈 Moving Averages
-• EMA20: ${money(ema20)}
-• EMA50: ${money(ema50)}
-• SMA20: ${money(sma20)}
-• SMA50: ${money(sma50)}`;
-
-  const footer = `🧠 Market analysis only — not financial advice.
-
-🤔 What level are you watching for $${coin.asset}?
-
-#Crypto #Binance #${coin.asset} #TechnicalAnalysis`;
+  const cashtag = `$${coin.asset}`;
 
   /*
-   * Three structurally distinct openings/orderings, picked by
-   * the caller based on recent history — not just different
-   * numbers plugged into one fixed template every time.
+   * 6 structurally distinct formats (spec: compact analysis,
+   * evidence-first, "what changed", scenario comparison,
+   * level-by-level breakdown, mini case study) — each with its
+   * own emoji set, its own ordering, and its own wording for
+   * every data point, not shared text blocks reused with
+   * different headers. Not every angle ends in a question,
+   * on purpose.
    */
+
+  if (angle === 0) {
+    // Compact analysis — dense, minimal, one-line verdict.
+    const verdict = conflict
+      ? `mixed — ${trend.toLowerCase()} structure, ${momentum.toLowerCase()} RSI`
+      : trend.toLowerCase();
+
+    return `🪙 ${cashtag}/USDT — ${money(price)} (${changeText})
+
+📐 EMA20 ${money(ema20)} · EMA50 ${money(ema50)} · RSI ${rsi14.toFixed(1)}
+📍 Range: ${money(support)} – ${money(resistance)}
+
+💹 Read: ${verdict}. A break of either side of the range likely sets the next 4H direction.
+
+#Crypto #Binance ${cashtag}`;
+  }
+
   if (angle === 1) {
-    return `📍 $${coin.asset} is testing the ${money(resistance)} / ${money(support)} range on the 4H chart.
+    // Evidence-first — lead with the strongest single data
+    // point before naming the asset.
+    const leadFact =
+      Math.abs(volumeChangePct) > 20
+        ? `4H volume just moved ${volumeChangePct >= 0 ? "up" : "down"} ${Math.abs(volumeChangePct).toFixed(0)}% versus the prior stretch`
+        : rsi14 >= 60 || rsi14 <= 40
+          ? `RSI(14) has pushed to ${rsi14.toFixed(1)}, a ${rsi14 >= 60 ? "stronger" : "weaker"} reading than typical`
+          : `price is holding inside a ${(((resistance - support) / support) * 100).toFixed(1)}% band between ${money(support)} and ${money(resistance)}`;
 
-💰 Price: ${money(price)} (${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}% 24H)
+    return `🧾 Evidence first: ${leadFact}.
 
-${levelsBlock}
+📌 That's on ${cashtag}/USDT, currently ${money(price)} (${changeText} 24H).
 
-${structureBlock}
+🔬 Supporting data:
+EMA20/EMA50: ${money(ema20)} / ${money(ema50)} — structure reads ${trend.toLowerCase()}
+Volume: ${volumeTrend}
+100-candle range: ${money(low100)} – ${money(high100)}
 
-${maBlock}
+${conflict ? `⚠️ Worth flagging: trend and momentum aren't fully aligned here, so treat this as lower-conviction until one confirms the other.` : `🧠 Trend and momentum are aligned on this one.`}
 
-${scenarioBlock}
-
-${footer}`;
+#Crypto #Binance ${cashtag} #MarketData`;
   }
 
   if (angle === 2) {
-    return `🤔 Is $${coin.asset} setting up for a move? Here's what the 4H chart shows.
+    // "What changed" — frames around the recent shift, not a
+    // static snapshot.
+    const shiftLine =
+      volumeTrend === "rising"
+        ? `volume has picked up ${Math.abs(volumeChangePct).toFixed(0)}% over the last few candles`
+        : volumeTrend === "fading"
+          ? `volume has faded ${Math.abs(volumeChangePct).toFixed(0)}% over the last few candles`
+          : `volume hasn't meaningfully shifted over the last few candles`;
 
-${structureBlock}
-📊 24H Volume: ${compact(coin.volume)}
+    return `🔄 What changed on ${cashtag}/USDT in the last few 4H candles?
 
-${maBlock}
+⏱️ ${shiftLine.charAt(0).toUpperCase() + shiftLine.slice(1)}, and RSI(14) now sits at ${rsi14.toFixed(1)} (${momentum.toLowerCase()}).
 
-${levelsBlock}
+📶 Price: ${money(price)} (${changeText} 24H) — trend structure currently reads ${trend}.
 
-${scenarioBlock}
+${conflict ? `That's a shift worth watching: momentum hasn't fully confirmed the trend yet.` : `Momentum and trend are moving in the same direction for now.`}
 
-🧠 Market analysis only — not financial advice.
+📍 Key levels either side: ${money(support)} support, ${money(resistance)} resistance.
 
-#Crypto #Binance #${coin.asset} #TechnicalAnalysis`;
+#Crypto #Binance ${cashtag}`;
   }
 
-  return `📊 $${coin.asset} — 4H Technical Analysis
+  if (angle === 3) {
+    // Scenario comparison — bull vs bear framed upfront.
+    return `🎯 ${cashtag}/USDT scenario check — ${money(price)} (${changeText} 24H)
 
-💰 Price: ${money(price)}
-${changeEmoji} 24H Change: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%
-📊 24H Volume: ${compact(coin.volume)}
+🔀 Bull case: reclaim/hold above ${money(resistance)} on rising volume keeps ${trend === "BULLISH" ? "the current uptrend" : "a recovery attempt"} alive.
+🔀 Bear case: a 4H close under ${money(support)} opens room toward the wider ${money(low100)}–${money(high100)} range.
 
-${structureBlock}
+🧭 Current read: trend ${trend.toLowerCase()}, momentum ${momentum.toLowerCase()}${conflict ? " — the two disagree right now, so neither case has full confirmation" : " — both pointing the same way for now"}.
 
-${maBlock}
+🤔 Which side of this do you think plays out first?
 
-${levelsBlock}
+#Crypto #Binance ${cashtag} #TechnicalAnalysis`;
+  }
 
-👀 Watch the reaction between ${money(support)} and ${money(resistance)}.
+  if (angle === 4) {
+    // Level-by-level breakdown — methodical, numbered, no
+    // closing question by design.
+    return `📏 ${cashtag}/USDT — 4H levels, low to high:
 
-${scenarioBlock}
+1️⃣ ${money(low100)} — 100-candle low. Losing this would be a structural break.
+2️⃣ ${money(support)} — near-term support (last 20 candles).
+3️⃣ ${money(price)} — current price (${changeText} 24H).
+4️⃣ ${money(resistance)} — near-term resistance (last 20 candles).
+5️⃣ ${money(high100)} — 100-candle high. A confirmed break opens fresh territory.
 
-${footer}`;
+📊 Context: EMA20/50 at ${money(ema20)}/${money(ema50)}, RSI(14) ${rsi14.toFixed(1)}, volume ${volumeTrend}.
+
+🧠 Informational only — not financial advice.
+
+#Crypto #Binance ${cashtag}`;
+  }
+
+  // angle 5 — mini case study, narrative framing.
+  const daysSpan = Math.round(
+    (candles.at(-1).time - candles[0].time) /
+      (1000 * 60 * 60 * 24)
+  );
+
+  return `📖 A quick look at ${cashtag} over the last ~${daysSpan} days.
+
+🕰️ Price has moved between ${money(low100)} and ${money(high100)} in that window, and currently sits at ${money(price)} (${changeText} 24H).
+
+🔎 Along the way, the 4H structure has shifted to ${trend.toLowerCase()}, with RSI(14) now at ${rsi14.toFixed(1)} and volume ${volumeTrend}${conflict ? " — though momentum hasn't fully caught up with that trend yet" : ""}.
+
+The next test is whether price can hold above ${money(support)} or push through ${money(resistance)}.
+
+🤔 Have you been tracking ${cashtag} through this stretch?
+
+#Crypto #Binance ${cashtag}`;
 }
+
 
 function topMoversPost(coins) {
   const movers = [...coins]
@@ -988,17 +1014,21 @@ async function createNewsImage(article) {
   return ok ? IMAGE_FILE : null;
 }
 
-function runChart(input, output, mode) {
+function runChart(input, output, mode, extraArg) {
   const chart = path.join(
     ROOT,
     "bot",
     "chart.mjs"
   );
 
+  const args = extraArg === undefined
+    ? [chart, input, output, mode]
+    : [chart, input, output, mode, String(extraArg)];
+
   try {
     execFileSync(
       "node",
-      [chart, input, output, mode],
+      args,
       {
         cwd: ROOT,
         stdio: "inherit"
@@ -1018,7 +1048,7 @@ function runChart(input, output, mode) {
   }
 }
 
-function createAnalysisChart(symbol) {
+function createAnalysisChart(symbol, variantIndex) {
   return runChart(
     symbol,
     path.join(
@@ -1026,11 +1056,12 @@ function createAnalysisChart(symbol) {
       "bot",
       "analysis-chart.png"
     ),
-    "analysis"
+    "analysis",
+    variantIndex
   );
 }
 
-function createCoinCardImage(symbol) {
+function createCoinCardImage(symbol, variantIndex) {
   return runChart(
     symbol,
     path.join(
@@ -1038,7 +1069,8 @@ function createCoinCardImage(symbol) {
       "bot",
       "coin-card.png"
     ),
-    "coincard"
+    "coincard",
+    variantIndex
   );
 }
 
@@ -1162,14 +1194,63 @@ function createWatchlistImage(coins) {
  * being unavailable, other types pick up the slack instead of
  * the schedule silently drifting).
  */
+/*
+ * Top-level type split. Previously a fixed 4:1 (80/20)
+ * analysis:other ratio; now targets ~20 analysis posts out of
+ * the roughly 47 posts/day this bot currently produces (the
+ * requested "make analysis 20, split the rest yourself"),
+ * i.e. ~43% analysis / 57% other — tracked adaptively the same
+ * way as the other schedulers rather than a fixed cycle.
+ */
+const POST_TYPE_TARGETS = [
+  { key: "analysis", weight: 43 },
+  { key: "other", weight: 57 }
+];
+
+function selectPostType(history) {
+  const recent = history
+    .filter(x => x && x.type && x.published === true)
+    .slice(-40);
+
+  const total = recent.length || 1;
+
+  let best = POST_TYPE_TARGETS[0].key;
+  let bestDeficit = -Infinity;
+
+  for (const t of POST_TYPE_TARGETS) {
+    const count = recent.filter(
+      x => x.type === t.key
+    ).length;
+
+    const actualShare = (count / total) * 100;
+    const deficit = t.weight - actualShare;
+
+    if (deficit > bestDeficit) {
+      bestDeficit = deficit;
+      best = t.key;
+    }
+  }
+
+  return best;
+}
+
+/*
+ * Target mix for the "other" bucket. Rebalanced from the
+ * original 20%-bucket proportions now that "other" is the
+ * majority of daily content (~57%): education and news stay
+ * dominant per the spec, poll is raised because direct
+ * questions drive the reply/engagement CreatorPad's 2026
+ * scoring actually rewards, and market_snapshot/project_study
+ * are trimmed slightly to make room.
+ */
 const OTHER_CONTENT_TYPES = [
   { key: "education", weight: 25 },
   { key: "news", weight: 20 },
-  { key: "market_snapshot", weight: 15 },
+  { key: "poll", weight: 10 },
+  { key: "market_snapshot", weight: 12 },
   { key: "top_movers", weight: 10 },
-  { key: "project_study", weight: 10 },
   { key: "bull_bear", weight: 10 },
-  { key: "poll", weight: 5 },
+  { key: "project_study", weight: 8 },
   { key: "ecosystem", weight: 5 }
 ];
 
@@ -1339,6 +1420,92 @@ ${coin.change >= 0 ? "🟢" : "🔴"} 24H Change: ${coin.change >= 0 ? "+" : ""}
 }
 
 /*
+ * Long-form article (real Binance Square article via
+ * post-text.mjs --title, contentType=2, up to 80,000 chars),
+ * not a short post padded out. Genuine multi-section depth
+ * built entirely from the same real coins/market data already
+ * fetched — a market-breadth digest rather than a single-coin
+ * analysis, so it doesn't compete with or duplicate the
+ * analysis posts.
+ */
+function reportPost(coins) {
+  const sorted = [...coins].sort(
+    (a, b) => b.change - a.change
+  );
+
+  const gainers = sorted.slice(0, 5);
+  const losers = sorted
+    .slice(-5)
+    .reverse()
+    .filter(c => !gainers.includes(c));
+
+  const advancing = coins.filter(
+    c => c.change > 0
+  ).length;
+
+  const declining = coins.length - advancing;
+
+  const totalVolume = coins.reduce(
+    (sum, c) => sum + c.volume,
+    0
+  );
+
+  const btc = coins.find(c => c.asset === "BTC");
+  const eth = coins.find(c => c.asset === "ETH");
+
+  const breadthLine =
+    advancing > declining * 1.3
+      ? "More assets are advancing than declining across the tracked Spot pairs, a broadly constructive backdrop."
+      : declining > advancing * 1.3
+        ? "More assets are declining than advancing across the tracked Spot pairs, a broadly cautious backdrop."
+        : "Advancing and declining assets are roughly balanced — a mixed, rotation-driven backdrop rather than a clear market-wide direction.";
+
+  const title = `Crypto Market Report — ${new Date().toISOString().slice(0, 10)}`;
+
+  const gainersList = gainers
+    .map(
+      c =>
+        `• $${c.asset}: ${money(c.price)} (${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%)`
+    )
+    .join("\n");
+
+  const losersList = losers
+    .map(
+      c =>
+        `• $${c.asset}: ${money(c.price)} (${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%)`
+    )
+    .join("\n");
+
+  const body = `📊 Market Overview
+
+${breadthLine}
+
+Tracked Spot volume (24H, liquid USDT pairs): ${compact(totalVolume)}
+Advancing: ${advancing} • Declining: ${declining}
+
+${btc ? `$BTC: ${money(btc.price)} (${btc.change >= 0 ? "+" : ""}${btc.change.toFixed(2)}%)` : ""}
+${eth ? `$ETH: ${money(eth.price)} (${eth.change >= 0 ? "+" : ""}${eth.change.toFixed(2)}%)` : ""}
+
+📈 Top Gainers (24H)
+
+${gainersList}
+
+📉 Top Losers (24H)
+
+${losersList}
+
+🧭 What This Means
+
+A market breadth reading like this describes participation, not direction on any single asset — a handful of large-cap movers can pull the overall picture in either direction even when breadth disagrees. Worth checking price action on any specific asset individually before drawing conclusions from the aggregate numbers here.
+
+🧠 This report is informational market data only — not financial advice.
+
+#Crypto #Binance #MarketReport #CryptoMarket`;
+
+  return { title, body };
+}
+
+/*
  * Finds the official Binance Square Skill's scripts directory.
  * The install command can place it under a few different
  * relative paths depending on the agent invoking it, so we
@@ -1440,7 +1607,7 @@ function runSkillScript(scriptPath, args) {
  *         string[] (1-4)     -> image post (post-image.mjs,
  *                                comma-separated, official max is 4)
  */
-function publish(text, images) {
+function publish(text, images, title) {
   const scriptsDir = findSkillScriptsDir();
 
   const imageList = !images
@@ -1470,10 +1637,38 @@ function publish(text, images) {
       : "Images: none (text-only post)"
   );
 
+  if (title) {
+    console.log(`Article title: ${title}`);
+  }
+
   if (imageList.length === 0) {
+    const args = title
+      ? ["--text", text, "--title", title]
+      : ["--text", text];
+
     return runSkillScript(
       path.join(scriptsDir, "post-text.mjs"),
-      ["--text", text]
+      args
+    );
+  }
+
+  if (title) {
+    if (imageList.length > 1) {
+      throw new Error(
+        "Article posts support exactly one cover image."
+      );
+    }
+
+    return runSkillScript(
+      path.join(scriptsDir, "post-image.mjs"),
+      [
+        "--text",
+        text,
+        "--title",
+        title,
+        "--cover",
+        imageList[0]
+      ]
     );
   }
 
@@ -1564,32 +1759,21 @@ async function main() {
   }
 
   /*
-   * 4 analysis posts + 1 other post.
-   * The cycle is based on SUCCESSFUL PUBLICATIONS,
-   * not on the clock.
-   *
-   * This keeps the 80/20 ratio even when GitHub
-   * delays a scheduled workflow.
+   * Adaptive type split (~43% analysis / 57% other, i.e. about
+   * 20 analysis posts out of this bot's current ~47 posts/day),
+   * tracked over the same rolling window as the other
+   * schedulers rather than a fixed per-5-posts cycle.
    */
-  const successfulPosts =
-    history.filter(
-      x => x && x.published === true
-    ).length;
-
-  const position =
-    successfulPosts % 5;
-
-  let type;
+  let type = selectPostType(history);
   let text;
   let asset = null;
   let image = null;
   let subtype = null;
   let angle = null;
   let media = null;
+  let title = null;
 
-  if (position < 4) {
-    type = "analysis";
-
+  if (type === "analysis") {
     const coin =
       chooseCoin(
         coins,
@@ -1609,7 +1793,7 @@ async function main() {
       x => x && x.type === "analysis"
     ).length;
 
-    angle = pastAnalysisCount % 3;
+    angle = pastAnalysisCount % 6;
 
     text =
       analysisText(
@@ -1621,13 +1805,13 @@ async function main() {
     media = selectAnalysisMedia(history);
 
     if (media === "chart_only") {
-      image = createAnalysisChart(coin.symbol);
+      image = createAnalysisChart(coin.symbol, angle);
     } else if (media === "coin_only") {
-      image = createCoinCardImage(coin.symbol);
+      image = createCoinCardImage(coin.symbol, pastAnalysisCount);
     } else if (media === "chart_plus_coin") {
       image = [
-        createAnalysisChart(coin.symbol),
-        createCoinCardImage(coin.symbol)
+        createAnalysisChart(coin.symbol, angle),
+        createCoinCardImage(coin.symbol, pastAnalysisCount)
       ];
     }
     /* media === "no_image" -> image stays null (text-only) */
@@ -1718,31 +1902,46 @@ async function main() {
           );
       }
     } else if (subtype === "education") {
-      const topics = [
-        "candlesticks",
-        "breakout",
-        "rsi"
-      ];
-
       const pastEducationCount = history.filter(
         x => x && x.subtype === "education"
       ).length;
 
-      const topic =
-        topics[
-          pastEducationCount %
-          topics.length
+      /*
+       * Alternate short educational posts with genuine
+       * long-form articles (real Binance Square article mode,
+       * not a padded-out short post) — per the requested
+       * "don't forget reports" and the spec's 50/50 education
+       * split.
+       */
+      if (pastEducationCount % 2 === 1) {
+        const report = reportPost(coins);
+
+        title = report.title;
+        text = report.body;
+        image = null;
+      } else {
+        const topics = [
+          "candlesticks",
+          "breakout",
+          "rsi"
         ];
 
-      text =
-        educationPost(
-          topic
-        );
+        const topic =
+          topics[
+            Math.floor(pastEducationCount / 2) %
+            topics.length
+          ];
 
-      image =
-        createEducationImage(
-          topic
-        );
+        text =
+          educationPost(
+            topic
+          );
+
+        image =
+          createEducationImage(
+            topic
+          );
+      }
     } else if (subtype === "market_snapshot") {
       text = marketUpdatePost(coins);
       image = createMarketSnapshotImage(coins);
@@ -1803,7 +2002,8 @@ async function main() {
    */
   publish(
     text,
-    images
+    images,
+    title
   );
 
   const now =
@@ -1817,6 +2017,7 @@ async function main() {
     subtype,
     angle,
     media,
+    title,
     published: true
   });
 

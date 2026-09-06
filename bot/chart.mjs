@@ -241,7 +241,16 @@ function coinBadgeSvg(asset, iconDataUri, cx, cy, r) {
   `;
 }
 
-function createAnalysisSvg(symbol, candles, iconDataUri, orderBook) {
+function createAnalysisSvg(symbol, candles, iconDataUri, orderBook, paletteIndex) {
+  const PALETTES = [
+    { sma20: "#F0B90B", ema20: "#8B5CF6", ema50: "#3B82F6" },
+    { sma20: "#14B8A6", ema20: "#F97316", ema50: "#EC4899" },
+    { sma20: "#E5E7EB", ema20: "#22D3EE", ema50: "#D946EF" }
+  ];
+
+  const palette =
+    PALETTES[(paletteIndex || 0) % PALETTES.length];
+
   const closes = candles.map(c => c.close);
 
   const sma20 = sma(closes, 20);
@@ -777,7 +786,7 @@ function createAnalysisSvg(symbol, candles, iconDataUri, orderBook) {
   <path
     d="${linePath(smaPoints)}"
     fill="none"
-    stroke="#F0B90B"
+    stroke="${palette.sma20}"
     stroke-width="2"
   />
 
@@ -785,7 +794,7 @@ function createAnalysisSvg(symbol, candles, iconDataUri, orderBook) {
   <path
     d="${linePath(ema20Points)}"
     fill="none"
-    stroke="#8B5CF6"
+    stroke="${palette.ema20}"
     stroke-width="2"
   />
 
@@ -793,7 +802,7 @@ function createAnalysisSvg(symbol, candles, iconDataUri, orderBook) {
   <path
     d="${linePath(ema50Points)}"
     fill="none"
-    stroke="#3B82F6"
+    stroke="${palette.ema50}"
     stroke-width="2"
   />
 
@@ -902,13 +911,13 @@ function createAnalysisSvg(symbol, candles, iconDataUri, orderBook) {
   ${timeSvg}
 
   <!-- Legend -->
-  <rect x="90" y="340" width="12" height="12" fill="#F0B90B" />
+  <rect x="90" y="340" width="12" height="12" fill="${palette.sma20}" />
   <text x="108" y="350" fill="#848E9C" font-size="14" font-family="Arial">SMA20</text>
 
-  <rect x="185" y="340" width="12" height="12" fill="#8B5CF6" />
+  <rect x="185" y="340" width="12" height="12" fill="${palette.ema20}" />
   <text x="203" y="350" fill="#848E9C" font-size="14" font-family="Arial">EMA20</text>
 
-  <rect x="280" y="340" width="12" height="12" fill="#3B82F6" />
+  <rect x="280" y="340" width="12" height="12" fill="${palette.ema50}" />
   <text x="298" y="350" fill="#848E9C" font-size="14" font-family="Arial">EMA50</text>
 
   <!-- Indicator tabs (decorative, matches app chrome) -->
@@ -938,7 +947,7 @@ function createAnalysisSvg(symbol, candles, iconDataUri, orderBook) {
 }
 
 
-function createCoinCardSvg(symbol, candles, iconDataUri) {
+function createCoinCardSvg(symbol, candles, iconDataUri, variantIndex) {
   const asset = symbol.replace("USDT", "");
   const last = candles.at(-1);
 
@@ -958,6 +967,115 @@ function createCoinCardSvg(symbol, candles, iconDataUri) {
   const changeText =
     `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`;
 
+  const variant = (variantIndex || 0) % 2;
+
+  if (variant === 1) {
+    /*
+     * Layout B: wide horizontal card, icon on the left third,
+     * stats stacked on the right — a genuinely different shape
+     * and arrangement from layout A, not just a recolor.
+     */
+    const W = 1400;
+    const H = 700;
+
+    return `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="${W}"
+  height="${H}"
+  viewBox="0 0 ${W} ${H}"
+>
+  <rect width="${W}" height="${H}" fill="#0B0E11" />
+
+  <rect x="0" y="0" width="450" height="${H}" fill="#12161C" />
+
+  <text
+    x="225"
+    y="70"
+    text-anchor="middle"
+    fill="#F0F0F0"
+    opacity="0.05"
+    font-size="60"
+    font-family="Arial"
+    font-weight="bold"
+  >
+    BINANCE
+  </text>
+
+  ${coinBadgeSvg(asset, iconDataUri, 225, 320, 150)}
+
+  <text
+    x="225"
+    y="530"
+    text-anchor="middle"
+    fill="#F0F0F0"
+    font-size="40"
+    font-family="Arial"
+    font-weight="bold"
+  >
+    ${escapeXml(asset)}
+  </text>
+
+  <text
+    x="225"
+    y="570"
+    text-anchor="middle"
+    fill="#848E9C"
+    font-size="22"
+    font-family="Arial"
+  >
+    /USDT
+  </text>
+
+  <text
+    x="530"
+    y="200"
+    fill="${changeColor}"
+    font-size="72"
+    font-family="Arial"
+    font-weight="bold"
+  >
+    ${escapeXml(formatPrice(last.close))}
+  </text>
+
+  <text
+    x="530"
+    y="255"
+    fill="${changeColor}"
+    font-size="30"
+    font-family="Arial"
+    font-weight="bold"
+  >
+    ${changeText} (24H)
+  </text>
+
+  <line x1="530" y1="320" x2="${W - 80}" y2="320" stroke="#1E2329" stroke-width="1" />
+
+  <text x="530" y="380" fill="#848E9C" font-size="20" font-family="Arial">24H High</text>
+  <text x="530" y="415" fill="#F0F0F0" font-size="26" font-family="Arial" font-weight="bold">${escapeXml(formatPrice(high24h))}</text>
+
+  <text x="800" y="380" fill="#848E9C" font-size="20" font-family="Arial">24H Low</text>
+  <text x="800" y="415" fill="#F0F0F0" font-size="26" font-family="Arial" font-weight="bold">${escapeXml(formatPrice(low24h))}</text>
+
+  <text x="1070" y="380" fill="#848E9C" font-size="20" font-family="Arial">24H Volume</text>
+  <text x="1070" y="415" fill="#F0F0F0" font-size="26" font-family="Arial" font-weight="bold">${escapeXml(compactNumber(vol24h))}</text>
+
+  <text
+    x="530"
+    y="640"
+    fill="#5E6673"
+    font-size="15"
+    font-family="Arial"
+  >
+    Real Binance Spot market data
+  </text>
+</svg>
+`;
+  }
+
+  /*
+   * Layout A: centered vertical card (original design).
+   */
   const SIZE = 1000;
   const centerX = SIZE / 2;
 
@@ -1045,6 +1163,7 @@ function createCoinCardSvg(symbol, candles, iconDataUri) {
 </svg>
 `;
 }
+
 
 
 function createEducationSvg(topic) {
@@ -1484,6 +1603,7 @@ async function main() {
   const input = process.argv[2];
   const output = process.argv[3];
   const mode = process.argv[4];
+  const variantIndex = Number(process.argv[5]) || 0;
 
   if (!input || !output || !mode) {
     throw new Error(
@@ -1524,7 +1644,8 @@ async function main() {
         symbol,
         candles,
         iconDataUri,
-        orderBook
+        orderBook,
+        variantIndex
       );
 
     await saveSvgAsPng(
@@ -1558,7 +1679,8 @@ async function main() {
       createCoinCardSvg(
         symbol,
         candles,
-        iconDataUri
+        iconDataUri,
+        variantIndex
       );
 
     await saveSvgAsPng(
