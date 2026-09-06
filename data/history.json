@@ -487,5 +487,16 @@
     "media": null,
     "title": null,
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T19:35:18.890Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "market_snapshot",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "published": true
   }
 ]
