@@ -427,7 +427,7 @@ async function getKlines(
   }));
 }
 
-function analysisText(coin, candles) {
+function analysisText(coin, candles, angle) {
   const closes = candles.map(x => x.close);
 
   const price = closes.at(-1);
@@ -484,6 +484,24 @@ function analysisText(coin, candles) {
     momentum = "Negative";
   }
 
+  /*
+   * Volume trend: recent 5 candles vs the prior 15 — used
+   * only to decide whether to call out a conflict, not to
+   * force a single direction.
+   */
+  const recentVol =
+    candles.slice(-5).reduce((s, c) => s + c.volume, 0) / 5;
+
+  const priorVol =
+    candles.slice(-20, -5).reduce((s, c) => s + c.volume, 0) / 15;
+
+  const volumeTrend =
+    recentVol > priorVol * 1.15
+      ? "rising"
+      : recentVol < priorVol * 0.85
+        ? "fading"
+        : "steady";
+
   const trendEmoji =
     trend === "BULLISH"
       ? "🟢"
@@ -503,42 +521,105 @@ function analysisText(coin, candles) {
   const changeEmoji =
     coin.change >= 0 ? "🟢" : "🔴";
 
+  /*
+   * When trend and momentum genuinely disagree, say so
+   * explicitly instead of forcing a single clean narrative —
+   * a real analyst would flag this rather than paper over it.
+   */
+  const conflict =
+    (trend === "BULLISH" &&
+      (momentum === "Weak" || momentum === "Negative")) ||
+    (trend === "BEARISH" &&
+      (momentum === "Strong" || momentum === "Positive"));
+
+  const scenarioBlock = conflict
+    ? `⚖️ Mixed Signal
+Trend structure remains ${trend.toLowerCase()}, but RSI momentum is ${momentum.toLowerCase()} and volume is ${volumeTrend}, so the picture is mixed — continuation is possible, but conviction is lower and chasing this move carries more risk.`
+    : `🐂 Bullish Scenario
+A confirmed 4H close above ${money(resistance)} with stronger volume could improve the structure. 🚀
+
+🐻 Bearish Scenario
+A 4H close below ${money(support)} could increase selling pressure. ⚠️`;
+
+  const levelsBlock = `📍 Key 4H Levels
+🟢 Support: ${money(support)}
+🟢 100-candle Low: ${money(low100)}
+🔴 Resistance: ${money(resistance)}
+🔴 100-candle High: ${money(high100)}`;
+
+  const structureBlock = `🔎 4H Market Structure
+${trendEmoji} Trend: ${trend}
+${momentumEmoji} Momentum: ${momentum}
+⚡ RSI(14): ${rsi14.toFixed(1)}
+📊 Volume trend: ${volumeTrend}`;
+
+  const maBlock = `📈 Moving Averages
+• EMA20: ${money(ema20)}
+• EMA50: ${money(ema50)}
+• SMA20: ${money(sma20)}
+• SMA50: ${money(sma50)}`;
+
+  const footer = `🧠 Market analysis only — not financial advice.
+
+🤔 What level are you watching for $${coin.asset}?
+
+#Crypto #Binance #${coin.asset} #TechnicalAnalysis`;
+
+  /*
+   * Three structurally distinct openings/orderings, picked by
+   * the caller based on recent history — not just different
+   * numbers plugged into one fixed template every time.
+   */
+  if (angle === 1) {
+    return `📍 $${coin.asset} is testing the ${money(resistance)} / ${money(support)} range on the 4H chart.
+
+💰 Price: ${money(price)} (${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}% 24H)
+
+${levelsBlock}
+
+${structureBlock}
+
+${maBlock}
+
+${scenarioBlock}
+
+${footer}`;
+  }
+
+  if (angle === 2) {
+    return `🤔 Is $${coin.asset} setting up for a move? Here's what the 4H chart shows.
+
+${structureBlock}
+📊 24H Volume: ${compact(coin.volume)}
+
+${maBlock}
+
+${levelsBlock}
+
+${scenarioBlock}
+
+🧠 Market analysis only — not financial advice.
+
+#Crypto #Binance #${coin.asset} #TechnicalAnalysis`;
+  }
+
   return `📊 $${coin.asset} — 4H Technical Analysis
 
 💰 Price: ${money(price)}
 ${changeEmoji} 24H Change: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%
 📊 24H Volume: ${compact(coin.volume)}
 
-🔎 4H Market Structure
-${trendEmoji} Trend: ${trend}
-${momentumEmoji} Momentum: ${momentum}
-⚡ RSI(14): ${rsi14.toFixed(1)}
+${structureBlock}
 
-📈 Moving Averages
-• EMA20: ${money(ema20)}
-• EMA50: ${money(ema50)}
-• SMA20: ${money(sma20)}
-• SMA50: ${money(sma50)}
+${maBlock}
 
-📍 Key 4H Levels
-🟢 Support: ${money(support)}
-🟢 100-candle Low: ${money(low100)}
-🔴 Resistance: ${money(resistance)}
-🔴 100-candle High: ${money(high100)}
+${levelsBlock}
 
 👀 Watch the reaction between ${money(support)} and ${money(resistance)}.
 
-🐂 Bullish Scenario
-A confirmed 4H close above ${money(resistance)} with stronger volume could improve the structure. 🚀
+${scenarioBlock}
 
-🐻 Bearish Scenario
-A 4H close below ${money(support)} could increase selling pressure. ⚠️
-
-🧠 Market analysis only — not financial advice.
-
-🤔 What level are you watching for $${coin.asset}?
-
-#Crypto #Binance #${coin.asset} #TechnicalAnalysis`;
+${footer}`;
 }
 
 function topMoversPost(coins) {
@@ -928,6 +1009,189 @@ function createWatchlistImage(coins) {
 }
 
 /*
+ * Target mix for the "other" 20% bucket. Real percentages,
+ * checked against actual recent history rather than a fixed
+ * round-robin, so the mix self-corrects (e.g. if news keeps
+ * being unavailable, other types pick up the slack instead of
+ * the schedule silently drifting).
+ */
+const OTHER_CONTENT_TYPES = [
+  { key: "education", weight: 25 },
+  { key: "news", weight: 20 },
+  { key: "market_snapshot", weight: 15 },
+  { key: "top_movers", weight: 10 },
+  { key: "project_study", weight: 10 },
+  { key: "bull_bear", weight: 10 },
+  { key: "poll", weight: 5 },
+  { key: "ecosystem", weight: 5 }
+];
+
+function selectOtherType(history) {
+  const recentOther = history
+    .filter(x => x && x.type === "other" && x.subtype)
+    .slice(-40);
+
+  const total = recentOther.length || 1;
+
+  let best = OTHER_CONTENT_TYPES[0].key;
+  let bestDeficit = -Infinity;
+
+  for (const t of OTHER_CONTENT_TYPES) {
+    const count = recentOther.filter(
+      x => x.subtype === t.key
+    ).length;
+
+    const actualShare = (count / total) * 100;
+    const deficit = t.weight - actualShare;
+
+    if (deficit > bestDeficit) {
+      bestDeficit = deficit;
+      best = t.key;
+    }
+  }
+
+  return best;
+}
+
+/*
+ * Text-only by design — a genuine use of the no-image posting
+ * path, not a workaround. A direct question invites replies,
+ * which is exactly the kind of engagement CreatorPad's 2026
+ * scoring update rewards over raw post volume.
+ */
+function pollPost(coins) {
+  const btc = coins.find(c => c.asset === "BTC");
+
+  const questions = [
+    `Do you think $BTC holds ${btc ? money(btc.price) : "current levels"} through the next few sessions, or do we see a deeper pullback first?`,
+    "Which matters more to you right now: price action, or on-chain/volume signals?",
+    "Spot or futures — which are you paying more attention to this week?",
+    "Are you currently more focused on majors (BTC/ETH) or altcoins?",
+    "What's one level, on any coin, you're personally watching closely right now?"
+  ];
+
+  const question =
+    questions[
+      Math.floor(Math.random() * questions.length)
+    ];
+
+  return `🗣️ Quick Question
+
+${question}
+
+🧠 Not financial advice — just curious where the community's head is at.
+
+#Crypto #Binance #CryptoCommunity`;
+}
+
+/*
+ * Short, factual notes about real, currently-documented
+ * Binance Square features — verified against Binance's own
+ * announcements rather than invented. Text-only.
+ */
+const ECOSYSTEM_NOTES = [
+  {
+    title: "Gold Verification",
+    body: "Binance Square offers Gold Verification for creators — a one-time verification step that can improve profile credibility and content reach on the platform."
+  },
+  {
+    title: "CreatorPad",
+    body: "CreatorPad runs project-funded content campaigns on Binance Square. In 2026, its scoring was updated to weigh genuine engagement and content quality more heavily than raw posting volume."
+  },
+  {
+    title: "Write to Earn",
+    body: "Write to Earn is Binance Square's program for rewarding consistent, quality written content from creators over time."
+  },
+  {
+    title: "Task Center",
+    body: "Binance Square's Task Center refreshes daily with a featured hashtag or trading pair — visible inside the app under Creator Center, and it changes every 24 hours."
+  },
+  {
+    title: "Live Trading Hub",
+    body: "Binance's Live Trading Hub lets verified creators with a minimum follower count stream and earn a share of trading fees from followers who trade alongside them."
+  }
+];
+
+function ecosystemPost() {
+  const note =
+    ECOSYSTEM_NOTES[
+      Math.floor(Math.random() * ECOSYSTEM_NOTES.length)
+    ];
+
+  return `ℹ️ Binance Square Feature: ${note.title}
+
+${note.body}
+
+🔎 Details and eligibility can change — check Binance Square's Creator Center for the current, official terms.
+
+#Binance #BinanceSquare #CryptoCommunity`;
+}
+
+/*
+ * Short factual spotlights for well-known projects only — no
+ * invented claims for obscure/low-cap tickers we don't actually
+ * have reliable information about.
+ */
+const PROJECT_NOTES = {
+  BTC: "the original cryptocurrency and largest by market cap, a decentralized peer-to-peer digital currency secured by proof-of-work mining.",
+  ETH: "a smart-contract platform and the base layer for most DeFi, NFT, and dApp activity, secured by proof-of-stake.",
+  BNB: "the native token of the BNB Chain ecosystem and Binance's exchange token, used for fees, staking, and on-chain activity.",
+  SOL: "a high-throughput smart-contract platform known for fast, low-cost transactions, widely used for DeFi and NFTs.",
+  XRP: "a token built for fast, low-cost cross-border payments, associated with Ripple's payment-settlement network.",
+  DOGE: "the original meme coin, a proof-of-work chain that has retained a large, active community since 2013.",
+  ADA: "the native token of Cardano, a proof-of-stake smart-contract platform built with a research-driven development approach.",
+  DOT: "Polkadot's native token, designed to connect multiple specialized blockchains ('parachains') into one network.",
+  LINK: "Chainlink's token, used to secure decentralized oracle networks that feed real-world data to smart contracts.",
+  AVAX: "Avalanche's native token, powering a smart-contract platform built around fast finality and custom subnets.",
+  LTC: "one of the earliest Bitcoin forks, designed for faster block times and lower fees for payments.",
+  TRX: "TRON's native token, powering a smart-contract platform with a strong focus on stablecoin transaction volume.",
+  MATIC: "the token of Polygon, an Ethereum-scaling network widely used for cheaper, faster transactions.",
+  POL: "the token of Polygon's ecosystem, an Ethereum-scaling network widely used for cheaper, faster transactions.",
+  DASH: "a payments-focused fork of Bitcoin offering optional faster transactions via its masternode network.",
+  ATOM: "Cosmos's native token, part of an ecosystem built around interoperable, independent blockchains.",
+  UNI: "the governance token of Uniswap, one of the largest decentralized exchanges by trading volume.",
+  NEAR: "the native token of a sharded, developer-focused smart-contract platform.",
+  APT: "the token of Aptos, a smart-contract platform built with the Move programming language.",
+  ARB: "the governance token of Arbitrum, one of the largest Ethereum layer-2 scaling networks.",
+  OP: "the governance token of Optimism, an Ethereum layer-2 network and the base of the broader OP Stack ecosystem.",
+  SUI: "the native token of Sui, a smart-contract platform also built with the Move language, focused on parallel transaction execution.",
+  SHIB: "a large meme-coin ecosystem that expanded from its original token into its own layer-2 network (Shibarium).",
+  PEPE: "one of the largest meme coins by market cap, with no stated utility beyond community and speculation.",
+  BCH: "a Bitcoin fork created to prioritize larger block sizes for cheaper on-chain payments."
+};
+
+function projectStudyPost(coins) {
+  const withNotes = coins.filter(
+    c => PROJECT_NOTES[c.asset]
+  );
+
+  const coin =
+    withNotes.length
+      ? withNotes.sort(
+          (a, b) => b.volume - a.volume
+        )[0]
+      : [...coins].sort(
+          (a, b) => b.volume - a.volume
+        )[0];
+
+  const note =
+    PROJECT_NOTES[coin.asset] ||
+    "a listed asset on Binance Spot — no verified project summary in our notes, so this covers market stats only rather than guessing at its purpose.";
+
+  return `🔍 Project Spotlight: $${coin.asset}
+
+${coin.asset} is ${note}
+
+💰 Price: ${money(coin.price)}
+${coin.change >= 0 ? "🟢" : "🔴"} 24H Change: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%
+📊 24H Volume: ${compact(coin.volume)}
+
+🧠 Informational only — not financial advice, always do your own research.
+
+#Crypto #Binance #${coin.asset}`;
+}
+
+/*
  * Finds the official Binance Square Skill's scripts directory.
  * The install command can place it under a few different
  * relative paths depending on the agent invoking it, so we
@@ -1167,6 +1431,8 @@ async function main() {
   let text;
   let asset = null;
   let image = null;
+  let subtype = null;
+  let angle = null;
 
   if (position < 4) {
     type = "analysis";
@@ -1186,10 +1452,17 @@ async function main() {
         100
       );
 
+    const pastAnalysisCount = history.filter(
+      x => x && x.type === "analysis"
+    ).length;
+
+    angle = pastAnalysisCount % 3;
+
     text =
       analysisText(
         coin,
-        candles
+        candles,
+        angle
       );
 
     image =
@@ -1199,15 +1472,9 @@ async function main() {
   } else {
     type = "other";
 
-    const otherNumber =
-      Math.floor(
-        successfulPosts / 5
-      );
+    subtype = selectOtherType(history);
 
-    const mode =
-      otherNumber % 6;
-
-    if (mode === 0) {
+    if (subtype === "news") {
       const news =
         await getNews();
 
@@ -1239,6 +1506,14 @@ async function main() {
             article
           );
       } else {
+        /*
+         * No usable news right now — actually publish as
+         * top_movers content, and record it as such, so the
+         * adaptive scheduler sees what really went out rather
+         * than crediting a "news" slot that didn't happen.
+         */
+        subtype = "top_movers";
+
         text =
           topMoversPost(
             coins
@@ -1249,26 +1524,51 @@ async function main() {
             coins
           );
       }
-    } else if (mode === 1) {
-      text =
-        topMoversPost(
-          coins
-        );
+    } else if (subtype === "top_movers") {
+      const useWatchlist =
+        history.filter(
+          x => x && x.subtype === "top_movers"
+        ).length % 2 === 1;
 
-      image =
-        createMoversImage(
-          coins
-        );
-    } else if (mode === 2) {
+      if (useWatchlist) {
+        text = whatToWatchPost(coins);
+
+        const watchlistImg = createWatchlistImage(coins);
+
+        const topPick = [...coins].sort(
+          (a, b) => b.volume - a.volume
+        )[0];
+
+        const topPickImg = topPick
+          ? createAnalysisChart(topPick.symbol)
+          : null;
+
+        image = [watchlistImg, topPickImg].filter(Boolean);
+      } else {
+        text =
+          topMoversPost(
+            coins
+          );
+
+        image =
+          createMoversImage(
+            coins
+          );
+      }
+    } else if (subtype === "education") {
       const topics = [
         "candlesticks",
         "breakout",
         "rsi"
       ];
 
+      const pastEducationCount = history.filter(
+        x => x && x.subtype === "education"
+      ).length;
+
       const topic =
         topics[
-          otherNumber %
+          pastEducationCount %
           topics.length
         ];
 
@@ -1281,10 +1581,10 @@ async function main() {
         createEducationImage(
           topic
         );
-    } else if (mode === 3) {
+    } else if (subtype === "market_snapshot") {
       text = marketUpdatePost(coins);
       image = createMarketSnapshotImage(coins);
-    } else if (mode === 4) {
+    } else if (subtype === "bull_bear") {
       const coin = chooseCoin(coins, history);
 
       const candles = await getKlines(
@@ -1295,27 +1595,21 @@ async function main() {
 
       text = bullBearPost(coin, candles);
       image = createAnalysisChart(coin.symbol);
+    } else if (subtype === "project_study") {
+      text = projectStudyPost(coins);
+
+      const coin = [...coins]
+        .filter(c => PROJECT_NOTES[c.asset])
+        .sort((a, b) => b.volume - a.volume)[0] ||
+        [...coins].sort((a, b) => b.volume - a.volume)[0];
+
+      image = createAnalysisChart(coin.symbol);
+    } else if (subtype === "poll") {
+      text = pollPost(coins);
+      image = null;
     } else {
-      text = whatToWatchPost(coins);
-
-      const watchlistImg = createWatchlistImage(coins);
-
-      /*
-       * Two images for this one: the liquidity watchlist
-       * snapshot, plus a close-up analysis chart of the single
-       * highest-volume pick on that list — a concrete, natural
-       * use of the Skill's up-to-4-images support rather than
-       * attaching a second image for its own sake.
-       */
-      const topPick = [...coins].sort(
-        (a, b) => b.volume - a.volume
-      )[0];
-
-      const topPickImg = topPick
-        ? createAnalysisChart(topPick.symbol)
-        : null;
-
-      image = [watchlistImg, topPickImg].filter(Boolean);
+      text = ecosystemPost();
+      image = null;
     }
   }
 
@@ -1358,6 +1652,8 @@ async function main() {
     time: now,
     type,
     asset,
+    subtype,
+    angle,
     published: true
   });
 
