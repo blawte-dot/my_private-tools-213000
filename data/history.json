@@ -269,5 +269,15 @@
     "angle": 0,
     "media": "no_image",
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T02:40:21.659Z",
+    "type": "analysis",
+    "asset": "TUT",
+    "subtype": null,
+    "angle": 1,
+    "media": "chart_only",
+    "published": true
   }
 ]
