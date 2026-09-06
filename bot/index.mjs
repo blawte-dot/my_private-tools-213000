@@ -748,9 +748,16 @@ function topMoversPost(coins) {
     .sort((a, b) => b.change - a.change)
     .slice(0, 5);
 
+  /*
+   * Binance Square's API rejects posts that tag too many
+   * distinct coin pairs at once (observed: error 220095,
+   * "Coin pair count exceed", with 5 $CASHTAGs). Cap to 3
+   * tagged, list the rest by plain ticker (no $) instead of
+   * dropping them from the post entirely.
+   */
   const lines = movers.map(
     (c, i) =>
-      `${i + 1}. ${c.change >= 0 ? "🟢" : "🔴"} $${c.asset} ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
+      `${i + 1}. ${c.change >= 0 ? "🟢" : "🔴"} ${i < 3 ? "$" + c.asset : c.asset} ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
   );
 
   const lead = movers[0];
@@ -852,8 +859,8 @@ function whatToWatchPost(coins) {
     .slice(0, 5);
 
   const lines = watch.map(
-    c =>
-      `• $${c.asset} — ${compact(c.volume)} 24h vol, ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
+    (c, i) =>
+      `• ${i < 3 ? "$" + c.asset : c.asset} — ${compact(c.volume)} 24h vol, ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
   );
 
   return `👀 What to Watch — Next Few Hours
@@ -1462,17 +1469,24 @@ function reportPost(coins) {
 
   const title = `Crypto Market Report — ${new Date().toISOString().slice(0, 10)}`;
 
+  /*
+   * Plain tickers here (no $) — the BTC/ETH highlight line
+   * below already accounts for 2 tagged cashtags, and this
+   * report can list up to 10 assets between gainers/losers,
+   * which would otherwise trip the same "coin pair count"
+   * limit fixed in topMoversPost/whatToWatchPost.
+   */
   const gainersList = gainers
     .map(
       c =>
-        `• $${c.asset}: ${money(c.price)} (${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%)`
+        `• ${c.asset}: ${money(c.price)} (${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%)`
     )
     .join("\n");
 
   const losersList = losers
     .map(
       c =>
-        `• $${c.asset}: ${money(c.price)} (${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%)`
+        `• ${c.asset}: ${money(c.price)} (${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%)`
     )
     .join("\n");
 
