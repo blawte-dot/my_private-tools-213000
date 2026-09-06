@@ -250,5 +250,14 @@
     "type": "analysis",
     "asset": "SUSHI",
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T01:45:24.565Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "education",
+    "angle": null,
+    "published": true
   }
 ]
