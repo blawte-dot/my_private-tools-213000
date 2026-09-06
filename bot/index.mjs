@@ -523,7 +523,7 @@ async function getKlines(
   }));
 }
 
-function analysisText(coin, candles, angle) {
+function analysisText(coin, candles, angle, includeHashtags, cta) {
   const closes = candles.map(x => x.close);
 
   const price = closes.at(-1);
@@ -620,6 +620,18 @@ function analysisText(coin, candles, angle) {
   const cashtag = `$${coin.asset}`;
 
   /*
+   * Spec: 60% of analysis posts should carry no hashtags at
+   * all, 40% may — decided by the caller (selectHashtagUse)
+   * and passed in, not a fixed per-angle rule. When omitted,
+   * the whole trailing hashtag line (and the blank line before
+   * it) is left out entirely rather than replaced with
+   * something else.
+   */
+  function tagLine(tags) {
+    return includeHashtags ? `\n\n${tags}` : "";
+  }
+
+  /*
    * 6 structurally distinct formats (spec: compact analysis,
    * evidence-first, "what changed", scenario comparison,
    * level-by-level breakdown, mini case study) — each with its
@@ -640,9 +652,7 @@ function analysisText(coin, candles, angle) {
 📐 EMA20 ${money(ema20)} · EMA50 ${money(ema50)} · RSI ${rsi14.toFixed(1)}
 📍 Range: ${money(support)} – ${money(resistance)}
 
-💹 Read: ${verdict}. A break of either side of the range likely sets the next 4H direction.
-
-#Crypto #Binance ${cashtag}`;
+💹 Read: ${verdict}. A break of either side of the range likely sets the next 4H direction.${tagLine(`#Crypto #Binance ${cashtag}`)}`;
   }
 
   if (angle === 1) {
@@ -664,9 +674,7 @@ EMA20/EMA50: ${money(ema20)} / ${money(ema50)} — structure reads ${trend.toLow
 Volume: ${volumeTrend}
 100-candle range: ${money(low100)} – ${money(high100)}
 
-${conflict ? `⚠️ Worth flagging: trend and momentum aren't fully aligned here, so treat this as lower-conviction until one confirms the other.` : `🧠 Trend and momentum are aligned on this one.`}
-
-#Crypto #Binance ${cashtag} #MarketData`;
+${conflict ? `⚠️ Worth flagging: trend and momentum aren't fully aligned here, so treat this as lower-conviction until one confirms the other.` : `🧠 Trend and momentum are aligned on this one.`}${tagLine(`#Crypto #Binance ${cashtag} #MarketData`)}`;
   }
 
   if (angle === 2) {
@@ -687,9 +695,7 @@ ${conflict ? `⚠️ Worth flagging: trend and momentum aren't fully aligned her
 
 ${conflict ? `That's a shift worth watching: momentum hasn't fully confirmed the trend yet.` : `Momentum and trend are moving in the same direction for now.`}
 
-📍 Key levels either side: ${money(support)} support, ${money(resistance)} resistance.
-
-#Crypto #Binance ${cashtag}`;
+📍 Key levels either side: ${money(support)} support, ${money(resistance)} resistance.${tagLine(`#Crypto #Binance ${cashtag}`)}`;
   }
 
   if (angle === 3) {
@@ -699,11 +705,7 @@ ${conflict ? `That's a shift worth watching: momentum hasn't fully confirmed the
 🔀 Bull case: reclaim/hold above ${money(resistance)} on rising volume keeps ${trend === "BULLISH" ? "the current uptrend" : "a recovery attempt"} alive.
 🔀 Bear case: a 4H close under ${money(support)} opens room toward the wider ${money(low100)}–${money(high100)} range.
 
-🧭 Current read: trend ${trend.toLowerCase()}, momentum ${momentum.toLowerCase()}${conflict ? " — the two disagree right now, so neither case has full confirmation" : " — both pointing the same way for now"}.
-
-🤔 Which side of this do you think plays out first?
-
-#Crypto #Binance ${cashtag} #TechnicalAnalysis`;
+🧭 Current read: trend ${trend.toLowerCase()}, momentum ${momentum.toLowerCase()}${conflict ? " — the two disagree right now, so neither case has full confirmation" : " — both pointing the same way for now"}.${cta ? `\n\n${cta}` : ""}${tagLine(`#Crypto #Binance ${cashtag} #TechnicalAnalysis`)}`;
   }
 
   if (angle === 4) {
@@ -719,9 +721,7 @@ ${conflict ? `That's a shift worth watching: momentum hasn't fully confirmed the
 
 📊 Context: EMA20/50 at ${money(ema20)}/${money(ema50)}, RSI(14) ${rsi14.toFixed(1)}, volume ${volumeTrend}.
 
-🧠 Informational only — not financial advice.
-
-#Crypto #Binance ${cashtag}`;
+🧠 Informational only — not financial advice.${tagLine(`#Crypto #Binance ${cashtag}`)}`;
   }
 
   // angle 5 — mini case study, narrative framing.
@@ -736,11 +736,7 @@ ${conflict ? `That's a shift worth watching: momentum hasn't fully confirmed the
 
 🔎 Along the way, the 4H structure has shifted to ${trend.toLowerCase()}, with RSI(14) now at ${rsi14.toFixed(1)} and volume ${volumeTrend}${conflict ? " — though momentum hasn't fully caught up with that trend yet" : ""}.
 
-The next test is whether price can hold above ${money(support)} or push through ${money(resistance)}.
-
-🤔 Have you been tracking ${cashtag} through this stretch?
-
-#Crypto #Binance ${cashtag}`;
+The next test is whether price can hold above ${money(support)} or push through ${money(resistance)}.${cta ? `\n\n${cta}` : ""}${tagLine(`#Crypto #Binance ${cashtag}`)}`;
 }
 
 
@@ -1209,6 +1205,59 @@ function createWatchlistImage(coins) {
  * — i.e. ~50% analysis / 50% other. Tracked adaptively the same
  * way as the other schedulers rather than a fixed cycle.
  */
+/*
+ * Spec 23: 60% of analysis posts carry no hashtags at all,
+ * 40% may. Spec 25: don't always end with "What do you think?" —
+ * vary the CTA, and sometimes have none.
+ */
+const HASHTAG_USE_TARGETS = [
+  { key: "none", weight: 60 },
+  { key: "some", weight: 40 }
+];
+
+function selectHashtagUse(history) {
+  const recent = history
+    .filter(x => x && x.type === "analysis" && x.hashtags)
+    .slice(-40);
+
+  const total = recent.length || 1;
+
+  let best = HASHTAG_USE_TARGETS[0].key;
+  let bestDeficit = -Infinity;
+
+  for (const t of HASHTAG_USE_TARGETS) {
+    const count = recent.filter(
+      x => x.hashtags === t.key
+    ).length;
+
+    const actualShare = (count / total) * 100;
+    const deficit = t.weight - actualShare;
+
+    if (deficit > bestDeficit) {
+      bestDeficit = deficit;
+      best = t.key;
+    }
+  }
+
+  return best;
+}
+
+const ANALYSIS_CTAS = [
+  "🤔 Would you watch this level?",
+  "🤔 Would a 4H close change your view?",
+  "🤔 Which level matters more here?",
+  "🤔 What would invalidate this setup for you?",
+  "📊 The volume here is the part I'm watching most."
+];
+
+function pickCta(history) {
+  const pastCtaCount = history.filter(
+    x => x && x.type === "analysis" && x.angle !== null
+  ).length;
+
+  return ANALYSIS_CTAS[pastCtaCount % ANALYSIS_CTAS.length];
+}
+
 const POST_TYPE_TARGETS = [
   { key: "analysis", weight: 50 },
   { key: "other", weight: 50 }
@@ -1610,7 +1659,20 @@ function runSkillScript(scriptPath, args) {
     );
   }
 
-  return { stdout, stderr };
+  const idMatch = stdout.match(/^ID:\s*(.+)$/m);
+  const linkMatch = stdout.match(/^Link:\s*(.+)$/m);
+
+  const postId =
+    idMatch && idMatch[1].trim() !== "unavailable"
+      ? idMatch[1].trim()
+      : null;
+
+  const postLink =
+    linkMatch && linkMatch[1].trim() !== "unavailable"
+      ? linkMatch[1].trim()
+      : null;
+
+  return { stdout, stderr, postId, postLink };
 }
 
 /*
@@ -1787,6 +1849,7 @@ async function main() {
   let angle = null;
   let media = null;
   let title = null;
+  let hashtags = null;
 
   if (type === "analysis") {
     const coin =
@@ -1810,11 +1873,22 @@ async function main() {
 
     angle = pastAnalysisCount % 6;
 
+    const hashtagUse = selectHashtagUse(history);
+    hashtags = hashtagUse;
+    const includeHashtags = hashtagUse === "some";
+
+    const cta =
+      angle === 3 || angle === 5
+        ? pickCta(history)
+        : null;
+
     text =
       analysisText(
         coin,
         candles,
-        angle
+        angle,
+        includeHashtags,
+        cta
       );
 
     media = selectAnalysisMedia(history);
@@ -2015,7 +2089,7 @@ async function main() {
    * Only after publish() succeeds do we
    * write published:true to history.
    */
-  publish(
+  const publishResult = publish(
     text,
     images,
     title
@@ -2033,6 +2107,13 @@ async function main() {
     angle,
     media,
     title,
+    hashtags,
+    postId: publishResult
+      ? publishResult.postId
+      : null,
+    postLink: publishResult
+      ? publishResult.postLink
+      : null,
     published: true
   });
 
