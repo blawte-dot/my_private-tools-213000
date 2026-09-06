@@ -359,5 +359,15 @@
     "angle": null,
     "media": null,
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T07:15:26.078Z",
+    "type": "analysis",
+    "asset": "COTI",
+    "subtype": null,
+    "angle": 2,
+    "media": "chart_plus_coin",
+    "published": true
   }
 ]
