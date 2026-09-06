@@ -319,5 +319,15 @@
     "angle": 1,
     "media": "coin_only",
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T05:15:13.682Z",
+    "type": "analysis",
+    "asset": "ASTER",
+    "subtype": null,
+    "angle": 2,
+    "media": "no_image",
+    "published": true
   }
 ]
