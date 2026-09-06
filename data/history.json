@@ -465,5 +465,16 @@
     "media": null,
     "title": null,
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T18:10:05.261Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "ecosystem",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "published": true
   }
 ]
