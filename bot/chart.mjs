@@ -938,6 +938,115 @@ function createAnalysisSvg(symbol, candles, iconDataUri, orderBook) {
 }
 
 
+function createCoinCardSvg(symbol, candles, iconDataUri) {
+  const asset = symbol.replace("USDT", "");
+  const last = candles.at(-1);
+
+  const last24h = candles.slice(-6);
+  const openStart24h = last24h[0].open;
+
+  const high24h = Math.max(...last24h.map(c => c.high));
+  const low24h = Math.min(...last24h.map(c => c.low));
+  const vol24h = last24h.reduce((s, c) => s + c.volume, 0);
+
+  const change =
+    ((last.close - openStart24h) / openStart24h) * 100;
+
+  const changeColor =
+    change >= 0 ? "#0ECB81" : "#F6465D";
+
+  const changeText =
+    `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`;
+
+  const SIZE = 1000;
+  const centerX = SIZE / 2;
+
+  return `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="${SIZE}"
+  height="${SIZE}"
+  viewBox="0 0 ${SIZE} ${SIZE}"
+>
+  <rect width="${SIZE}" height="${SIZE}" fill="#0B0E11" />
+
+  <text
+    x="${centerX}"
+    y="180"
+    text-anchor="middle"
+    fill="#F0F0F0"
+    opacity="0.045"
+    font-size="130"
+    font-family="Arial"
+    font-weight="bold"
+  >
+    BINANCE
+  </text>
+
+  ${coinBadgeSvg(asset, iconDataUri, centerX, 340, 130)}
+
+  <text
+    x="${centerX}"
+    y="560"
+    text-anchor="middle"
+    fill="#F0F0F0"
+    font-size="52"
+    font-family="Arial"
+    font-weight="bold"
+  >
+    ${escapeXml(asset)}/USDT
+  </text>
+
+  <text
+    x="${centerX}"
+    y="630"
+    text-anchor="middle"
+    fill="${changeColor}"
+    font-size="64"
+    font-family="Arial"
+    font-weight="bold"
+  >
+    ${escapeXml(formatPrice(last.close))}
+  </text>
+
+  <text
+    x="${centerX}"
+    y="680"
+    text-anchor="middle"
+    fill="${changeColor}"
+    font-size="30"
+    font-family="Arial"
+    font-weight="bold"
+  >
+    ${changeText} (24H)
+  </text>
+
+  <line x1="120" y1="750" x2="${SIZE - 120}" y2="750" stroke="#1E2329" stroke-width="1" />
+
+  <text x="150" y="800" fill="#848E9C" font-size="20" font-family="Arial">24H High</text>
+  <text x="150" y="830" fill="#F0F0F0" font-size="22" font-family="Arial" font-weight="bold">${escapeXml(formatPrice(high24h))}</text>
+
+  <text x="${centerX}" y="800" text-anchor="middle" fill="#848E9C" font-size="20" font-family="Arial">24H Low</text>
+  <text x="${centerX}" y="830" text-anchor="middle" fill="#F0F0F0" font-size="22" font-family="Arial" font-weight="bold">${escapeXml(formatPrice(low24h))}</text>
+
+  <text x="${SIZE - 150}" y="800" text-anchor="end" fill="#848E9C" font-size="20" font-family="Arial">24H Vol</text>
+  <text x="${SIZE - 150}" y="830" text-anchor="end" fill="#F0F0F0" font-size="22" font-family="Arial" font-weight="bold">${escapeXml(compactNumber(vol24h))}</text>
+
+  <text
+    x="${centerX}"
+    y="920"
+    text-anchor="middle"
+    fill="#5E6673"
+    font-size="15"
+    font-family="Arial"
+  >
+    Real Binance Spot market data
+  </text>
+</svg>
+`;
+}
+
+
 function createEducationSvg(topic) {
   const common = `
     <rect
@@ -1425,6 +1534,40 @@ async function main() {
 
     console.log(
       `4H chart created: ${output}`
+    );
+
+    return;
+  }
+
+  if (mode === "coincard") {
+    const symbol = input;
+
+    const candles =
+      await getKlines(symbol);
+
+    if (candles.length < 6) {
+      throw new Error(
+        "Not enough Binance candle data."
+      );
+    }
+
+    const asset = symbol.replace("USDT", "");
+    const iconDataUri = await fetchCoinIcon(asset);
+
+    const svg =
+      createCoinCardSvg(
+        symbol,
+        candles,
+        iconDataUri
+      );
+
+    await saveSvgAsPng(
+      svg,
+      output
+    );
+
+    console.log(
+      `Coin card created: ${output}`
     );
 
     return;

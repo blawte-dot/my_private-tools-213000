@@ -382,19 +382,114 @@ function chooseCoin(coins, history) {
       .map(x => x.asset)
   );
 
-  const candidates = coins
-    .filter(c => !usedToday.has(c.asset))
-    .sort((a, b) => {
-      const scoreA =
+  const eligible = coins.filter(
+    c => !usedToday.has(c.asset)
+  );
+
+  const pool = eligible.length ? eligible : coins;
+
+  /*
+   * Recency-weighted fatigue from the last 30 analysis picks
+   * (not just today) — a coin picked 2 days ago should still
+   * be somewhat less attractive today, not just excluded on
+   * its own literal calendar day.
+   */
+  const recentAnalysis = history
+    .filter(x => x && x.type === "analysis" && x.asset)
+    .slice(-30);
+
+  const fatigue = {};
+
+  recentAnalysis.forEach((entry, i) => {
+    const recencyWeight =
+      (i + 1) / recentAnalysis.length;
+
+    fatigue[entry.asset] =
+      (fatigue[entry.asset] || 0) + recencyWeight;
+  });
+
+  /*
+   * Tier by volume percentile within today's eligible pool, and
+   * rotate which tier we target across posts — so the screener
+   * doesn't just repeatedly settle on the same handful of
+   * largest-volume majors. Momentum can still override this
+   * (see scoring below) for a genuinely exceptional mover.
+   */
+  const byVolume = [...pool].sort(
+    (a, b) => b.volume - a.volume
+  );
+
+  const majorsCount = Math.max(
+    1,
+    Math.ceil(byVolume.length * 0.15)
+  );
+
+  const largeCount = Math.max(
+    1,
+    Math.ceil(byVolume.length * 0.35)
+  );
+
+  function tierOf(asset) {
+    const idx = byVolume.findIndex(
+      c => c.asset === asset
+    );
+
+    if (idx < majorsCount) return "majors";
+    if (idx < majorsCount + largeCount) return "large";
+    return "mid";
+  }
+
+  const pastAnalysisCount = history.filter(
+    x => x && x.type === "analysis"
+  ).length;
+
+  /*
+   * majors: 1/4 of picks, large: 2/4, mid/liquid-emerging: 1/4
+   * — still liquidity-safe (the 5M 24h-volume floor is applied
+   * before this function ever sees the list), but not majors
+   * every single time.
+   */
+  const tierCycle = [
+    "majors",
+    "large",
+    "mid",
+    "large"
+  ];
+
+  const targetTier =
+    tierCycle[pastAnalysisCount % tierCycle.length];
+
+  const tierPool = pool.filter(
+    c => tierOf(c.asset) === targetTier
+  );
+
+  const scoringPool = tierPool.length
+    ? tierPool
+    : pool;
+
+  const FATIGUE_WEIGHT = 25;
+
+  const candidates = [...scoringPool].sort(
+    (a, b) => {
+      const momentumA =
         Math.max(a.change, 0) *
         Math.log10(Math.max(a.volume, 1));
 
-      const scoreB =
+      const momentumB =
         Math.max(b.change, 0) *
         Math.log10(Math.max(b.volume, 1));
 
+      const scoreA =
+        momentumA -
+        (fatigue[a.asset] || 0) * FATIGUE_WEIGHT;
+
+      const scoreB =
+        momentumB -
+        (fatigue[b.asset] || 0) * FATIGUE_WEIGHT;
+
       return scoreB - scoreA;
-    });
+    }
+  );
 
   return (
     candidates[0] ||
@@ -935,6 +1030,58 @@ function createAnalysisChart(symbol) {
   );
 }
 
+function createCoinCardImage(symbol) {
+  return runChart(
+    symbol,
+    path.join(
+      ROOT,
+      "bot",
+      "coin-card.png"
+    ),
+    "coincard"
+  );
+}
+
+/*
+ * Media mix for ANALYSIS posts specifically (the text itself is
+ * always the full technical breakdown regardless of this — this
+ * only decides which image(s), if any, accompany it). Same
+ * proportional-fair approach as the "other" content scheduler.
+ */
+const ANALYSIS_MEDIA_TYPES = [
+  { key: "no_image", weight: 50 },
+  { key: "chart_only", weight: 20 },
+  { key: "chart_plus_coin", weight: 20 },
+  { key: "coin_only", weight: 10 }
+];
+
+function selectAnalysisMedia(history) {
+  const recentAnalysis = history
+    .filter(x => x && x.type === "analysis" && x.media)
+    .slice(-40);
+
+  const total = recentAnalysis.length || 1;
+
+  let best = ANALYSIS_MEDIA_TYPES[0].key;
+  let bestDeficit = -Infinity;
+
+  for (const t of ANALYSIS_MEDIA_TYPES) {
+    const count = recentAnalysis.filter(
+      x => x.media === t.key
+    ).length;
+
+    const actualShare = (count / total) * 100;
+    const deficit = t.weight - actualShare;
+
+    if (deficit > bestDeficit) {
+      bestDeficit = deficit;
+      best = t.key;
+    }
+  }
+
+  return best;
+}
+
 function createEducationImage(topic) {
   return runChart(
     topic,
@@ -1363,6 +1510,11 @@ function cleanup() {
       ROOT,
       "bot",
       "watchlist.png"
+    ),
+    path.join(
+      ROOT,
+      "bot",
+      "coin-card.png"
     )
   ];
 
@@ -1433,6 +1585,7 @@ async function main() {
   let image = null;
   let subtype = null;
   let angle = null;
+  let media = null;
 
   if (position < 4) {
     type = "analysis";
@@ -1465,10 +1618,19 @@ async function main() {
         angle
       );
 
-    image =
-      createAnalysisChart(
-        coin.symbol
-      );
+    media = selectAnalysisMedia(history);
+
+    if (media === "chart_only") {
+      image = createAnalysisChart(coin.symbol);
+    } else if (media === "coin_only") {
+      image = createCoinCardImage(coin.symbol);
+    } else if (media === "chart_plus_coin") {
+      image = [
+        createAnalysisChart(coin.symbol),
+        createCoinCardImage(coin.symbol)
+      ];
+    }
+    /* media === "no_image" -> image stays null (text-only) */
   } else {
     type = "other";
 
@@ -1654,6 +1816,7 @@ async function main() {
     asset,
     subtype,
     angle,
+    media,
     published: true
   });
 
