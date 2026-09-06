@@ -379,5 +379,15 @@
     "angle": 0,
     "media": "no_image",
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T08:05:16.109Z",
+    "type": "analysis",
+    "asset": "DOGE",
+    "subtype": null,
+    "angle": 1,
+    "media": "no_image",
+    "published": true
   }
 ]
