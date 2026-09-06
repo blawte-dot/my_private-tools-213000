@@ -443,5 +443,16 @@
     "media": null,
     "title": "Crypto Market Report — 2026-09-06",
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T16:40:20.043Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "project_study",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "published": true
   }
 ]
