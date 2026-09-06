@@ -349,5 +349,15 @@
     "angle": 1,
     "media": "no_image",
     "published": true
+  },
+  {
+    "date": "2026-09-06",
+    "time": "2026-09-06T06:50:20.231Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "market_snapshot",
+    "angle": null,
+    "media": null,
+    "published": true
   }
 ]
