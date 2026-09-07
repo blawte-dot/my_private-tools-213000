@@ -251,6 +251,37 @@ test("analysisText respects includeHashtags=false (no hash symbol anywhere)", ()
   }
 });
 
+test("selectDepth converges to ~85/15 (normal/deep) among majors-tier history", () => {
+  let history = [];
+  const counts = { normal: 0, deep: 0 };
+
+  for (let i = 0; i < SAMPLES; i++) {
+    const t = bot.selectDepth(history);
+    counts[t]++;
+    history.push({ type: "analysis", tier: "majors", depth: t });
+  }
+
+  for (const target of bot.DEPTH_TARGETS) {
+    const actual = (counts[target.key] / SAMPLES) * 100;
+
+    assert.ok(
+      Math.abs(actual - target.weight) < TOLERANCE_PP,
+      `${target.key}: target ${target.weight}%, got ${actual}%`
+    );
+  }
+});
+
+test("deepAnalysisText produces a real long-form article with a title", () => {
+  const coin = { symbol: "BTCUSDT", asset: "BTC", price: 62000, change: 1.8 };
+  const candles = fakeCandles();
+
+  const deep = bot.deepAnalysisText(coin, candles);
+
+  assert.ok(deep.title.includes("BTC"));
+  assert.ok(deep.body.length > 800, "deep dive should be substantially longer than a normal post");
+  assert.ok(!deep.body.includes("+-"), "malformed sign found");
+});
+
 // ---- Cashtag count safety (regression test for the 220095 bug) ----
 
 function countDistinctCashtags(text) {

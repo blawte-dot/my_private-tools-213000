@@ -492,12 +492,16 @@ function chooseCoin(coins, history) {
     }
   );
 
-  return (
+  const picked =
     candidates[0] ||
     [...coins].sort(
       (a, b) => b.change - a.change
-    )[0]
-  );
+    )[0];
+
+  return {
+    ...picked,
+    tier: tierOf(picked.asset)
+  };
 }
 
 /*
@@ -737,6 +741,107 @@ ${conflict ? `That's a shift worth watching: momentum hasn't fully confirmed the
 🔎 Along the way, the 4H structure has shifted to ${trend.toLowerCase()}, with RSI(14) now at ${rsi14.toFixed(1)} and volume ${volumeTrend}${conflict ? " — though momentum hasn't fully caught up with that trend yet" : ""}.
 
 The next test is whether price can hold above ${money(support)} or push through ${money(resistance)}.${cta ? `\n\n${cta}` : ""}${tagLine(`#Crypto #Binance ${cashtag}`)}`;
+}
+
+
+function deepAnalysisText(coin, candles) {
+  const closes = candles.map(c => c.close);
+  const price = closes.at(-1);
+
+  const ema20 = ema(closes, 20);
+  const ema50 = ema(closes, 50);
+  const sma20 = sma(closes, 20);
+  const sma50 = sma(closes, 50);
+  const rsi14 = rsi(closes, 14);
+
+  const high100 = Math.max(...candles.map(c => c.high));
+  const low100 = Math.min(...candles.map(c => c.low));
+
+  const last20 = candles.slice(-20);
+  const support = Math.min(...last20.map(c => c.low));
+  const resistance = Math.max(...last20.map(c => c.high));
+
+  const first = candles[0];
+  const mid = candles[Math.floor(candles.length / 2)];
+  const daysSpan = Math.round(
+    (candles.at(-1).time - first.time) / (1000 * 60 * 60 * 24)
+  );
+
+  const periodChangePct =
+    ((price - first.open) / first.open) * 100;
+
+  const firstHalfChangePct =
+    ((mid.close - first.open) / first.open) * 100;
+
+  const secondHalfChangePct =
+    ((price - mid.close) / mid.close) * 100;
+
+  const recentVol =
+    candles.slice(-5).reduce((s, c) => s + c.volume, 0) / 5;
+
+  const priorVol =
+    candles.slice(-20, -5).reduce((s, c) => s + c.volume, 0) / 15;
+
+  const volumeTrend =
+    recentVol > priorVol * 1.15
+      ? "picking up"
+      : recentVol < priorVol * 0.85
+        ? "fading"
+        : "holding steady";
+
+  let trend = "neutral";
+
+  if (price > ema20 && ema20 > ema50) trend = "bullish";
+  else if (price < ema20 && ema20 < ema50) trend = "bearish";
+
+  const rsiReading =
+    rsi14 >= 70
+      ? "in overbought territory"
+      : rsi14 >= 55
+        ? "on the stronger side without being overbought"
+        : rsi14 <= 30
+          ? "in oversold territory"
+          : rsi14 <= 45
+            ? "on the weaker side without being oversold"
+            : "roughly neutral";
+
+  const title = `$${coin.asset} Deep Dive — 4H Structure, Momentum, and Levels`;
+
+  const body = `${coin.asset} is currently trading at ${money(price)}, ${coin.change >= 0 ? "up" : "down"} ${Math.abs(coin.change).toFixed(2)}% over the last 24 hours. Here's a full walk through the 4H picture — not just the numbers, but why each of them matters.
+
+📈 The Bigger Picture (Last ${daysSpan} Days)
+
+Over this window, price has moved between ${money(low100)} and ${money(high100)} — a range of about ${(((high100 - low100) / low100) * 100).toFixed(1)}%. The first half of that period saw a ${firstHalfChangePct >= 0 ? "gain" : "decline"} of ${Math.abs(firstHalfChangePct).toFixed(1)}%, while the second half has moved ${secondHalfChangePct >= 0 ? "up" : "down"} ${Math.abs(secondHalfChangePct).toFixed(1)}%. Net change across the full window: ${periodChangePct >= 0 ? "+" : ""}${periodChangePct.toFixed(1)}%. That split matters because it shows whether the recent move is accelerating, decelerating, or reversing relative to the earlier trend — not just where price ended up.
+
+🔎 Trend Structure
+
+The 4H trend currently reads ${trend}. This comes from comparing price to two moving averages: the 20-period EMA (${money(ema20)}) and the 50-period EMA (${money(ema50)}). When price sits above a rising short-term average, and that average sits above the longer-term one, buyers have been in control on this timeframe — that's what "bullish structure" means here, and the reverse defines "bearish." Right now: price ${price > ema20 ? "above" : "below"} the 20 EMA, and the 20 EMA ${ema20 > ema50 ? "above" : "below"} the 50 EMA.
+
+For reference, the simple moving averages sit at SMA20 ${money(sma20)} and SMA50 ${money(sma50)} — these weight all candles equally rather than favoring recent ones like the EMAs do, so a gap between the SMA and EMA readings can hint at how much the trend has accelerated or decelerated very recently.
+
+⚡ Momentum (RSI)
+
+RSI(14) is at ${rsi14.toFixed(1)}, which is ${rsiReading}. RSI measures the speed and size of recent price changes on a 0-100 scale — above 70 typically signals the move has been fast enough that a pause or pullback becomes more likely, while below 30 signals the opposite. A neutral RSI alongside a clear trend (or vice versa) is often more informative than either reading alone, because it tells you whether the current move still has room to run or is already stretched.
+
+📊 Volume Context
+
+Volume over the last few candles has been ${volumeTrend} relative to the prior stretch. Volume matters because a price move on rising volume reflects broader participation and tends to be more reliable than the same move on fading volume, which can indicate the move is running out of committed buyers or sellers.
+
+📍 The Levels That Matter Right Now
+
+Support sits at ${money(support)} (the lowest point of the last 20 candles) and resistance at ${money(resistance)} (the highest). These aren't arbitrary lines — they mark where price has already been rejected or defended recently, which is exactly why traders watch them: a level that has held before tends to attract attention when price approaches it again, whether that means it holds a third time or finally breaks.
+
+Zooming out, the wider ${money(low100)}–${money(high100)} range from the full ${daysSpan}-day window is the structure that a confirmed break of either near-term level would ultimately be testing.
+
+🧭 Putting It Together
+
+None of these signals work well in isolation — a bullish trend reading with weak momentum and fading volume tells a different story than the same trend with strong momentum and rising volume, even though the "trend" label is identical in both cases. That's the actual reason to look at structure, momentum, and volume together rather than any single indicator on its own.
+
+🧠 This is market analysis and educational context only — not financial advice. Always do your own research before making any decisions.
+
+#Crypto #Binance #${coin.asset} #TechnicalAnalysis`;
+
+  return { title, body };
 }
 
 
@@ -1093,11 +1198,54 @@ function createCoinCardImage(symbol, variantIndex) {
  * proportional-fair approach as the "other" content scheduler.
  */
 const ANALYSIS_MEDIA_TYPES = [
-  { key: "no_image", weight: 50 },
-  { key: "chart_only", weight: 20 },
-  { key: "chart_plus_coin", weight: 20 },
-  { key: "coin_only", weight: 10 }
+  { key: "no_image", weight: 60 },
+  { key: "chart_only", weight: 16 },
+  { key: "chart_plus_coin", weight: 16 },
+  { key: "coin_only", weight: 8 }
 ];
+
+/*
+ * Occasional long-form "deep dive" analysis for major coins only
+ * (chooseCoin's "majors" tier) — a genuinely longer, more
+ * explanatory piece (real article via publish()'s title support),
+ * not just another quick angle. Kept rare and majors-only per
+ * "an important coin... explained in detail" / "an excellent
+ * occasion" — this is meant to feel like an occasional event, not
+ * the default.
+ */
+const DEPTH_TARGETS = [
+  { key: "normal", weight: 85 },
+  { key: "deep", weight: 15 }
+];
+
+function selectDepth(history) {
+  const recentMajors = history
+    .filter(
+      x => x && x.type === "analysis" && x.tier === "majors" && x.depth
+    )
+    .slice(-20);
+
+  const total = recentMajors.length || 1;
+
+  let best = DEPTH_TARGETS[0].key;
+  let bestDeficit = -Infinity;
+
+  for (const t of DEPTH_TARGETS) {
+    const count = recentMajors.filter(
+      x => x.depth === t.key
+    ).length;
+
+    const actualShare = (count / total) * 100;
+    const deficit = t.weight - actualShare;
+
+    if (deficit > bestDeficit) {
+      bestDeficit = deficit;
+      best = t.key;
+    }
+  }
+
+  return best;
+}
 
 function selectAnalysisMedia(history) {
   const recentAnalysis = history
@@ -1859,6 +2007,8 @@ async function main() {
   let title = null;
   let hashtags = null;
   let newsUrl = null;
+  let tier = null;
+  let depth = null;
 
   if (type === "analysis") {
     const coin =
@@ -1880,39 +2030,58 @@ async function main() {
       x => x && x.type === "analysis"
     ).length;
 
-    angle = pastAnalysisCount % 6;
+    tier = coin.tier;
 
-    const hashtagUse = selectHashtagUse(history);
-    hashtags = hashtagUse;
-    const includeHashtags = hashtagUse === "some";
+    const depthChoice =
+      coin.tier === "majors"
+        ? selectDepth(history)
+        : "normal";
 
-    const cta =
-      angle === 3 || angle === 5
-        ? pickCta(history)
-        : null;
+    depth = depthChoice;
 
-    text =
-      analysisText(
-        coin,
-        candles,
-        angle,
-        includeHashtags,
-        cta
-      );
+    if (depthChoice === "deep") {
+      const deep = deepAnalysisText(coin, candles);
 
-    media = selectAnalysisMedia(history);
+      title = deep.title;
+      text = deep.body;
+      image = null;
+      media = "no_image";
+      hashtags = "some";
+    } else {
+      angle = pastAnalysisCount % 6;
 
-    if (media === "chart_only") {
-      image = createAnalysisChart(coin.symbol, angle);
-    } else if (media === "coin_only") {
-      image = createCoinCardImage(coin.symbol, pastAnalysisCount);
-    } else if (media === "chart_plus_coin") {
-      image = [
-        createAnalysisChart(coin.symbol, angle),
-        createCoinCardImage(coin.symbol, pastAnalysisCount)
-      ];
+      const hashtagUse = selectHashtagUse(history);
+      hashtags = hashtagUse;
+      const includeHashtags = hashtagUse === "some";
+
+      const cta =
+        angle === 3 || angle === 5
+          ? pickCta(history)
+          : null;
+
+      text =
+        analysisText(
+          coin,
+          candles,
+          angle,
+          includeHashtags,
+          cta
+        );
+
+      media = selectAnalysisMedia(history);
+
+      if (media === "chart_only") {
+        image = createAnalysisChart(coin.symbol, angle);
+      } else if (media === "coin_only") {
+        image = createCoinCardImage(coin.symbol, pastAnalysisCount);
+      } else if (media === "chart_plus_coin") {
+        image = [
+          createAnalysisChart(coin.symbol, angle),
+          createCoinCardImage(coin.symbol, pastAnalysisCount)
+        ];
+      }
+      /* media === "no_image" -> image stays null (text-only) */
     }
-    /* media === "no_image" -> image stays null (text-only) */
   } else {
     type = "other";
 
@@ -2122,6 +2291,8 @@ async function main() {
       ? publishResult.postLink
       : null,
     newsUrl,
+    tier,
+    depth,
     published: true
   });
 
@@ -2163,6 +2334,9 @@ export {
   canPublish,
   chooseCoin,
   analysisText,
+  deepAnalysisText,
+  selectDepth,
+  DEPTH_TARGETS,
   topMoversPost,
   marketUpdatePost,
   bullBearPost,
