@@ -950,5 +950,20 @@
     "postLink": "https://app.binance.com/uni-qr/cpos/364202896663046?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T19:52:37.988Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "364214509085598",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364214509085598?r=MW37HSBO&l=fr",
+    "newsUrl": "https://cointelegraph.com/markets/bitcoin-chips-away-at-weekend-upside-as-80k-hangs-in-the-balance",
+    "published": true
   }
 ]
