@@ -936,7 +936,7 @@ function educationPost(topic) {
 #CryptoEducation #Binance #Candlesticks #Trading`;
 }
 
-async function getNews() {
+async function getNews(history) {
   const queries = [
     `"bitcoin" OR "ethereum" OR "cryptocurrency" OR "crypto market"`,
     `"donald trump" AND (bitcoin OR crypto OR cryptocurrency)`,
@@ -1006,7 +1006,23 @@ async function getNews() {
     }
   }
 
-  return [...unique.values()].slice(0, 30);
+  /*
+   * Spec 20/93: a story should only be reused when there's a
+   * genuinely new development, not reposted verbatim. Filter
+   * out anything matching a URL we've already published as
+   * news in the last 20 news posts, rather than relying only
+   * on the 6h GDELT window to prevent repeats.
+   */
+  const recentlyUsed = new Set(
+    (history || [])
+      .filter(x => x && x.subtype === "news" && x.newsUrl)
+      .slice(-20)
+      .map(x => x.newsUrl)
+  );
+
+  return [...unique.values()]
+    .filter(a => !recentlyUsed.has(a.url))
+    .slice(0, 30);
 }
 
 async function createNewsImage(article) {
@@ -1684,8 +1700,12 @@ function runSkillScript(scriptPath, args) {
  *                                comma-separated, official max is 4)
  */
 function publish(text, images, title) {
-  const scriptsDir = findSkillScriptsDir();
-
+  /*
+   * Validate cheap, pure inputs before touching the filesystem
+   * for the Skill directory or the environment for the API key —
+   * fail fast with the most relevant error, and let these checks
+   * run in tests without requiring the Skill to be installed.
+   */
   const imageList = !images
     ? []
     : Array.isArray(images)
@@ -1705,6 +1725,8 @@ function publish(text, images, title) {
       );
     }
   }
+
+  const scriptsDir = findSkillScriptsDir();
 
   console.log("Publishing Binance Square post...");
   console.log(
@@ -1850,6 +1872,7 @@ async function main() {
   let media = null;
   let title = null;
   let hashtags = null;
+  let newsUrl = null;
 
   if (type === "analysis") {
     const coin =
@@ -1911,11 +1934,13 @@ async function main() {
 
     if (subtype === "news") {
       const news =
-        await getNews();
+        await getNews(history);
 
       if (news.length) {
         const article =
           news[0];
+
+        newsUrl = article.url || null;
 
         text = `📰 Crypto News Update
 
@@ -2114,6 +2139,7 @@ async function main() {
     postLink: publishResult
       ? publishResult.postLink
       : null,
+    newsUrl,
     published: true
   });
 
@@ -2131,13 +2157,83 @@ async function main() {
   );
 }
 
-main().catch(err => {
-  console.error(
-    "❌ Bot failed:",
-    err
-  );
+/*
+ * Exported for bot/test.mjs. Pure/logic functions only —
+ * network-dependent functions (getSpotCoins, getKlines, getNews,
+ * createNewsImage, downloadImage, getJson) are exported too so
+ * tests can mock fetch around them, but are not called live in
+ * the test suite itself.
+ */
+export {
+  randomPostIntervalMs,
+  money,
+  compact,
+  sma,
+  ema,
+  rsi,
+  loadHistory,
+  saveHistory,
+  loadHealth,
+  saveHealth,
+  recordSuccess,
+  recordFailure,
+  getLastPublished,
+  canPublish,
+  chooseCoin,
+  analysisText,
+  topMoversPost,
+  marketUpdatePost,
+  bullBearPost,
+  whatToWatchPost,
+  educationPost,
+  selectAnalysisMedia,
+  ANALYSIS_MEDIA_TYPES,
+  selectHashtagUse,
+  HASHTAG_USE_TARGETS,
+  pickCta,
+  ANALYSIS_CTAS,
+  selectPostType,
+  POST_TYPE_TARGETS,
+  selectOtherType,
+  OTHER_CONTENT_TYPES,
+  pollPost,
+  ecosystemPost,
+  ECOSYSTEM_NOTES,
+  projectStudyPost,
+  PROJECT_NOTES,
+  reportPost,
+  findSkillScriptsDir,
+  redactSecret,
+  runSkillScript,
+  publish,
+  cleanup,
+  getJson,
+  getSpotCoins,
+  getKlines,
+  getNews,
+  createNewsImage,
+  downloadImage,
+  main
+};
 
-  recordFailure(err);
+/*
+ * Only auto-run when executed directly (node bot/index.mjs),
+ * not when imported — e.g. by bot/test.mjs. Standard Node
+ * entry-point guard, so the real functions above can be
+ * unit-tested without a regex-stripping hack.
+ */
+if (
+  process.argv[1] &&
+  import.meta.url === `file://${process.argv[1]}`
+) {
+  main().catch(err => {
+    console.error(
+      "❌ Bot failed:",
+      err
+    );
 
-  process.exit(1);
-});
+    recordFailure(err);
+
+    process.exit(1);
+  });
+}

@@ -1737,11 +1737,43 @@ async function main() {
   );
 }
 
-main().catch(err => {
-  console.error(
-    "Chart error:",
-    err
-  );
+/*
+ * Exported for bot/test.mjs.
+ */
+export {
+  sma,
+  ema,
+  formatPrice,
+  escapeXml,
+  compactNumber,
+  linePath,
+  coinBadgeSvg,
+  createAnalysisSvg,
+  createCoinCardSvg,
+  createEducationSvg,
+  createMoversSvg,
+  getJson,
+  getKlines,
+  getOrderBook,
+  fetchCoinIcon,
+  saveSvgAsPng,
+  main
+};
 
-  process.exit(1);
-});
+/*
+ * Only auto-run when executed directly (node bot/chart.mjs
+ * <input> <output> <mode>), not when imported for tests.
+ */
+if (
+  process.argv[1] &&
+  import.meta.url === `file://${process.argv[1]}`
+) {
+  main().catch(err => {
+    console.error(
+      "Chart error:",
+      err
+    );
+
+    process.exit(1);
+  });
+}
