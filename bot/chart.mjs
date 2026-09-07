@@ -187,57 +187,38 @@ async function fetchCoinIcon(asset) {
 }
 
 function coinBadgeSvg(asset, iconDataUri, cx, cy, r) {
-  if (iconDataUri) {
-    return `
-      <defs>
-        <clipPath id="coinIconClip">
-          <circle cx="${cx}" cy="${cy}" r="${r}" />
-        </clipPath>
-      </defs>
-      <image
-        href="${iconDataUri}"
-        x="${cx - r}"
-        y="${cy - r}"
-        width="${r * 2}"
-        height="${r * 2}"
-        clip-path="url(#coinIconClip)"
-      />
-      <circle
-        cx="${cx}"
-        cy="${cy}"
-        r="${r}"
-        fill="none"
-        stroke="#F0B90B"
-        stroke-width="2"
-      />
-    `;
-  }
-
   /*
-   * No public icon found for this ticker (common for
-   * low-cap/obscure coins) — fall back to a lettered badge
-   * instead of leaving a blank gap.
+   * No real icon found for this ticker — draw nothing rather
+   * than a lettered placeholder pretending to be the coin's
+   * picture. Callers that lay out around this badge (header
+   * text position, coin-card title position) are unaffected
+   * either way since they use fixed coordinates, not this
+   * function's output size.
    */
+  if (!iconDataUri) return "";
+
   return `
+    <defs>
+      <clipPath id="coinIconClip">
+        <circle cx="${cx}" cy="${cy}" r="${r}" />
+      </clipPath>
+    </defs>
+    <image
+      href="${iconDataUri}"
+      x="${cx - r}"
+      y="${cy - r}"
+      width="${r * 2}"
+      height="${r * 2}"
+      clip-path="url(#coinIconClip)"
+    />
     <circle
       cx="${cx}"
       cy="${cy}"
       r="${r}"
-      fill="#2B3139"
+      fill="none"
       stroke="#F0B90B"
       stroke-width="2"
     />
-    <text
-      x="${cx}"
-      y="${cy + 8}"
-      text-anchor="middle"
-      fill="#F0B90B"
-      font-size="22"
-      font-family="Arial"
-      font-weight="bold"
-    >
-      ${escapeXml(asset.slice(0, 1))}
-    </text>
   `;
 }
 
@@ -1674,6 +1655,22 @@ async function main() {
 
     const asset = symbol.replace("USDT", "");
     const iconDataUri = await fetchCoinIcon(asset);
+
+    if (!iconDataUri) {
+      /*
+       * No real picture exists for this coin — don't produce
+       * a coin-card image at all rather than a card with a
+       * placeholder badge. Leaving the output file unwritten
+       * makes runChart()'s existsSync check return null, which
+       * the caller already handles gracefully (falls back to
+       * chart-only or drops out of an image array cleanly).
+       */
+      console.log(
+        `No public icon found for ${asset} — skipping coin card.`
+      );
+
+      return;
+    }
 
     const svg =
       createCoinCardSvg(
