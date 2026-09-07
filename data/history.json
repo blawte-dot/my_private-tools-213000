@@ -615,5 +615,19 @@
     "postId": "363955712802839",
     "postLink": "https://app.binance.com/uni-qr/cpos/363955712802839?r=MW37HSBO&l=fr",
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T03:05:20.456Z",
+    "type": "analysis",
+    "asset": "ZEC",
+    "subtype": null,
+    "angle": 2,
+    "media": "coin_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "363966956951851",
+    "postLink": "https://app.binance.com/uni-qr/cpos/363966956951851?r=MW37HSBO&l=fr",
+    "published": true
   }
 ]
