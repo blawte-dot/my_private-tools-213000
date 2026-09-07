@@ -643,5 +643,19 @@
     "postId": "363977989232013",
     "postLink": "https://app.binance.com/uni-qr/cpos/363977989232013?r=MW37HSBO&l=fr",
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T04:30:22.665Z",
+    "type": "analysis",
+    "asset": "CFG",
+    "subtype": null,
+    "angle": 4,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "363987855494931",
+    "postLink": "https://app.binance.com/uni-qr/cpos/363987855494931?r=MW37HSBO&l=fr",
+    "published": true
   }
 ]
