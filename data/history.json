@@ -1010,5 +1010,20 @@
     "postLink": "https://app.binance.com/uni-qr/cpos/364245914832533?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T22:48:26.764Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "364257716810600",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364257716810600?r=MW37HSBO&l=fr",
+    "newsUrl": "https://cointelegraph.com/markets/crypto-fund-flows-show-investors-trading-fed-rate-path-not-exiting-market-coinshares",
+    "published": true
   }
 ]
