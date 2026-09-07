@@ -629,5 +629,19 @@
     "postId": "363966956951851",
     "postLink": "https://app.binance.com/uni-qr/cpos/363966956951851?r=MW37HSBO&l=fr",
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T03:50:13.955Z",
+    "type": "analysis",
+    "asset": "TAO",
+    "subtype": null,
+    "angle": 3,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "363977989232013",
+    "postLink": "https://app.binance.com/uni-qr/cpos/363977989232013?r=MW37HSBO&l=fr",
+    "published": true
   }
 ]
