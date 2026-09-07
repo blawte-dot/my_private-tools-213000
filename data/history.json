@@ -770,5 +770,20 @@
     "postLink": "https://app.binance.com/uni-qr/cpos/364075115633206?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T11:05:14.237Z",
+    "type": "analysis",
+    "asset": "PUMP",
+    "subtype": null,
+    "angle": 5,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "364084896047782",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364084896047782?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "published": true
   }
 ]
