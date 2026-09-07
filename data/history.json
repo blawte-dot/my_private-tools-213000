@@ -815,5 +815,20 @@
     "postLink": "https://app.binance.com/uni-qr/cpos/364105827861596?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T13:15:15.996Z",
+    "type": "analysis",
+    "asset": "LTC",
+    "subtype": null,
+    "angle": 1,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "364116852062823",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364116852062823?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "published": true
   }
 ]
