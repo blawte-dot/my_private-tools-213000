@@ -905,5 +905,20 @@
     "postLink": "https://app.binance.com/uni-qr/cpos/364170915684215?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T17:40:14.714Z",
+    "type": "analysis",
+    "asset": "USD1",
+    "subtype": null,
+    "angle": 0,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "364181973176566",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364181973176566?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "published": true
   }
 ]
