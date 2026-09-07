@@ -995,5 +995,20 @@
     "postLink": "https://app.binance.com/uni-qr/cpos/364234841988641?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T22:00:25.410Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "education",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "364245914832533",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364245914832533?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "published": true
   }
 ]
