@@ -671,5 +671,19 @@
     "postId": "363997691073635",
     "postLink": "https://app.binance.com/uni-qr/cpos/363997691073635?r=MW37HSBO&l=fr",
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T05:55:15.827Z",
+    "type": "analysis",
+    "asset": "ICP",
+    "subtype": null,
+    "angle": 5,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364008716701971",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364008716701971?r=MW37HSBO&l=fr",
+    "published": true
   }
 ]
