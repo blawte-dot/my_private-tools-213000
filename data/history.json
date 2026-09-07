@@ -935,5 +935,20 @@
     "postLink": "https://app.binance.com/uni-qr/cpos/364192482789102?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T19:05:22.926Z",
+    "type": "analysis",
+    "asset": "SOPH",
+    "subtype": null,
+    "angle": 2,
+    "media": "chart_plus_coin",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364202896663046",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364202896663046?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "published": true
   }
 ]
