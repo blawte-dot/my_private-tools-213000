@@ -785,5 +785,20 @@
     "postLink": "https://app.binance.com/uni-qr/cpos/364084896047782?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T11:45:16.618Z",
+    "type": "analysis",
+    "asset": "INJ",
+    "subtype": null,
+    "angle": 0,
+    "media": "coin_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364094736201191",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364094736201191?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "published": true
   }
 ]
