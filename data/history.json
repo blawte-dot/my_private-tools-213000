@@ -830,5 +830,20 @@
     "postLink": "https://app.binance.com/uni-qr/cpos/364116852062823?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "published": true
+  },
+  {
+    "date": "2026-09-07",
+    "time": "2026-09-07T14:00:25.966Z",
+    "type": "analysis",
+    "asset": "SUI",
+    "subtype": null,
+    "angle": 2,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364127952270098",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364127952270098?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "published": true
   }
 ]
