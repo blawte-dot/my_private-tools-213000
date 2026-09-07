@@ -759,9 +759,7 @@ function topMoversPost(coins) {
 
   const lead = movers[0];
 
-  return `🔥 Binance Spot — Top Movers
-
-📈 Strongest movers right now:
+  return `📈 Strongest movers on Binance Spot right now:
 
 ${lines.join("\n")}
 
@@ -805,9 +803,7 @@ function marketUpdatePost(coins) {
         `${c.change >= 0 ? "🟢" : "🔴"} $${c.asset}: ${money(c.price)} (${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%)`
     );
 
-  return `🌐 Crypto Market Update
-
-${lines.join("\n")}
+  return `${lines.join("\n")}
 
 📊 Total tracked Spot volume (24h): ${compact(totalVolume)}
 ⚖️ Breadth: ${advancing} up / ${declining} down among liquid USDT pairs
@@ -830,9 +826,7 @@ function bullBearPost(coin, candles) {
     ...last20.map(x => x.high)
   );
 
-  return `⚖️ $${coin.asset} — Bull vs Bear
-
-💰 Price: ${money(price)}
+  return `💰 $${coin.asset} — ${money(price)}
 ${coin.change >= 0 ? "🟢" : "🔴"} 24H Change: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%
 
 🐂 Bull Case
@@ -860,9 +854,7 @@ function whatToWatchPost(coins) {
       `• ${i < 3 ? "$" + c.asset : c.asset} — ${compact(c.volume)} 24h vol, ${c.change >= 0 ? "+" : ""}${c.change.toFixed(2)}%`
   );
 
-  return `👀 What to Watch — Next Few Hours
-
-The most liquid Spot pairs right now, worth keeping on the radar for follow-through or reversal:
+  return `👀 The most liquid Spot pairs right now, worth keeping on the radar for follow-through or reversal:
 
 ${lines.join("\n")}
 
@@ -1375,9 +1367,7 @@ function pollPost(coins) {
       Math.floor(Math.random() * questions.length)
     ];
 
-  return `🗣️ Quick Question
-
-${question}
+  return `🗣️ ${question}
 
 🧠 Not financial advice — just curious where the community's head is at.
 
@@ -1418,9 +1408,7 @@ function ecosystemPost() {
       Math.floor(Math.random() * ECOSYSTEM_NOTES.length)
     ];
 
-  return `ℹ️ Binance Square Feature: ${note.title}
-
-${note.body}
+  return `ℹ️ ${note.body}
 
 🔎 Details and eligibility can change — check Binance Square's Creator Center for the current, official terms.
 
@@ -1478,9 +1466,7 @@ function projectStudyPost(coins) {
     PROJECT_NOTES[coin.asset] ||
     "a listed asset on Binance Spot — no verified project summary in our notes, so this covers market stats only rather than guessing at its purpose.";
 
-  return `🔍 Project Spotlight: $${coin.asset}
-
-${coin.asset} is ${note}
+  return `🔍 $${coin.asset} is ${note}
 
 💰 Price: ${money(coin.price)}
 ${coin.change >= 0 ? "🟢" : "🔴"} 24H Change: ${coin.change >= 0 ? "+" : ""}${coin.change.toFixed(2)}%
@@ -1942,11 +1928,7 @@ async function main() {
 
         newsUrl = article.url || null;
 
-        text = `📰 Crypto News Update
-
-🔎 ${article.title}
-
-🌐 Source: ${article.domain || "News source"}
+        text = `${article.title}
 
 📊 This development may be relevant to crypto-market sentiment and should be considered alongside price action and volume.
 
