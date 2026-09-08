@@ -1433,5 +1433,22 @@
     "tier": "large",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T17:25:19.517Z",
+    "type": "analysis",
+    "asset": "ETC",
+    "subtype": null,
+    "angle": 2,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364532200855148",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364532200855148?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "published": true
   }
 ]
