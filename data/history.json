@@ -1450,5 +1450,22 @@
     "tier": "mid",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T18:10:21.226Z",
+    "type": "analysis",
+    "asset": "PROM",
+    "subtype": null,
+    "angle": 3,
+    "media": "coin_only",
+    "title": null,
+    "hashtags": "some",
+    "postId": "364543267076099",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364543267076099?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "published": true
   }
 ]
