@@ -651,7 +651,7 @@ function analysisText(coin, candles, angle, includeHashtags, cta) {
       ? `mixed — ${trend.toLowerCase()} structure, ${momentum.toLowerCase()} RSI`
       : trend.toLowerCase();
 
-    return `🪙 ${cashtag}/USDT — ${money(price)} (${changeText})
+    return `🪙 ${cashtag} — ${money(price)} (${changeText})
 
 📐 EMA20 ${money(ema20)} · EMA50 ${money(ema50)} · RSI ${rsi14.toFixed(1)}
 📍 Range: ${money(support)} – ${money(resistance)}
@@ -671,7 +671,7 @@ function analysisText(coin, candles, angle, includeHashtags, cta) {
 
     return `🧾 Evidence first: ${leadFact}.
 
-📌 That's on ${cashtag}/USDT, currently ${money(price)} (${changeText} 24H).
+📌 That's on ${cashtag}, currently ${money(price)} (${changeText} 24H).
 
 🔬 Supporting data:
 EMA20/EMA50: ${money(ema20)} / ${money(ema50)} — structure reads ${trend.toLowerCase()}
@@ -691,7 +691,7 @@ ${conflict ? `⚠️ Worth flagging: trend and momentum aren't fully aligned her
           ? `volume has faded ${Math.abs(volumeChangePct).toFixed(0)}% over the last few candles`
           : `volume hasn't meaningfully shifted over the last few candles`;
 
-    return `🔄 What changed on ${cashtag}/USDT in the last few 4H candles?
+    return `🔄 What changed on ${cashtag} in the last few 4H candles?
 
 ⏱️ ${shiftLine.charAt(0).toUpperCase() + shiftLine.slice(1)}, and RSI(14) now sits at ${rsi14.toFixed(1)} (${momentum.toLowerCase()}).
 
@@ -704,7 +704,7 @@ ${conflict ? `That's a shift worth watching: momentum hasn't fully confirmed the
 
   if (angle === 3) {
     // Scenario comparison — bull vs bear framed upfront.
-    return `🎯 ${cashtag}/USDT scenario check — ${money(price)} (${changeText} 24H)
+    return `🎯 ${cashtag} scenario check — ${money(price)} (${changeText} 24H)
 
 🔀 Bull case: reclaim/hold above ${money(resistance)} on rising volume keeps ${trend === "BULLISH" ? "the current uptrend" : "a recovery attempt"} alive.
 🔀 Bear case: a 4H close under ${money(support)} opens room toward the wider ${money(low100)}–${money(high100)} range.
@@ -715,7 +715,7 @@ ${conflict ? `That's a shift worth watching: momentum hasn't fully confirmed the
   if (angle === 4) {
     // Level-by-level breakdown — methodical, numbered, no
     // closing question by design.
-    return `📏 ${cashtag}/USDT — 4H levels, low to high:
+    return `📏 ${cashtag} — 4H levels, low to high:
 
 1️⃣ ${money(low100)} — 100-candle low. Losing this would be a structural break.
 2️⃣ ${money(support)} — near-term support (last 20 candles).
