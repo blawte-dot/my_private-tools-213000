@@ -1535,5 +1535,22 @@
     "tier": "mid",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T21:55:24.489Z",
+    "type": "analysis",
+    "asset": "PEPE",
+    "subtype": null,
+    "angle": 1,
+    "media": "chart_plus_coin",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364598576696337",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364598576696337?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "published": true
   }
 ]
