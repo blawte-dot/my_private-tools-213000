@@ -1552,5 +1552,22 @@
     "tier": "large",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T22:43:02.214Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "364610281889592",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364610281889592?r=MW37HSBO&l=fr",
+    "newsUrl": "https://arynews.tv/wall-st-slips-as-steep-oil-prices-stoke-inflation-concerns-ahead-of-cpi",
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
