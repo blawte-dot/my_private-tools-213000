@@ -1297,5 +1297,22 @@
     "tier": "large",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T11:37:43.276Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "364446773981857",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364446773981857?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.texarkanagazette.com/news/2026/sep/08/partys-over-for-crypto-scammers-who-went-on-a/",
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
