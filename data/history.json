@@ -1484,5 +1484,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T19:40:17.483Z",
+    "type": "analysis",
+    "asset": "BTC",
+    "subtype": null,
+    "angle": 4,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364565370239092",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364565370239092?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "normal",
+    "published": true
   }
 ]
