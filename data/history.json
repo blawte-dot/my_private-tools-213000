@@ -1348,5 +1348,22 @@
     "tier": "large",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T13:45:17.355Z",
+    "type": "analysis",
+    "asset": "FF",
+    "subtype": null,
+    "angle": 4,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "364478124801046",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364478124801046?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "published": true
   }
 ]
