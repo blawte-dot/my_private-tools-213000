@@ -1399,5 +1399,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T15:55:33.326Z",
+    "type": "analysis",
+    "asset": "XRP",
+    "subtype": null,
+    "angle": 0,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364510139195254",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364510139195254?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "normal",
+    "published": true
   }
 ]
