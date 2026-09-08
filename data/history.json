@@ -1263,5 +1263,22 @@
     "tier": "large",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T10:05:15.552Z",
+    "type": "analysis",
+    "asset": "AERO",
+    "subtype": null,
+    "angle": 0,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364424050204686",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364424050204686?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "published": true
   }
 ]
