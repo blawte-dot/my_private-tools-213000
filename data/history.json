@@ -1314,5 +1314,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T12:20:17.107Z",
+    "type": "analysis",
+    "asset": "WLD",
+    "subtype": null,
+    "angle": null,
+    "media": "no_image",
+    "title": "$WLD Deep Dive — 4H Structure, Momentum, and Levels",
+    "hashtags": "some",
+    "postId": "364457234300873",
+    "postLink": "https://app.binance.com/uni-qr/cart/364457234300873?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "deep",
+    "published": true
   }
 ]
