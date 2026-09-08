@@ -1382,5 +1382,22 @@
     "tier": "large",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T15:10:18.644Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "education",
+    "angle": null,
+    "media": null,
+    "title": "Crypto Market Report — 2026-09-08",
+    "hashtags": null,
+    "postId": "364499019819746",
+    "postLink": "https://app.binance.com/uni-qr/cart/364499019819746?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
