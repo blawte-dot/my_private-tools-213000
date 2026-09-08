@@ -1501,5 +1501,22 @@
     "tier": "majors",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T20:25:27.708Z",
+    "type": "analysis",
+    "asset": "CAKE",
+    "subtype": null,
+    "angle": 5,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364576471502313",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364576471502313?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "published": true
   }
 ]
