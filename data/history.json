@@ -1093,5 +1093,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-08",
+    "time": "2026-09-08T02:33:22.694Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "364312996114691",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364312996114691?r=MW37HSBO&l=fr",
+    "newsUrl": "https://n.yam.com/Article/20260908720223",
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
