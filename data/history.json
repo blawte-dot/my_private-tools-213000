@@ -1739,5 +1739,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-09",
+    "time": "2026-09-09T06:53:20.025Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "364730777292745",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364730777292745?r=MW37HSBO&l=fr",
+    "newsUrl": "https://92q.com/5914826/donald-trump-colors-hair-lies-about-911/",
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
