@@ -1926,5 +1926,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-09",
+    "time": "2026-09-09T15:15:22.804Z",
+    "type": "analysis",
+    "asset": "IOST",
+    "subtype": null,
+    "angle": 1,
+    "media": "coin_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364854160085594",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364854160085594?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "published": true
   }
 ]
