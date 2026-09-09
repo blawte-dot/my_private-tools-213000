@@ -2113,5 +2113,22 @@
     "tier": "large",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-09",
+    "time": "2026-09-09T23:30:33.943Z",
+    "type": "analysis",
+    "asset": "MINA",
+    "subtype": null,
+    "angle": 4,
+    "media": "chart_plus_coin",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364975856937321",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364975856937321?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "published": true
   }
 ]
