@@ -1858,5 +1858,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-09",
+    "time": "2026-09-09T12:13:08.133Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "364809371740782",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364809371740782?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.newspim.com/news/view/20260909001283",
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
