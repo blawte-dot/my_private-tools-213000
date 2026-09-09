@@ -1620,5 +1620,22 @@
     "tier": "mid",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-09",
+    "time": "2026-09-09T01:40:32.012Z",
+    "type": "analysis",
+    "asset": "DOT",
+    "subtype": null,
+    "angle": 5,
+    "media": "chart_plus_coin",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364653903460354",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364653903460354?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "published": true
   }
 ]
