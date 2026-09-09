@@ -1960,5 +1960,22 @@
     "tier": "mid",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-09",
+    "time": "2026-09-09T16:40:22.620Z",
+    "type": "analysis",
+    "asset": "KAT",
+    "subtype": null,
+    "angle": 3,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364875048933164",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364875048933164?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "published": true
   }
 ]
