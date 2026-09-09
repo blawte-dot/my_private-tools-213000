@@ -1977,5 +1977,22 @@
     "tier": "large",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-09",
+    "time": "2026-09-09T17:26:25.301Z",
+    "type": "analysis",
+    "asset": "ZEC",
+    "subtype": null,
+    "angle": 4,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "364886364810318",
+    "postLink": "https://app.binance.com/uni-qr/cpos/364886364810318?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "normal",
+    "published": true
   }
 ]
