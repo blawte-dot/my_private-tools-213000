@@ -2351,5 +2351,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T09:48:06.517Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365127624087393",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365127624087393?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.riotimesonline.com/crypto-markets-bitcoin-majors-thursday-september-10-2026/",
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
