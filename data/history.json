@@ -2164,5 +2164,22 @@
     "tier": "majors",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T01:42:59.440Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365008401772050",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365008401772050?r=MW37HSBO&l=fr",
+    "newsUrl": "https://themissouritimes.com/opinion-hataway-congress-must-protect-local-lending-community-prosperity/",
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
