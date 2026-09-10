@@ -2606,5 +2606,22 @@
     "tier": "large",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T21:05:20.299Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "market_snapshot",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365294060321207",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365294060321207?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
