@@ -2487,5 +2487,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T15:45:21.295Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "project_study",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365215421134369",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365215421134369?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
