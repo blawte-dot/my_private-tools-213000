@@ -2521,5 +2521,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T17:15:17.563Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "poll",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365237524162773",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365237524162773?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
