@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync, spawnSync } from "node:child_process";
 import sharp from "sharp";
+import { judgeContent } from "./gemini.mjs";
 
 const API = "https://data-api.binance.vision";
 const GDELT = "https://api.gdeltproject.org/api/v2/doc/doc";
@@ -2009,6 +2010,10 @@ async function main() {
   let newsUrl = null;
   let tier = null;
   let depth = null;
+  let geminiDecision = null;
+  let geminiQualityScore = null;
+  let geminiDuplicateRisk = null;
+  let geminiReasoning = null;
 
   if (type === "analysis") {
     const coin =
@@ -2081,6 +2086,107 @@ async function main() {
         ];
       }
       /* media === "no_image" -> image stays null (text-only) */
+    }
+
+    /*
+     * Gemini quality gate (spec: AI_MONITORING_ADDENDUM). Reviews
+     * the already-generated draft for quality/originality — never
+     * regenerates content itself, never touches the real numbers
+     * already computed above. Any failure/missing key degrades to
+     * "no opinion" and the draft publishes as-is.
+     */
+    const recentAnalysisSummary = history
+      .filter(x => x && x.type === "analysis")
+      .slice(-10)
+      .map(x => `${x.asset || "?"} (angle ${x.angle ?? x.depth ?? "?"})`)
+      .join(", ");
+
+    let judgment = await judgeContent({
+      text,
+      asset,
+      contentType: depthChoice === "deep" ? "deep_dive" : "analysis",
+      angle: depthChoice === "deep" ? "deep" : angle,
+      recentSummary: recentAnalysisSummary
+    });
+
+    const recentGeminiSkips = history
+      .filter(x => x && x.type === "analysis")
+      .slice(-3)
+      .filter(x => x.geminiDecision === "skip").length;
+
+    if (judgment && judgment.decision === "rewrite" && depthChoice !== "deep") {
+      /*
+       * One retry with a different angle, then publish regardless
+       * of the second opinion — never loop, never pay for a third
+       * Gemini call over one post.
+       */
+      const altAngle = (angle + 1 + Math.floor(Math.random() * 5)) % 6;
+
+      angle = altAngle;
+
+      const hashtagUse2 = selectHashtagUse(history);
+      hashtags = hashtagUse2;
+
+      const cta2 =
+        altAngle === 3 || altAngle === 5
+          ? pickCta(history)
+          : null;
+
+      text = analysisText(
+        coin,
+        candles,
+        altAngle,
+        hashtagUse2 === "some",
+        cta2
+      );
+
+      if (media === "chart_only") {
+        image = createAnalysisChart(coin.symbol, altAngle);
+      } else if (media === "chart_plus_coin") {
+        image = [
+          createAnalysisChart(coin.symbol, altAngle),
+          createCoinCardImage(coin.symbol, pastAnalysisCount)
+        ];
+      }
+
+      const secondJudgment = await judgeContent({
+        text,
+        asset,
+        contentType: "analysis",
+        angle: altAngle,
+        recentSummary: recentAnalysisSummary
+      });
+
+      judgment = secondJudgment || judgment;
+    }
+
+    if (
+      judgment &&
+      judgment.decision === "skip" &&
+      recentGeminiSkips < 2
+    ) {
+      geminiDecision = judgment.decision;
+      geminiQualityScore = judgment.quality_score;
+      geminiDuplicateRisk = judgment.duplicate_risk;
+      geminiReasoning = judgment.reasoning_summary;
+
+      console.log(
+        "Gemini quality gate: skipping this cycle —",
+        judgment.reasoning_summary
+      );
+
+      return;
+    }
+
+    if (judgment) {
+      geminiDecision =
+        judgment.decision === "skip"
+          ? "skip_overridden"
+          : judgment.decision;
+
+      geminiQualityScore = judgment.quality_score;
+      geminiDuplicateRisk = judgment.duplicate_risk;
+      geminiReasoning = judgment.reasoning_summary;
     }
   } else {
     type = "other";
@@ -2293,6 +2399,10 @@ async function main() {
     newsUrl,
     tier,
     depth,
+    geminiDecision,
+    geminiQualityScore,
+    geminiDuplicateRisk,
+    geminiReasoning,
     published: true
   });
 

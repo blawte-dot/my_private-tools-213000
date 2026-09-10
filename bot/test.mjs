@@ -23,6 +23,8 @@ import path from "node:path";
 import os from "node:os";
 
 import * as bot from "./index.mjs";
+import * as gemini from "./gemini.mjs";
+import * as monitor from "./monitor-views.mjs";
 
 const SAMPLES = 3000;
 const TOLERANCE_PP = 5;
@@ -280,6 +282,129 @@ test("deepAnalysisText produces a real long-form article with a title", () => {
   assert.ok(deep.title.includes("BTC"));
   assert.ok(deep.body.length > 800, "deep dive should be substantially longer than a normal post");
   assert.ok(!deep.body.includes("+-"), "malformed sign found");
+});
+
+// ---- Gemini quality gate (pure logic only, no real API calls) ----
+
+test("gemini.judgeContent returns null when GEMINI_API_KEY is unset", async () => {
+  const savedKey = process.env.GEMINI_API_KEY;
+  delete process.env.GEMINI_API_KEY;
+
+  try {
+    const result = await gemini.judgeContent({
+      text: "draft",
+      asset: "BTC",
+      contentType: "analysis",
+      angle: 0,
+      recentSummary: ""
+    });
+
+    assert.equal(result, null);
+  } finally {
+    if (savedKey) process.env.GEMINI_API_KEY = savedKey;
+  }
+});
+
+test("gemini.validateJudgment accepts a well-formed judgment", () => {
+  const result = gemini.validateJudgment({
+    decision: "publish",
+    quality_score: 85,
+    duplicate_risk: 5,
+    reasoning_summary: "Clear and original."
+  });
+
+  assert.ok(result);
+  assert.equal(result.decision, "publish");
+});
+
+test("gemini.validateJudgment rejects missing/invalid fields", () => {
+  assert.equal(gemini.validateJudgment(null), null);
+  assert.equal(gemini.validateJudgment({}), null);
+  assert.equal(
+    gemini.validateJudgment({
+      decision: "not_a_real_decision",
+      quality_score: 50,
+      duplicate_risk: 50,
+      reasoning_summary: "x"
+    }),
+    null
+  );
+  assert.equal(
+    gemini.validateJudgment({
+      decision: "publish",
+      quality_score: "high",
+      duplicate_risk: 5,
+      reasoning_summary: "x"
+    }),
+    null
+  );
+});
+
+test("gemini.buildPrompt embeds the draft text and never asks Gemini to verify numbers", () => {
+  const prompt = gemini.buildPrompt({
+    text: "BTC is at $62,000",
+    asset: "BTC",
+    contentType: "analysis",
+    angle: 2,
+    recentSummary: "ETH (angle 1)"
+  });
+
+  assert.ok(prompt.includes("BTC is at $62,000"));
+  assert.ok(prompt.includes("do NOT have access to live market data"));
+});
+
+// ---- View monitoring (mocked fetch, no real network) ----
+
+test("monitor.fetchViewCount extracts a matching pattern", async () => {
+  const originalFetch = global.fetch;
+
+  try {
+    global.fetch = async () => ({
+      ok: true,
+      text: async () => 'preamble "viewNum":98765 trailer'
+    });
+
+    const result = await monitor.fetchViewCount("123");
+    assert.equal(result.status, "ok");
+    assert.equal(result.views, 98765);
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test("monitor.fetchViewCount reports unavailable (never guesses) when no pattern matches", async () => {
+  const originalFetch = global.fetch;
+
+  try {
+    global.fetch = async () => ({
+      ok: true,
+      text: async () => "<html>nothing recognizable</html>"
+    });
+
+    const result = await monitor.fetchViewCount("123");
+    assert.equal(result.status, "unavailable");
+    assert.equal(result.views, null);
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test("monitor.fetchViewCount handles HTTP errors and network failures safely", async () => {
+  const originalFetch = global.fetch;
+
+  try {
+    global.fetch = async () => ({ ok: false, status: 403 });
+    const r1 = await monitor.fetchViewCount("123");
+    assert.equal(r1.status, "unavailable");
+
+    global.fetch = async () => {
+      throw new Error("simulated network failure");
+    };
+    const r2 = await monitor.fetchViewCount("123");
+    assert.equal(r2.status, "unavailable");
+  } finally {
+    global.fetch = originalFetch;
+  }
 });
 
 // ---- Cashtag count safety (regression test for the 220095 bug) ----
