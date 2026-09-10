@@ -32,7 +32,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install sharp
+          npm install sharp @google/genai
 
       - name: Run test suite
         continue-on-error: true
@@ -49,6 +49,7 @@ jobs:
       - name: Run Binance Square Bot
         env:
           BINANCE_SQUARE_OPENAPI_KEY: ${{ secrets.BINANCE_SQUARE_OPENAPI_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           node bot/index.mjs
 
