@@ -2300,5 +2300,22 @@
     "tier": "mid",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T07:35:28.062Z",
+    "type": "analysis",
+    "asset": "COTI",
+    "subtype": null,
+    "angle": 1,
+    "media": "chart_plus_coin",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365095026573849",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365095026573849?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "published": true
   }
 ]
