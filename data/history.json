@@ -2674,5 +2674,26 @@
     "tier": "majors",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T23:55:19.519Z",
+    "type": "analysis",
+    "asset": "SPCXB",
+    "subtype": null,
+    "angle": 1,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "365335836152361",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365335836152361?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
