@@ -2504,5 +2504,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T16:33:13.803Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365227186783281",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365227186783281?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.rttnews.com/3690078/cryptos-plunge-as-macro-worries-haunt.aspx",
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
