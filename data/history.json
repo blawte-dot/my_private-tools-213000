@@ -2419,5 +2419,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T12:53:00.327Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365173064561584",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365173064561584?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.aol.com/articles/retirees-watch-5-hidden-retirement-101500000.html",
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
