@@ -2538,5 +2538,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T18:00:45.401Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "education",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365248697472190",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365248697472190?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
