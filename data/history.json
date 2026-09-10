@@ -2283,5 +2283,22 @@
     "tier": "large",
     "depth": "normal",
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T06:50:25.916Z",
+    "type": "analysis",
+    "asset": "REZ",
+    "subtype": null,
+    "angle": 0,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365083958449869",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365083958449869?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "published": true
   }
 ]
