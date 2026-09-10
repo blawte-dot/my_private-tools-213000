@@ -2589,5 +2589,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T20:20:16.445Z",
+    "type": "analysis",
+    "asset": "ETHFI",
+    "subtype": null,
+    "angle": 3,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365282985109946",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365282985109946?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "published": true
   }
 ]
