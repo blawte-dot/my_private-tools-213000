@@ -2385,5 +2385,22 @@
     "tier": null,
     "depth": null,
     "published": true
+  },
+  {
+    "date": "2026-09-10",
+    "time": "2026-09-10T11:20:27.748Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "bull_bear",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365150321194942",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365150321194942?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "published": true
   }
 ]
