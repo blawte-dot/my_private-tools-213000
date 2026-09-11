@@ -2800,5 +2800,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "published": true
+  },
+  {
+    "date": "2026-09-11",
+    "time": "2026-09-11T04:23:10.949Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365401664895292",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365401664895292?r=MW37HSBO&l=fr",
+    "newsUrl": "https://economictimes.indiatimes.com/markets/forex/forex-news/dollar-holds-gains-yen-slips-as-mideast-energy-shock-deepens/articleshow/134040305.cms",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
