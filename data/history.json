@@ -2716,5 +2716,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "published": true
+  },
+  {
+    "date": "2026-09-11",
+    "time": "2026-09-11T01:25:22.185Z",
+    "type": "analysis",
+    "asset": "SAGA",
+    "subtype": null,
+    "angle": 2,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365357965420869",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365357965420869?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
