@@ -139,15 +139,20 @@
         "checkedAt": "2026-09-11T10:22:56.461Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:02.964Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364787257979944",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T10:43:09.281Z",
-    "lastChecked": "2026-09-11T10:22:56.461Z",
+    "lastChecked": "2026-09-11T10:26:02.964Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364797603645893": {
@@ -166,15 +171,20 @@
         "checkedAt": "2026-09-11T10:22:57.973Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:04.472Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364797603645893",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T11:25:15.081Z",
-    "lastChecked": "2026-09-11T10:22:57.973Z",
+    "lastChecked": "2026-09-11T10:26:04.472Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364809371740782": {
@@ -193,15 +203,20 @@
         "checkedAt": "2026-09-11T10:22:59.485Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:05.978Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364809371740782",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T12:13:08.133Z",
-    "lastChecked": "2026-09-11T10:22:59.485Z",
+    "lastChecked": "2026-09-11T10:26:05.978Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364821007847443": {
@@ -220,15 +235,20 @@
         "checkedAt": "2026-09-11T10:23:00.994Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:07.484Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364821007847443",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T13:00:29.016Z",
-    "lastChecked": "2026-09-11T10:23:00.994Z",
+    "lastChecked": "2026-09-11T10:26:07.484Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364832035802878": {
@@ -247,15 +267,20 @@
         "checkedAt": "2026-09-11T10:23:02.505Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:08.991Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364832035802878",
     "asset": "NEAR",
     "type": "analysis",
     "publishedAt": "2026-09-09T13:45:21.425Z",
-    "lastChecked": "2026-09-11T10:23:02.505Z",
+    "lastChecked": "2026-09-11T10:26:08.991Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364843098283901": {
@@ -274,15 +299,20 @@
         "checkedAt": "2026-09-11T10:23:04.013Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:10.497Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364843098283901",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T14:30:22.138Z",
-    "lastChecked": "2026-09-11T10:23:04.013Z",
+    "lastChecked": "2026-09-11T10:26:10.497Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364854160085594": {
@@ -301,15 +331,20 @@
         "checkedAt": "2026-09-11T10:23:05.524Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:12.003Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364854160085594",
     "asset": "IOST",
     "type": "analysis",
     "publishedAt": "2026-09-09T15:15:22.804Z",
-    "lastChecked": "2026-09-11T10:23:05.524Z",
+    "lastChecked": "2026-09-11T10:26:12.003Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364865208190467": {
@@ -328,15 +363,20 @@
         "checkedAt": "2026-09-11T10:23:07.033Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:13.509Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364865208190467",
     "asset": "XTZ",
     "type": "analysis",
     "publishedAt": "2026-09-09T16:00:20.141Z",
-    "lastChecked": "2026-09-11T10:23:07.033Z",
+    "lastChecked": "2026-09-11T10:26:13.509Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364875048933164": {
@@ -355,15 +395,20 @@
         "checkedAt": "2026-09-11T10:23:08.543Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:15.016Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364875048933164",
     "asset": "KAT",
     "type": "analysis",
     "publishedAt": "2026-09-09T16:40:22.620Z",
-    "lastChecked": "2026-09-11T10:23:08.543Z",
+    "lastChecked": "2026-09-11T10:26:15.016Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364886364810318": {
@@ -382,15 +427,20 @@
         "checkedAt": "2026-09-11T10:23:10.052Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:16.523Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364886364810318",
     "asset": "ZEC",
     "type": "analysis",
     "publishedAt": "2026-09-09T17:26:25.301Z",
-    "lastChecked": "2026-09-11T10:23:10.052Z",
+    "lastChecked": "2026-09-11T10:26:16.523Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364897904947654": {
@@ -409,15 +459,20 @@
         "checkedAt": "2026-09-11T10:23:11.562Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:18.029Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364897904947654",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T18:13:22.693Z",
-    "lastChecked": "2026-09-11T10:23:11.562Z",
+    "lastChecked": "2026-09-11T10:26:18.029Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364909494451007": {
@@ -436,15 +491,20 @@
         "checkedAt": "2026-09-11T10:23:13.071Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:19.535Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364909494451007",
     "asset": "RAY",
     "type": "analysis",
     "publishedAt": "2026-09-09T19:00:32.167Z",
-    "lastChecked": "2026-09-11T10:23:13.071Z",
+    "lastChecked": "2026-09-11T10:26:19.535Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364920494785140": {
@@ -463,15 +523,20 @@
         "checkedAt": "2026-09-11T10:23:14.580Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:21.042Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364920494785140",
     "asset": "SC",
     "type": "analysis",
     "publishedAt": "2026-09-09T19:45:17.825Z",
-    "lastChecked": "2026-09-11T10:23:14.580Z",
+    "lastChecked": "2026-09-11T10:26:21.042Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364931546840447": {
@@ -490,15 +555,20 @@
         "checkedAt": "2026-09-11T10:23:16.090Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:22.548Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364931546840447",
     "asset": "SAHARA",
     "type": "analysis",
     "publishedAt": "2026-09-09T20:30:16.081Z",
-    "lastChecked": "2026-09-11T10:23:16.090Z",
+    "lastChecked": "2026-09-11T10:26:22.548Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364942400443836": {
@@ -517,15 +587,20 @@
         "checkedAt": "2026-09-11T10:23:17.600Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:24.065Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364942400443836",
     "asset": "HOLO",
     "type": "analysis",
     "publishedAt": "2026-09-09T21:14:25.894Z",
-    "lastChecked": "2026-09-11T10:23:17.600Z",
+    "lastChecked": "2026-09-11T10:26:24.065Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364953711843112": {
@@ -544,15 +619,20 @@
         "checkedAt": "2026-09-11T10:23:19.109Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:25.571Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364953711843112",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T22:00:27.455Z",
-    "lastChecked": "2026-09-11T10:23:19.109Z",
+    "lastChecked": "2026-09-11T10:26:25.571Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364964768939380": {
@@ -571,15 +651,20 @@
         "checkedAt": "2026-09-11T10:23:20.617Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:27.078Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364964768939380",
     "asset": "PAXG",
     "type": "analysis",
     "publishedAt": "2026-09-09T22:45:26.900Z",
-    "lastChecked": "2026-09-11T10:23:20.617Z",
+    "lastChecked": "2026-09-11T10:26:27.078Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364975856937321": {
@@ -598,15 +683,20 @@
         "checkedAt": "2026-09-11T10:23:22.125Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:28.584Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364975856937321",
     "asset": "MINA",
     "type": "analysis",
     "publishedAt": "2026-09-09T23:30:33.943Z",
-    "lastChecked": "2026-09-11T10:23:22.125Z",
+    "lastChecked": "2026-09-11T10:26:28.584Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364986863474470": {
@@ -625,15 +715,20 @@
         "checkedAt": "2026-09-11T10:23:23.634Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:30.091Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364986863474470",
     "asset": "IOST",
     "type": "analysis",
     "publishedAt": "2026-09-10T00:15:21.091Z",
-    "lastChecked": "2026-09-11T10:23:23.634Z",
+    "lastChecked": "2026-09-11T10:26:30.091Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "364997911241927": {
@@ -652,15 +747,20 @@
         "checkedAt": "2026-09-11T10:23:25.143Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:31.598Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364997911241927",
     "asset": "NEAR",
     "type": "analysis",
     "publishedAt": "2026-09-10T01:00:18.358Z",
-    "lastChecked": "2026-09-11T10:23:25.143Z",
+    "lastChecked": "2026-09-11T10:26:31.598Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365008401772050": {
@@ -679,15 +779,20 @@
         "checkedAt": "2026-09-11T10:23:26.652Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:33.105Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365008401772050",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T01:42:59.440Z",
-    "lastChecked": "2026-09-11T10:23:26.652Z",
+    "lastChecked": "2026-09-11T10:26:33.105Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365018820913234": {
@@ -706,15 +811,20 @@
         "checkedAt": "2026-09-11T10:23:28.160Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:34.612Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365018820913234",
     "asset": "SAHARA",
     "type": "analysis",
     "publishedAt": "2026-09-10T02:25:23.179Z",
-    "lastChecked": "2026-09-11T10:23:28.160Z",
+    "lastChecked": "2026-09-11T10:26:34.612Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365028621483623": {
@@ -733,15 +843,20 @@
         "checkedAt": "2026-09-11T10:23:29.669Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:36.118Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365028621483623",
     "asset": "VTHO",
     "type": "analysis",
     "publishedAt": "2026-09-10T03:05:15.949Z",
-    "lastChecked": "2026-09-11T10:23:29.669Z",
+    "lastChecked": "2026-09-11T10:26:36.118Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365039754397555": {
@@ -760,15 +875,20 @@
         "checkedAt": "2026-09-11T10:23:31.178Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:37.624Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365039754397555",
     "asset": "RAY",
     "type": "analysis",
     "publishedAt": "2026-09-10T03:50:33.902Z",
-    "lastChecked": "2026-09-11T10:23:31.178Z",
+    "lastChecked": "2026-09-11T10:26:37.624Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365050754328059": {
@@ -787,15 +907,20 @@
         "checkedAt": "2026-09-11T10:23:32.686Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:39.130Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365050754328059",
     "asset": "USDC",
     "type": "analysis",
     "publishedAt": "2026-09-10T04:35:19.476Z",
-    "lastChecked": "2026-09-11T10:23:32.686Z",
+    "lastChecked": "2026-09-11T10:26:39.130Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365061816322490": {
@@ -814,15 +939,20 @@
         "checkedAt": "2026-09-11T10:23:34.194Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:40.641Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365061816322490",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T05:20:20.107Z",
-    "lastChecked": "2026-09-11T10:23:34.194Z",
+    "lastChecked": "2026-09-11T10:26:40.641Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365072870665930": {
@@ -841,15 +971,20 @@
         "checkedAt": "2026-09-11T10:23:35.703Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:42.148Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365072870665930",
     "asset": "SNDKB",
     "type": "analysis",
     "publishedAt": "2026-09-10T06:05:18.960Z",
-    "lastChecked": "2026-09-11T10:23:35.703Z",
+    "lastChecked": "2026-09-11T10:26:42.148Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365083958449869": {
@@ -868,15 +1003,20 @@
         "checkedAt": "2026-09-11T10:23:37.210Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:43.655Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365083958449869",
     "asset": "REZ",
     "type": "analysis",
     "publishedAt": "2026-09-10T06:50:25.916Z",
-    "lastChecked": "2026-09-11T10:23:37.210Z",
+    "lastChecked": "2026-09-11T10:26:43.655Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365095026573849": {
@@ -895,15 +1035,20 @@
         "checkedAt": "2026-09-11T10:23:38.719Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:45.162Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365095026573849",
     "asset": "COTI",
     "type": "analysis",
     "publishedAt": "2026-09-10T07:35:28.062Z",
-    "lastChecked": "2026-09-11T10:23:38.719Z",
+    "lastChecked": "2026-09-11T10:26:45.162Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365106039539423": {
@@ -922,15 +1067,20 @@
         "checkedAt": "2026-09-11T10:23:40.229Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:46.667Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365106039539423",
     "asset": "USD1",
     "type": "analysis",
     "publishedAt": "2026-09-10T08:20:16.827Z",
-    "lastChecked": "2026-09-11T10:23:40.229Z",
+    "lastChecked": "2026-09-11T10:26:46.667Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365115878649986": {
@@ -949,15 +1099,20 @@
         "checkedAt": "2026-09-11T10:23:41.737Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:48.174Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365115878649986",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T09:00:18.982Z",
-    "lastChecked": "2026-09-11T10:23:41.737Z",
+    "lastChecked": "2026-09-11T10:26:48.174Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365127624087393": {
@@ -976,15 +1131,20 @@
         "checkedAt": "2026-09-11T10:23:43.244Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:49.680Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365127624087393",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T09:48:06.517Z",
-    "lastChecked": "2026-09-11T10:23:43.244Z",
+    "lastChecked": "2026-09-11T10:26:49.680Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365139221358538": {
@@ -1003,15 +1163,20 @@
         "checkedAt": "2026-09-11T10:23:44.752Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:51.186Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365139221358538",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T10:35:17.859Z",
-    "lastChecked": "2026-09-11T10:23:44.752Z",
+    "lastChecked": "2026-09-11T10:26:51.186Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365150321194942": {
@@ -1030,15 +1195,20 @@
         "checkedAt": "2026-09-11T10:23:46.259Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:52.691Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365150321194942",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T11:20:27.748Z",
-    "lastChecked": "2026-09-11T10:23:46.259Z",
+    "lastChecked": "2026-09-11T10:26:52.691Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365161438064883": {
@@ -1057,15 +1227,20 @@
         "checkedAt": "2026-09-11T10:23:47.768Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:54.197Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365161438064883",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T12:05:41.862Z",
-    "lastChecked": "2026-09-11T10:23:47.768Z",
+    "lastChecked": "2026-09-11T10:26:54.197Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365173064561584": {
@@ -1084,15 +1259,20 @@
         "checkedAt": "2026-09-11T10:23:49.276Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:55.703Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365173064561584",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T12:53:00.327Z",
-    "lastChecked": "2026-09-11T10:23:49.276Z",
+    "lastChecked": "2026-09-11T10:26:55.703Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365183462295700": {
@@ -1111,15 +1291,20 @@
         "checkedAt": "2026-09-11T10:23:50.784Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:57.209Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365183462295700",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T13:35:18.872Z",
-    "lastChecked": "2026-09-11T10:23:50.784Z",
+    "lastChecked": "2026-09-11T10:26:57.209Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365193305834731": {
@@ -1138,15 +1323,20 @@
         "checkedAt": "2026-09-11T10:23:52.293Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:26:58.714Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365193305834731",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T14:15:22.049Z",
-    "lastChecked": "2026-09-11T10:23:52.293Z",
+    "lastChecked": "2026-09-11T10:26:58.714Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365204374985310": {
@@ -1165,15 +1355,20 @@
         "checkedAt": "2026-09-11T10:23:53.802Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:00.219Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365204374985310",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T15:00:24.532Z",
-    "lastChecked": "2026-09-11T10:23:53.802Z",
+    "lastChecked": "2026-09-11T10:27:00.219Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365215421134369": {
@@ -1192,15 +1387,20 @@
         "checkedAt": "2026-09-11T10:23:55.309Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:01.724Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365215421134369",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T15:45:21.295Z",
-    "lastChecked": "2026-09-11T10:23:55.309Z",
+    "lastChecked": "2026-09-11T10:27:01.724Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365227186783281": {
@@ -1219,15 +1419,20 @@
         "checkedAt": "2026-09-11T10:23:56.818Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:03.231Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365227186783281",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T16:33:13.803Z",
-    "lastChecked": "2026-09-11T10:23:56.818Z",
+    "lastChecked": "2026-09-11T10:27:03.231Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365237524162773": {
@@ -1246,15 +1451,20 @@
         "checkedAt": "2026-09-11T10:23:58.327Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:04.737Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365237524162773",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T17:15:17.563Z",
-    "lastChecked": "2026-09-11T10:23:58.327Z",
+    "lastChecked": "2026-09-11T10:27:04.737Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365248697472190": {
@@ -1273,15 +1483,20 @@
         "checkedAt": "2026-09-11T10:23:59.836Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:06.244Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365248697472190",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T18:00:45.401Z",
-    "lastChecked": "2026-09-11T10:23:59.836Z",
+    "lastChecked": "2026-09-11T10:27:06.244Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365260921822813": {
@@ -1300,15 +1515,20 @@
         "checkedAt": "2026-09-11T10:24:01.345Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:07.748Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365260921822813",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T18:50:29.843Z",
-    "lastChecked": "2026-09-11T10:24:01.345Z",
+    "lastChecked": "2026-09-11T10:27:07.748Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365271940841495": {
@@ -1327,15 +1547,20 @@
         "checkedAt": "2026-09-11T10:24:02.853Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:09.255Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365271940841495",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T19:35:20.098Z",
-    "lastChecked": "2026-09-11T10:24:02.853Z",
+    "lastChecked": "2026-09-11T10:27:09.255Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365282985109946": {
@@ -1354,15 +1579,20 @@
         "checkedAt": "2026-09-11T10:24:04.363Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:10.761Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365282985109946",
     "asset": "ETHFI",
     "type": "analysis",
     "publishedAt": "2026-09-10T20:20:16.445Z",
-    "lastChecked": "2026-09-11T10:24:04.363Z",
+    "lastChecked": "2026-09-11T10:27:10.761Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365294060321207": {
@@ -1381,15 +1611,20 @@
         "checkedAt": "2026-09-11T10:24:05.872Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:12.268Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365294060321207",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T21:05:20.299Z",
-    "lastChecked": "2026-09-11T10:24:05.872Z",
+    "lastChecked": "2026-09-11T10:27:12.268Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365305112039953": {
@@ -1408,15 +1643,20 @@
         "checkedAt": "2026-09-11T10:24:07.381Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:13.774Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365305112039953",
     "asset": "SAGA",
     "type": "analysis",
     "publishedAt": "2026-09-10T21:50:18.540Z",
-    "lastChecked": "2026-09-11T10:24:07.381Z",
+    "lastChecked": "2026-09-11T10:27:13.774Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365314934371187": {
@@ -1435,15 +1675,20 @@
         "checkedAt": "2026-09-11T10:24:08.890Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:15.280Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365314934371187",
     "asset": "MARSCOIN",
     "type": "analysis",
     "publishedAt": "2026-09-10T22:30:16.533Z",
-    "lastChecked": "2026-09-11T10:24:08.890Z",
+    "lastChecked": "2026-09-11T10:27:15.280Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365324778178001": {
@@ -1462,15 +1707,20 @@
         "checkedAt": "2026-09-11T10:24:10.398Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:16.786Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365324778178001",
     "asset": "牛来",
     "type": "analysis",
     "publishedAt": "2026-09-10T23:10:19.840Z",
-    "lastChecked": "2026-09-11T10:24:10.398Z",
+    "lastChecked": "2026-09-11T10:27:16.786Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365335836152361": {
@@ -1489,15 +1739,20 @@
         "checkedAt": "2026-09-11T10:24:11.907Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:18.292Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365335836152361",
     "asset": "SPCXB",
     "type": "analysis",
     "publishedAt": "2026-09-10T23:55:19.519Z",
-    "lastChecked": "2026-09-11T10:24:11.907Z",
+    "lastChecked": "2026-09-11T10:27:18.292Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365346933403129": {
@@ -1516,15 +1771,20 @@
         "checkedAt": "2026-09-11T10:24:13.415Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:19.798Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365346933403129",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-11T00:40:28.767Z",
-    "lastChecked": "2026-09-11T10:24:13.415Z",
+    "lastChecked": "2026-09-11T10:27:19.798Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365357965420869": {
@@ -1543,15 +1803,20 @@
         "checkedAt": "2026-09-11T10:24:14.926Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:21.305Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365357965420869",
     "asset": "SAGA",
     "type": "analysis",
     "publishedAt": "2026-09-11T01:25:22.185Z",
-    "lastChecked": "2026-09-11T10:24:14.926Z",
+    "lastChecked": "2026-09-11T10:27:21.305Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365369015015621": {
@@ -1570,15 +1835,20 @@
         "checkedAt": "2026-09-11T10:24:16.434Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:22.812Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365369015015621",
     "asset": "牛来",
     "type": "analysis",
     "publishedAt": "2026-09-11T02:10:19.851Z",
-    "lastChecked": "2026-09-11T10:24:16.434Z",
+    "lastChecked": "2026-09-11T10:27:22.812Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365380087084657": {
@@ -1597,15 +1867,20 @@
         "checkedAt": "2026-09-11T10:24:17.943Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:24.320Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365380087084657",
     "asset": "BTC",
     "type": "analysis",
     "publishedAt": "2026-09-11T02:55:22.974Z",
-    "lastChecked": "2026-09-11T10:24:17.943Z",
+    "lastChecked": "2026-09-11T10:27:24.320Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365391202191718": {
@@ -1624,15 +1899,20 @@
         "checkedAt": "2026-09-11T10:24:19.451Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:25.825Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365391202191718",
     "asset": "RAY",
     "type": "analysis",
     "publishedAt": "2026-09-11T03:40:36.592Z",
-    "lastChecked": "2026-09-11T10:24:19.451Z",
+    "lastChecked": "2026-09-11T10:27:25.825Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365401664895292": {
@@ -1651,15 +1931,20 @@
         "checkedAt": "2026-09-11T10:24:20.960Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:27.332Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365401664895292",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-11T04:23:10.949Z",
-    "lastChecked": "2026-09-11T10:24:20.960Z",
+    "lastChecked": "2026-09-11T10:27:27.332Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365412052729902": {
@@ -1673,15 +1958,20 @@
         "checkedAt": "2026-09-11T10:24:22.468Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:28.839Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365412052729902",
     "asset": "FF",
     "type": "analysis",
     "publishedAt": "2026-09-11T05:05:27.076Z",
-    "lastChecked": "2026-09-11T10:24:22.468Z",
+    "lastChecked": "2026-09-11T10:27:28.839Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365423068726835": {
@@ -1695,15 +1985,20 @@
         "checkedAt": "2026-09-11T10:24:23.975Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:30.344Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365423068726835",
     "asset": "MARSCOIN",
     "type": "analysis",
     "publishedAt": "2026-09-11T05:50:16.564Z",
-    "lastChecked": "2026-09-11T10:24:23.975Z",
+    "lastChecked": "2026-09-11T10:27:30.344Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365434202237670": {
@@ -1717,15 +2012,20 @@
         "checkedAt": "2026-09-11T10:24:25.482Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:31.850Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365434202237670",
     "asset": "ETH",
     "type": "analysis",
     "publishedAt": "2026-09-11T06:35:34.634Z",
-    "lastChecked": "2026-09-11T10:24:25.482Z",
+    "lastChecked": "2026-09-11T10:27:31.850Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365445198474065": {
@@ -1739,15 +2039,20 @@
         "checkedAt": "2026-09-11T10:24:26.990Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:33.358Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365445198474065",
     "asset": "ETHFI",
     "type": "analysis",
     "publishedAt": "2026-09-11T07:20:19.293Z",
-    "lastChecked": "2026-09-11T10:24:26.990Z",
+    "lastChecked": "2026-09-11T10:27:33.358Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365455024889201": {
@@ -1761,15 +2066,20 @@
         "checkedAt": "2026-09-11T10:24:28.498Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:34.863Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365455024889201",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-11T08:00:18.337Z",
-    "lastChecked": "2026-09-11T10:24:28.498Z",
+    "lastChecked": "2026-09-11T10:27:34.863Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365466154379617": {
@@ -1783,15 +2093,20 @@
         "checkedAt": "2026-09-11T10:24:30.006Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:36.368Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365466154379617",
     "asset": "EIGEN",
     "type": "analysis",
     "publishedAt": "2026-09-11T08:45:35.468Z",
-    "lastChecked": "2026-09-11T10:24:30.006Z",
+    "lastChecked": "2026-09-11T10:27:36.368Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365477141669210": {
@@ -1800,15 +2115,20 @@
         "checkedAt": "2026-09-11T10:24:31.515Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:37.875Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365477141669210",
     "asset": "LTC",
     "type": "analysis",
     "publishedAt": "2026-09-11T09:30:17.957Z",
-    "lastChecked": "2026-09-11T10:24:31.515Z",
+    "lastChecked": "2026-09-11T10:27:37.875Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   },
   "365488218458673": {
@@ -1817,15 +2137,20 @@
         "checkedAt": "2026-09-11T10:24:33.023Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T10:27:39.383Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365488218458673",
     "asset": "NEAR",
     "type": "analysis",
     "publishedAt": "2026-09-11T10:15:22.239Z",
-    "lastChecked": "2026-09-11T10:24:33.023Z",
+    "lastChecked": "2026-09-11T10:27:39.383Z",
     "lastStatus": "unavailable",
-    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "lastReason": "no known pattern matched (tried 6 patterns), html length 0",
     "views": null
   }
 }
