@@ -2926,5 +2926,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "published": true
+  },
+  {
+    "date": "2026-09-11",
+    "time": "2026-09-11T08:45:35.468Z",
+    "type": "analysis",
+    "asset": "EIGEN",
+    "subtype": null,
+    "angle": 4,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365466154379617",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365466154379617?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
