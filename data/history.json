@@ -3262,5 +3262,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "published": true
+  },
+  {
+    "date": "2026-09-11",
+    "time": "2026-09-11T20:42:59.589Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365642463156338",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365642463156338?r=MW37HSBO&l=fr",
+    "newsUrl": "https://wwd.com/sourcing-journal/industry-news/is-black-friday-losing-its-glow-to-october-oobit-1239221433/",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
