@@ -3115,5 +3115,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
     "published": true
+  },
+  {
+    "date": "2026-09-11",
+    "time": "2026-09-11T15:28:03.825Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365565066008432",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365565066008432?r=MW37HSBO&l=fr",
+    "newsUrl": "https://fortune.com/2026/09/11/a-four-time-fortune-500-cfo-makes-a-huge-career-beton-joining-polymarket/",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
