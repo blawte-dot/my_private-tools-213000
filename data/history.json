@@ -2947,5 +2947,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "published": true
+  },
+  {
+    "date": "2026-09-11",
+    "time": "2026-09-11T09:30:17.957Z",
+    "type": "analysis",
+    "asset": "LTC",
+    "subtype": null,
+    "angle": 5,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "365477141669210",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365477141669210?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
