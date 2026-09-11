@@ -3094,5 +3094,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
     "published": true
+  },
+  {
+    "date": "2026-09-11",
+    "time": "2026-09-11T14:45:19.366Z",
+    "type": "analysis",
+    "asset": "PEPE",
+    "subtype": null,
+    "angle": 5,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "365554561863468",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365554561863468?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+    "published": true
   }
 ]
