@@ -2779,5 +2779,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "published": true
+  },
+  {
+    "date": "2026-09-11",
+    "time": "2026-09-11T03:40:36.592Z",
+    "type": "analysis",
+    "asset": "RAY",
+    "subtype": null,
+    "angle": 5,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365391202191718",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365391202191718?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
