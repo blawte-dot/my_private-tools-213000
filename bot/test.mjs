@@ -286,7 +286,7 @@ test("deepAnalysisText produces a real long-form article with a title", () => {
 
 // ---- Gemini quality gate (pure logic only, no real API calls) ----
 
-test("gemini.judgeContent returns null when GEMINI_API_KEY is unset", async () => {
+test("gemini.judgeContent returns a no-opinion object (with reason) when GEMINI_API_KEY is unset", async () => {
   const savedKey = process.env.GEMINI_API_KEY;
   delete process.env.GEMINI_API_KEY;
 
@@ -299,7 +299,8 @@ test("gemini.judgeContent returns null when GEMINI_API_KEY is unset", async () =
       recentSummary: ""
     });
 
-    assert.equal(result, null);
+    assert.equal(result.decision, null);
+    assert.ok(result.reasoning_summary.includes("GEMINI_API_KEY"));
   } finally {
     if (savedKey) process.env.GEMINI_API_KEY = savedKey;
   }

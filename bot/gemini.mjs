@@ -60,11 +60,14 @@ export function validateJudgment(parsed) {
 }
 
 /*
- * Reviews a drafted post before it publishes. Returns the parsed
- * judgment object, or null if Gemini is unavailable/misconfigured/
- * failed/returned something unusable — callers must treat null as
- * "no opinion, proceed normally", never as a reason to fail the
- * whole publish.
+ * Reviews a drafted post before it publishes. Always returns an
+ * object with a `decision` field. On success, decision is one of
+ * "publish"/"rewrite"/"skip" with real scores. On any failure
+ * (missing key, network error, malformed response), decision is
+ * null and reasoning_summary explains why — callers must treat a
+ * null decision as "no opinion, proceed normally", but the reason
+ * is preserved (and recorded in history) instead of being lost to
+ * a log line no one can inspect after the fact.
  */
 export async function judgeContent({
   text,
@@ -73,14 +76,19 @@ export async function judgeContent({
   angle,
   recentSummary
 }) {
+  const noOpinion = reason => ({
+    decision: null,
+    quality_score: null,
+    duplicate_risk: null,
+    reasoning_summary: reason
+  });
+
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    console.log(
-      "GEMINI_API_KEY not set — skipping quality gate, publishing as drafted."
-    );
-
-    return null;
+    const reason = "GEMINI_API_KEY not set";
+    console.log(`${reason} — publishing as drafted.`);
+    return noOpinion(reason);
   }
 
   const prompt = buildPrompt({
@@ -106,22 +114,17 @@ export async function judgeContent({
     const raw = response.text;
 
     if (!raw) {
-      console.log(
-        "Gemini returned an empty response — proceeding without a quality-gate opinion."
-      );
-
-      return null;
+      const reason = "Gemini returned an empty response";
+      console.log(`${reason} — proceeding without a quality-gate opinion.`);
+      return noOpinion(reason);
     }
 
     const parsed = validateJudgment(JSON.parse(raw));
 
     if (!parsed) {
-      console.log(
-        "Gemini response failed validation — proceeding without a quality-gate opinion:",
-        raw
-      );
-
-      return null;
+      const reason = `Gemini response failed validation: ${raw.slice(0, 200)}`;
+      console.log(`${reason} — proceeding without a quality-gate opinion.`);
+      return noOpinion(reason);
     }
 
     return parsed;
@@ -130,12 +133,9 @@ export async function judgeContent({
       ? err.message.split(apiKey).join("[REDACTED]")
       : err.message;
 
-    console.log(
-      "Gemini quality gate failed (network/API error) — proceeding without a quality-gate opinion:",
-      safeMessage
-    );
-
-    return null;
+    const reason = `Gemini call failed: ${safeMessage}`;
+    console.log(`${reason} — proceeding without a quality-gate opinion.`);
+    return noOpinion(reason);
   }
 }
 

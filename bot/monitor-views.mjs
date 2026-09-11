@@ -97,6 +97,21 @@ async function fetchViewCount(postId) {
     }
   }
 
+  /*
+   * TEMPORARY diagnostic: none of the guessed patterns matched.
+   * Save a sample of the real raw HTML (once, overwritten each
+   * run) so the actual structure can be inspected and the real
+   * patterns identified — remove this once patterns are fixed.
+   */
+  try {
+    fs.writeFileSync(
+      path.join(ROOT, "data", "debug-post-html-sample.txt"),
+      html.slice(0, 50000)
+    );
+  } catch {
+    // non-critical, ignore
+  }
+
   return {
     views: null,
     status: "unavailable",
