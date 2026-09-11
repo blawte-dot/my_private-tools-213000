@@ -107,13 +107,18 @@
         "checkedAt": "2026-09-11T04:54:10.941Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:22.726Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364775536738833",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T09:55:27.642Z",
-    "lastChecked": "2026-09-11T04:54:10.941Z",
+    "lastChecked": "2026-09-11T09:13:22.726Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -124,13 +129,18 @@
         "checkedAt": "2026-09-11T04:54:12.450Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:24.237Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364787257979944",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T10:43:09.281Z",
-    "lastChecked": "2026-09-11T04:54:12.450Z",
+    "lastChecked": "2026-09-11T09:13:24.237Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -141,13 +151,18 @@
         "checkedAt": "2026-09-11T04:54:13.958Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:25.747Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364797603645893",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T11:25:15.081Z",
-    "lastChecked": "2026-09-11T04:54:13.958Z",
+    "lastChecked": "2026-09-11T09:13:25.747Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -158,13 +173,18 @@
         "checkedAt": "2026-09-11T04:54:15.467Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:27.256Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364809371740782",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T12:13:08.133Z",
-    "lastChecked": "2026-09-11T04:54:15.467Z",
+    "lastChecked": "2026-09-11T09:13:27.256Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -175,13 +195,18 @@
         "checkedAt": "2026-09-11T04:54:16.975Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:28.765Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364821007847443",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T13:00:29.016Z",
-    "lastChecked": "2026-09-11T04:54:16.975Z",
+    "lastChecked": "2026-09-11T09:13:28.765Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -192,13 +217,18 @@
         "checkedAt": "2026-09-11T04:54:18.483Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:30.274Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364832035802878",
     "asset": "NEAR",
     "type": "analysis",
     "publishedAt": "2026-09-09T13:45:21.425Z",
-    "lastChecked": "2026-09-11T04:54:18.483Z",
+    "lastChecked": "2026-09-11T09:13:30.274Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -209,13 +239,18 @@
         "checkedAt": "2026-09-11T04:54:19.991Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:31.783Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364843098283901",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T14:30:22.138Z",
-    "lastChecked": "2026-09-11T04:54:19.991Z",
+    "lastChecked": "2026-09-11T09:13:31.783Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -226,13 +261,18 @@
         "checkedAt": "2026-09-11T04:54:21.500Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:33.292Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364854160085594",
     "asset": "IOST",
     "type": "analysis",
     "publishedAt": "2026-09-09T15:15:22.804Z",
-    "lastChecked": "2026-09-11T04:54:21.500Z",
+    "lastChecked": "2026-09-11T09:13:33.292Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -243,13 +283,18 @@
         "checkedAt": "2026-09-11T04:54:23.007Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:34.801Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364865208190467",
     "asset": "XTZ",
     "type": "analysis",
     "publishedAt": "2026-09-09T16:00:20.141Z",
-    "lastChecked": "2026-09-11T04:54:23.007Z",
+    "lastChecked": "2026-09-11T09:13:34.801Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -260,13 +305,18 @@
         "checkedAt": "2026-09-11T04:54:24.515Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:36.311Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364875048933164",
     "asset": "KAT",
     "type": "analysis",
     "publishedAt": "2026-09-09T16:40:22.620Z",
-    "lastChecked": "2026-09-11T04:54:24.515Z",
+    "lastChecked": "2026-09-11T09:13:36.311Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -277,13 +327,18 @@
         "checkedAt": "2026-09-11T04:54:26.024Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:37.821Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364886364810318",
     "asset": "ZEC",
     "type": "analysis",
     "publishedAt": "2026-09-09T17:26:25.301Z",
-    "lastChecked": "2026-09-11T04:54:26.024Z",
+    "lastChecked": "2026-09-11T09:13:37.821Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -294,13 +349,18 @@
         "checkedAt": "2026-09-11T04:54:27.531Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:39.331Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364897904947654",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T18:13:22.693Z",
-    "lastChecked": "2026-09-11T04:54:27.531Z",
+    "lastChecked": "2026-09-11T09:13:39.331Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -311,13 +371,18 @@
         "checkedAt": "2026-09-11T04:54:29.039Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:40.838Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364909494451007",
     "asset": "RAY",
     "type": "analysis",
     "publishedAt": "2026-09-09T19:00:32.167Z",
-    "lastChecked": "2026-09-11T04:54:29.039Z",
+    "lastChecked": "2026-09-11T09:13:40.838Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -328,13 +393,18 @@
         "checkedAt": "2026-09-11T04:54:30.546Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:42.346Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364920494785140",
     "asset": "SC",
     "type": "analysis",
     "publishedAt": "2026-09-09T19:45:17.825Z",
-    "lastChecked": "2026-09-11T04:54:30.546Z",
+    "lastChecked": "2026-09-11T09:13:42.346Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -345,13 +415,18 @@
         "checkedAt": "2026-09-11T04:54:32.052Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:43.853Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364931546840447",
     "asset": "SAHARA",
     "type": "analysis",
     "publishedAt": "2026-09-09T20:30:16.081Z",
-    "lastChecked": "2026-09-11T04:54:32.052Z",
+    "lastChecked": "2026-09-11T09:13:43.853Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -362,13 +437,18 @@
         "checkedAt": "2026-09-11T04:54:33.559Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:45.363Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364942400443836",
     "asset": "HOLO",
     "type": "analysis",
     "publishedAt": "2026-09-09T21:14:25.894Z",
-    "lastChecked": "2026-09-11T04:54:33.559Z",
+    "lastChecked": "2026-09-11T09:13:45.363Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -379,13 +459,18 @@
         "checkedAt": "2026-09-11T04:54:35.067Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:46.871Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364953711843112",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-09T22:00:27.455Z",
-    "lastChecked": "2026-09-11T04:54:35.067Z",
+    "lastChecked": "2026-09-11T09:13:46.871Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -396,13 +481,18 @@
         "checkedAt": "2026-09-11T04:54:36.574Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:48.379Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364964768939380",
     "asset": "PAXG",
     "type": "analysis",
     "publishedAt": "2026-09-09T22:45:26.900Z",
-    "lastChecked": "2026-09-11T04:54:36.574Z",
+    "lastChecked": "2026-09-11T09:13:48.379Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -413,13 +503,18 @@
         "checkedAt": "2026-09-11T04:54:38.080Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:49.889Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364975856937321",
     "asset": "MINA",
     "type": "analysis",
     "publishedAt": "2026-09-09T23:30:33.943Z",
-    "lastChecked": "2026-09-11T04:54:38.080Z",
+    "lastChecked": "2026-09-11T09:13:49.889Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -430,13 +525,18 @@
         "checkedAt": "2026-09-11T04:54:39.588Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:51.397Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364986863474470",
     "asset": "IOST",
     "type": "analysis",
     "publishedAt": "2026-09-10T00:15:21.091Z",
-    "lastChecked": "2026-09-11T04:54:39.588Z",
+    "lastChecked": "2026-09-11T09:13:51.397Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -447,13 +547,18 @@
         "checkedAt": "2026-09-11T04:54:41.098Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:52.907Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "364997911241927",
     "asset": "NEAR",
     "type": "analysis",
     "publishedAt": "2026-09-10T01:00:18.358Z",
-    "lastChecked": "2026-09-11T04:54:41.098Z",
+    "lastChecked": "2026-09-11T09:13:52.907Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -464,13 +569,18 @@
         "checkedAt": "2026-09-11T04:54:42.606Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:54.415Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365008401772050",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T01:42:59.440Z",
-    "lastChecked": "2026-09-11T04:54:42.606Z",
+    "lastChecked": "2026-09-11T09:13:54.415Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -481,13 +591,18 @@
         "checkedAt": "2026-09-11T04:54:44.113Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:55.924Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365018820913234",
     "asset": "SAHARA",
     "type": "analysis",
     "publishedAt": "2026-09-10T02:25:23.179Z",
-    "lastChecked": "2026-09-11T04:54:44.113Z",
+    "lastChecked": "2026-09-11T09:13:55.924Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -498,13 +613,18 @@
         "checkedAt": "2026-09-11T04:54:45.620Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:57.432Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365028621483623",
     "asset": "VTHO",
     "type": "analysis",
     "publishedAt": "2026-09-10T03:05:15.949Z",
-    "lastChecked": "2026-09-11T04:54:45.620Z",
+    "lastChecked": "2026-09-11T09:13:57.432Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -515,13 +635,18 @@
         "checkedAt": "2026-09-11T04:54:47.128Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:13:58.941Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365039754397555",
     "asset": "RAY",
     "type": "analysis",
     "publishedAt": "2026-09-10T03:50:33.902Z",
-    "lastChecked": "2026-09-11T04:54:47.128Z",
+    "lastChecked": "2026-09-11T09:13:58.941Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -532,13 +657,18 @@
         "checkedAt": "2026-09-11T04:54:48.635Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:00.448Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365050754328059",
     "asset": "USDC",
     "type": "analysis",
     "publishedAt": "2026-09-10T04:35:19.476Z",
-    "lastChecked": "2026-09-11T04:54:48.635Z",
+    "lastChecked": "2026-09-11T09:14:00.448Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -549,13 +679,18 @@
         "checkedAt": "2026-09-11T04:54:50.142Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:01.956Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365061816322490",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T05:20:20.107Z",
-    "lastChecked": "2026-09-11T04:54:50.142Z",
+    "lastChecked": "2026-09-11T09:14:01.956Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -566,13 +701,18 @@
         "checkedAt": "2026-09-11T04:54:51.649Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:03.464Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365072870665930",
     "asset": "SNDKB",
     "type": "analysis",
     "publishedAt": "2026-09-10T06:05:18.960Z",
-    "lastChecked": "2026-09-11T04:54:51.649Z",
+    "lastChecked": "2026-09-11T09:14:03.464Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -583,13 +723,18 @@
         "checkedAt": "2026-09-11T04:54:53.157Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:04.973Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365083958449869",
     "asset": "REZ",
     "type": "analysis",
     "publishedAt": "2026-09-10T06:50:25.916Z",
-    "lastChecked": "2026-09-11T04:54:53.157Z",
+    "lastChecked": "2026-09-11T09:14:04.973Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -600,13 +745,18 @@
         "checkedAt": "2026-09-11T04:54:54.665Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:06.482Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365095026573849",
     "asset": "COTI",
     "type": "analysis",
     "publishedAt": "2026-09-10T07:35:28.062Z",
-    "lastChecked": "2026-09-11T04:54:54.665Z",
+    "lastChecked": "2026-09-11T09:14:06.482Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -617,13 +767,18 @@
         "checkedAt": "2026-09-11T04:54:56.172Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:07.991Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365106039539423",
     "asset": "USD1",
     "type": "analysis",
     "publishedAt": "2026-09-10T08:20:16.827Z",
-    "lastChecked": "2026-09-11T04:54:56.172Z",
+    "lastChecked": "2026-09-11T09:14:07.991Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -634,13 +789,18 @@
         "checkedAt": "2026-09-11T04:54:57.679Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:09.498Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365115878649986",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T09:00:18.982Z",
-    "lastChecked": "2026-09-11T04:54:57.679Z",
+    "lastChecked": "2026-09-11T09:14:09.498Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -651,13 +811,18 @@
         "checkedAt": "2026-09-11T04:54:59.186Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:11.008Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365127624087393",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T09:48:06.517Z",
-    "lastChecked": "2026-09-11T04:54:59.186Z",
+    "lastChecked": "2026-09-11T09:14:11.008Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -668,13 +833,18 @@
         "checkedAt": "2026-09-11T04:55:00.693Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:12.517Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365139221358538",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T10:35:17.859Z",
-    "lastChecked": "2026-09-11T04:55:00.693Z",
+    "lastChecked": "2026-09-11T09:14:12.517Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -685,13 +855,18 @@
         "checkedAt": "2026-09-11T04:55:02.201Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:14.026Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365150321194942",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T11:20:27.748Z",
-    "lastChecked": "2026-09-11T04:55:02.201Z",
+    "lastChecked": "2026-09-11T09:14:14.026Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -702,13 +877,18 @@
         "checkedAt": "2026-09-11T04:55:03.709Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:15.534Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365161438064883",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T12:05:41.862Z",
-    "lastChecked": "2026-09-11T04:55:03.709Z",
+    "lastChecked": "2026-09-11T09:14:15.534Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -719,13 +899,18 @@
         "checkedAt": "2026-09-11T04:55:05.216Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:17.045Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365173064561584",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T12:53:00.327Z",
-    "lastChecked": "2026-09-11T04:55:05.216Z",
+    "lastChecked": "2026-09-11T09:14:17.045Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -736,13 +921,18 @@
         "checkedAt": "2026-09-11T04:55:06.723Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:18.553Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365183462295700",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T13:35:18.872Z",
-    "lastChecked": "2026-09-11T04:55:06.723Z",
+    "lastChecked": "2026-09-11T09:14:18.553Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -753,13 +943,18 @@
         "checkedAt": "2026-09-11T04:55:08.231Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:20.063Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365193305834731",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T14:15:22.049Z",
-    "lastChecked": "2026-09-11T04:55:08.231Z",
+    "lastChecked": "2026-09-11T09:14:20.063Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -770,13 +965,18 @@
         "checkedAt": "2026-09-11T04:55:09.739Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:21.593Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365204374985310",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T15:00:24.532Z",
-    "lastChecked": "2026-09-11T04:55:09.739Z",
+    "lastChecked": "2026-09-11T09:14:21.593Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -787,13 +987,18 @@
         "checkedAt": "2026-09-11T04:55:11.247Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:23.102Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365215421134369",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T15:45:21.295Z",
-    "lastChecked": "2026-09-11T04:55:11.247Z",
+    "lastChecked": "2026-09-11T09:14:23.102Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -804,13 +1009,18 @@
         "checkedAt": "2026-09-11T04:55:12.753Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:24.610Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365227186783281",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T16:33:13.803Z",
-    "lastChecked": "2026-09-11T04:55:12.753Z",
+    "lastChecked": "2026-09-11T09:14:24.610Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -821,13 +1031,18 @@
         "checkedAt": "2026-09-11T04:55:14.261Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:26.119Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365237524162773",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T17:15:17.563Z",
-    "lastChecked": "2026-09-11T04:55:14.261Z",
+    "lastChecked": "2026-09-11T09:14:26.119Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -838,13 +1053,18 @@
         "checkedAt": "2026-09-11T04:55:15.768Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:27.626Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365248697472190",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T18:00:45.401Z",
-    "lastChecked": "2026-09-11T04:55:15.768Z",
+    "lastChecked": "2026-09-11T09:14:27.626Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -855,13 +1075,18 @@
         "checkedAt": "2026-09-11T04:55:17.276Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:29.135Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365260921822813",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T18:50:29.843Z",
-    "lastChecked": "2026-09-11T04:55:17.276Z",
+    "lastChecked": "2026-09-11T09:14:29.135Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -872,13 +1097,18 @@
         "checkedAt": "2026-09-11T04:55:18.783Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:30.643Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365271940841495",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T19:35:20.098Z",
-    "lastChecked": "2026-09-11T04:55:18.783Z",
+    "lastChecked": "2026-09-11T09:14:30.643Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -889,13 +1119,18 @@
         "checkedAt": "2026-09-11T04:55:20.290Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:32.153Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365282985109946",
     "asset": "ETHFI",
     "type": "analysis",
     "publishedAt": "2026-09-10T20:20:16.445Z",
-    "lastChecked": "2026-09-11T04:55:20.290Z",
+    "lastChecked": "2026-09-11T09:14:32.153Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -906,13 +1141,18 @@
         "checkedAt": "2026-09-11T04:55:21.796Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:33.661Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365294060321207",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-10T21:05:20.299Z",
-    "lastChecked": "2026-09-11T04:55:21.796Z",
+    "lastChecked": "2026-09-11T09:14:33.661Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -923,13 +1163,18 @@
         "checkedAt": "2026-09-11T04:55:23.303Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:35.170Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365305112039953",
     "asset": "SAGA",
     "type": "analysis",
     "publishedAt": "2026-09-10T21:50:18.540Z",
-    "lastChecked": "2026-09-11T04:55:23.303Z",
+    "lastChecked": "2026-09-11T09:14:35.170Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -940,13 +1185,18 @@
         "checkedAt": "2026-09-11T04:55:24.810Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:36.678Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365314934371187",
     "asset": "MARSCOIN",
     "type": "analysis",
     "publishedAt": "2026-09-10T22:30:16.533Z",
-    "lastChecked": "2026-09-11T04:55:24.810Z",
+    "lastChecked": "2026-09-11T09:14:36.678Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -957,13 +1207,18 @@
         "checkedAt": "2026-09-11T04:55:26.317Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:38.186Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365324778178001",
     "asset": "牛来",
     "type": "analysis",
     "publishedAt": "2026-09-10T23:10:19.840Z",
-    "lastChecked": "2026-09-11T04:55:26.317Z",
+    "lastChecked": "2026-09-11T09:14:38.186Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -974,13 +1229,18 @@
         "checkedAt": "2026-09-11T04:55:27.824Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:39.695Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365335836152361",
     "asset": "SPCXB",
     "type": "analysis",
     "publishedAt": "2026-09-10T23:55:19.519Z",
-    "lastChecked": "2026-09-11T04:55:27.824Z",
+    "lastChecked": "2026-09-11T09:14:39.695Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -991,13 +1251,18 @@
         "checkedAt": "2026-09-11T04:55:29.333Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:41.206Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365346933403129",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-11T00:40:28.767Z",
-    "lastChecked": "2026-09-11T04:55:29.333Z",
+    "lastChecked": "2026-09-11T09:14:41.206Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -1008,13 +1273,18 @@
         "checkedAt": "2026-09-11T04:55:30.840Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:42.714Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365357965420869",
     "asset": "SAGA",
     "type": "analysis",
     "publishedAt": "2026-09-11T01:25:22.185Z",
-    "lastChecked": "2026-09-11T04:55:30.840Z",
+    "lastChecked": "2026-09-11T09:14:42.714Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -1025,13 +1295,18 @@
         "checkedAt": "2026-09-11T04:55:32.348Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:44.224Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365369015015621",
     "asset": "牛来",
     "type": "analysis",
     "publishedAt": "2026-09-11T02:10:19.851Z",
-    "lastChecked": "2026-09-11T04:55:32.348Z",
+    "lastChecked": "2026-09-11T09:14:44.224Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -1042,13 +1317,18 @@
         "checkedAt": "2026-09-11T04:55:33.854Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:45.732Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365380087084657",
     "asset": "BTC",
     "type": "analysis",
     "publishedAt": "2026-09-11T02:55:22.974Z",
-    "lastChecked": "2026-09-11T04:55:33.854Z",
+    "lastChecked": "2026-09-11T09:14:45.732Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -1059,13 +1339,18 @@
         "checkedAt": "2026-09-11T04:55:35.362Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:47.241Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365391202191718",
     "asset": "RAY",
     "type": "analysis",
     "publishedAt": "2026-09-11T03:40:36.592Z",
-    "lastChecked": "2026-09-11T04:55:35.362Z",
+    "lastChecked": "2026-09-11T09:14:47.241Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
@@ -1076,13 +1361,120 @@
         "checkedAt": "2026-09-11T04:55:36.869Z",
         "views": null,
         "status": "unavailable"
+      },
+      {
+        "checkedAt": "2026-09-11T09:14:48.779Z",
+        "views": null,
+        "status": "unavailable"
       }
     ],
     "postId": "365401664895292",
     "asset": null,
     "type": "other",
     "publishedAt": "2026-09-11T04:23:10.949Z",
-    "lastChecked": "2026-09-11T04:55:36.869Z",
+    "lastChecked": "2026-09-11T09:14:48.779Z",
+    "lastStatus": "unavailable",
+    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "views": null
+  },
+  "365412052729902": {
+    "history": [
+      {
+        "checkedAt": "2026-09-11T09:14:50.381Z",
+        "views": null,
+        "status": "unavailable"
+      }
+    ],
+    "postId": "365412052729902",
+    "asset": "FF",
+    "type": "analysis",
+    "publishedAt": "2026-09-11T05:05:27.076Z",
+    "lastChecked": "2026-09-11T09:14:50.381Z",
+    "lastStatus": "unavailable",
+    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "views": null
+  },
+  "365423068726835": {
+    "history": [
+      {
+        "checkedAt": "2026-09-11T09:14:51.888Z",
+        "views": null,
+        "status": "unavailable"
+      }
+    ],
+    "postId": "365423068726835",
+    "asset": "MARSCOIN",
+    "type": "analysis",
+    "publishedAt": "2026-09-11T05:50:16.564Z",
+    "lastChecked": "2026-09-11T09:14:51.888Z",
+    "lastStatus": "unavailable",
+    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "views": null
+  },
+  "365434202237670": {
+    "history": [
+      {
+        "checkedAt": "2026-09-11T09:14:53.398Z",
+        "views": null,
+        "status": "unavailable"
+      }
+    ],
+    "postId": "365434202237670",
+    "asset": "ETH",
+    "type": "analysis",
+    "publishedAt": "2026-09-11T06:35:34.634Z",
+    "lastChecked": "2026-09-11T09:14:53.398Z",
+    "lastStatus": "unavailable",
+    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "views": null
+  },
+  "365445198474065": {
+    "history": [
+      {
+        "checkedAt": "2026-09-11T09:14:54.906Z",
+        "views": null,
+        "status": "unavailable"
+      }
+    ],
+    "postId": "365445198474065",
+    "asset": "ETHFI",
+    "type": "analysis",
+    "publishedAt": "2026-09-11T07:20:19.293Z",
+    "lastChecked": "2026-09-11T09:14:54.906Z",
+    "lastStatus": "unavailable",
+    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "views": null
+  },
+  "365455024889201": {
+    "history": [
+      {
+        "checkedAt": "2026-09-11T09:14:56.414Z",
+        "views": null,
+        "status": "unavailable"
+      }
+    ],
+    "postId": "365455024889201",
+    "asset": null,
+    "type": "other",
+    "publishedAt": "2026-09-11T08:00:18.337Z",
+    "lastChecked": "2026-09-11T09:14:56.414Z",
+    "lastStatus": "unavailable",
+    "lastReason": "no known pattern matched (tried 6 patterns)",
+    "views": null
+  },
+  "365466154379617": {
+    "history": [
+      {
+        "checkedAt": "2026-09-11T09:14:57.925Z",
+        "views": null,
+        "status": "unavailable"
+      }
+    ],
+    "postId": "365466154379617",
+    "asset": "EIGEN",
+    "type": "analysis",
+    "publishedAt": "2026-09-11T08:45:35.468Z",
+    "lastChecked": "2026-09-11T09:14:57.925Z",
     "lastStatus": "unavailable",
     "lastReason": "no known pattern matched (tried 6 patterns)",
     "views": null
