@@ -2968,5 +2968,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "published": true
+  },
+  {
+    "date": "2026-09-11",
+    "time": "2026-09-11T10:15:22.239Z",
+    "type": "analysis",
+    "asset": "NEAR",
+    "subtype": null,
+    "angle": null,
+    "media": "no_image",
+    "title": "$NEAR Deep Dive — 4H Structure, Momentum, and Levels",
+    "hashtags": "some",
+    "postId": "365488218458673",
+    "postLink": "https://app.binance.com/uni-qr/cart/365488218458673?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "deep",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
