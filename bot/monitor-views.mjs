@@ -99,23 +99,32 @@ async function fetchViewCount(postId) {
 
   /*
    * TEMPORARY diagnostic: none of the guessed patterns matched.
-   * Save a sample of the real raw HTML (once, overwritten each
-   * run) so the actual structure can be inspected and the real
-   * patterns identified — remove this once patterns are fixed.
+   * Save a sample of the real raw HTML — only the first one this
+   * run finds (skip if already saved and non-empty this run, and
+   * skip saving if this particular fetch came back suspiciously
+   * short/empty) — so the actual structure can be inspected via
+   * git pull instead of guessing further. Remove this once real
+   * patterns are identified and confirmed working.
    */
-  try {
-    fs.writeFileSync(
-      path.join(ROOT, "data", "debug-post-html-sample.txt"),
-      html.slice(0, 50000)
-    );
-  } catch {
-    // non-critical, ignore
+  const debugPath = path.join(ROOT, "data", "debug-post-html-sample.txt");
+
+  if (html && html.length > 500) {
+    try {
+      const alreadySaved =
+        fs.existsSync(debugPath) && fs.statSync(debugPath).size > 500;
+
+      if (!alreadySaved) {
+        fs.writeFileSync(debugPath, html.slice(0, 50000));
+      }
+    } catch {
+      // non-critical, ignore
+    }
   }
 
   return {
     views: null,
     status: "unavailable",
-    reason: `no known pattern matched (tried ${VIEW_COUNT_PATTERNS.length} patterns)`
+    reason: `no known pattern matched (tried ${VIEW_COUNT_PATTERNS.length} patterns), html length ${html ? html.length : 0}`
   };
 }
 
