@@ -356,12 +356,15 @@ test("gemini.buildPrompt embeds the draft text and never asks Gemini to verify n
 
 // ---- View monitoring (mocked fetch, no real network) ----
 
+const mockHeaders = () => ({ get: () => null });
+
 test("monitor.fetchViewCount extracts a matching pattern", async () => {
   const originalFetch = global.fetch;
 
   try {
     global.fetch = async () => ({
       ok: true,
+      headers: mockHeaders(),
       text: async () => 'preamble "viewNum":98765 trailer'
     });
 
@@ -379,6 +382,7 @@ test("monitor.fetchViewCount reports unavailable (never guesses) when no pattern
   try {
     global.fetch = async () => ({
       ok: true,
+      headers: mockHeaders(),
       text: async () => "<html>nothing recognizable</html>"
     });
 
@@ -394,7 +398,11 @@ test("monitor.fetchViewCount handles HTTP errors and network failures safely", a
   const originalFetch = global.fetch;
 
   try {
-    global.fetch = async () => ({ ok: false, status: 403 });
+    global.fetch = async () => ({
+      ok: false,
+      status: 403,
+      headers: mockHeaders()
+    });
     const r1 = await monitor.fetchViewCount("123");
     assert.equal(r1.status, "unavailable");
 
