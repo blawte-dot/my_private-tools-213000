@@ -3724,5 +3724,26 @@
     "geminiDuplicateRisk": 20,
     "geminiReasoning": "The draft provides a clean, well-structured 4-hour technical analysis with clear support and resistance levels for HOLO. Duplicate risk is low as the asset is unique and recent posts covered different angles and assets.",
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T13:05:25.645Z",
+    "type": "analysis",
+    "asset": "REZ",
+    "subtype": null,
+    "angle": 5,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "some",
+    "postId": "365883906172881",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365883906172881?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 85,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft provides a clear, well-structured technical analysis of REZ with specific key levels and indicator metrics. Angle 5 has not been used in the last five posts, keeping duplicate risk low.",
+    "published": true
   }
 ]
