@@ -3745,5 +3745,26 @@
     "geminiDuplicateRisk": 15,
     "geminiReasoning": "The draft provides a clear, well-structured technical analysis of REZ with specific key levels and indicator metrics. Angle 5 has not been used in the last five posts, keeping duplicate risk low.",
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T13:45:27.719Z",
+    "type": "analysis",
+    "asset": "PROM",
+    "subtype": null,
+    "angle": 0,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365893745128636",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365893745128636?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 85,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft provides a clean, concise technical analysis for PROM using key indicators and clear range boundaries. Duplicate risk is low as PROM has not been analyzed recently and angle 0 was not used in the immediate past posts.",
+    "published": true
   }
 ]
