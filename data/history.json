@@ -3984,5 +3984,27 @@
     "geminiReasoning": "The draft provides a clear, concise technical update on INJ with key indicator data and price levels. Duplicate risk is low as INJ has not been featured recently.",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T21:55:21.279Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "market_snapshot",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "366014141033958",
+    "postLink": "https://app.binance.com/uni-qr/cpos/366014141033958?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
