@@ -170,16 +170,20 @@ Do not be a rubber stamp — a real fraction of drafts should get "rewrite" when
  * Generates a themed illustration (not a data chart — those stay
  * deterministic and SVG-based) via Gemini's current image model
  * ("Nano Banana"). Used sparingly as one option in the analysis
- * media mix for genuine visual variety. Returns a file path on
- * success, or null on any failure — callers must fall back to a
- * different media type, never block a post on this.
+ * media mix for genuine visual variety. Always returns an object
+ * with a `path` field — null on any failure, with `reason`
+ * explaining why (same pattern as judgeContent, learned from the
+ * model-name issue: the real reason must be preserved in data we
+ * can inspect later, not just logged to an Actions run we have no
+ * way to read after the fact).
  */
 export async function generateMemeImage(prompt, outputPath) {
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    console.log("GEMINI_API_KEY not set — skipping AI image generation.");
-    return null;
+    const reason = "GEMINI_API_KEY not set";
+    console.log(`${reason} — skipping AI image generation.`);
+    return { path: null, reason };
   }
 
   try {
@@ -197,26 +201,28 @@ export async function generateMemeImage(prompt, outputPath) {
     const imagePart = parts.find(p => p.inlineData?.data);
 
     if (!imagePart) {
-      console.log(
-        "Gemini image generation returned no image data — skipping."
-      );
-      return null;
+      const textPart = parts.find(p => p.text)?.text;
+
+      const reason = textPart
+        ? `No image data in response; model said: ${textPart.slice(0, 200)}`
+        : "No image data in response (no text explanation either)";
+
+      console.log(`${reason} — skipping.`);
+      return { path: null, reason };
     }
 
     const fs = await import("node:fs");
     const buffer = Buffer.from(imagePart.inlineData.data, "base64");
     fs.writeFileSync(outputPath, buffer);
 
-    return outputPath;
+    return { path: outputPath, reason: null };
   } catch (err) {
     const safeMessage = apiKey
       ? err.message.split(apiKey).join("[REDACTED]")
       : err.message;
 
-    console.log(
-      `Gemini image generation failed — skipping: ${safeMessage}`
-    );
-
-    return null;
+    const reason = `Gemini image call failed: ${safeMessage}`;
+    console.log(`${reason} — skipping.`);
+    return { path: null, reason };
   }
 }

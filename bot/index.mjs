@@ -2094,6 +2094,7 @@ async function main() {
   let geminiQualityScore = null;
   let geminiDuplicateRisk = null;
   let geminiReasoning = null;
+  let aiImageFailureReason = null;
 
   if (type === "analysis") {
     const coin =
@@ -2167,19 +2168,26 @@ async function main() {
       } else if (media === "ai_image") {
         const memePrompt = pickMemeImagePrompt(coin.asset, history);
 
-        image = await generateMemeImage(
+        const memeResult = await generateMemeImage(
           memePrompt,
           path.join(ROOT, "bot", "ai-meme.png")
         );
 
-        if (!image) {
+        if (!memeResult.path) {
           /*
            * Generation failed — fall back to the chart rather
            * than publishing with no image at all for a media
            * choice that was specifically meant to have one.
+           * Preserve the real reason (learned from the earlier
+           * model-name issue: this must be inspectable later,
+           * not just logged to a run we can't read after the
+           * fact).
            */
+          aiImageFailureReason = memeResult.reason;
           media = "chart_only";
           image = createAnalysisChart(coin.symbol, angle);
+        } else {
+          image = memeResult.path;
         }
       }
       /* media === "no_image" -> image stays null (text-only) */
@@ -2500,6 +2508,7 @@ async function main() {
     geminiQualityScore,
     geminiDuplicateRisk,
     geminiReasoning,
+    aiImageFailureReason,
     published: true
   });
 

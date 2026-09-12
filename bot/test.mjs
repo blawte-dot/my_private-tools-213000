@@ -353,7 +353,7 @@ test("gemini.buildPrompt embeds the draft text and never asks Gemini to verify n
   assert.ok(prompt.includes("do NOT have access to live market data"));
 });
 
-test("gemini.generateMemeImage returns null when GEMINI_API_KEY is unset", async () => {
+test("gemini.generateMemeImage returns a no-path result (with reason) when GEMINI_API_KEY is unset", async () => {
   const savedKey = process.env.GEMINI_API_KEY;
   delete process.env.GEMINI_API_KEY;
 
@@ -363,7 +363,8 @@ test("gemini.generateMemeImage returns null when GEMINI_API_KEY is unset", async
       "/tmp/should-not-be-created.png"
     );
 
-    assert.equal(result, null);
+    assert.equal(result.path, null);
+    assert.ok(result.reason.includes("GEMINI_API_KEY"));
   } finally {
     if (savedKey) process.env.GEMINI_API_KEY = savedKey;
   }
