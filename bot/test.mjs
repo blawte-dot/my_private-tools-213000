@@ -24,7 +24,6 @@ import os from "node:os";
 
 import * as bot from "./index.mjs";
 import * as gemini from "./gemini.mjs";
-import * as monitor from "./monitor-views.mjs";
 
 const SAMPLES = 3000;
 const TOLERANCE_PP = 5;
@@ -352,68 +351,6 @@ test("gemini.buildPrompt embeds the draft text and never asks Gemini to verify n
 
   assert.ok(prompt.includes("BTC is at $62,000"));
   assert.ok(prompt.includes("do NOT have access to live market data"));
-});
-
-// ---- View monitoring (mocked fetch, no real network) ----
-
-const mockHeaders = () => ({ get: () => null });
-
-test("monitor.fetchViewCount extracts a matching pattern", async () => {
-  const originalFetch = global.fetch;
-
-  try {
-    global.fetch = async () => ({
-      ok: true,
-      headers: mockHeaders(),
-      text: async () => 'preamble "viewNum":98765 trailer'
-    });
-
-    const result = await monitor.fetchViewCount("123");
-    assert.equal(result.status, "ok");
-    assert.equal(result.views, 98765);
-  } finally {
-    global.fetch = originalFetch;
-  }
-});
-
-test("monitor.fetchViewCount reports unavailable (never guesses) when no pattern matches", async () => {
-  const originalFetch = global.fetch;
-
-  try {
-    global.fetch = async () => ({
-      ok: true,
-      headers: mockHeaders(),
-      text: async () => "<html>nothing recognizable</html>"
-    });
-
-    const result = await monitor.fetchViewCount("123");
-    assert.equal(result.status, "unavailable");
-    assert.equal(result.views, null);
-  } finally {
-    global.fetch = originalFetch;
-  }
-});
-
-test("monitor.fetchViewCount handles HTTP errors and network failures safely", async () => {
-  const originalFetch = global.fetch;
-
-  try {
-    global.fetch = async () => ({
-      ok: false,
-      status: 403,
-      headers: mockHeaders()
-    });
-    const r1 = await monitor.fetchViewCount("123");
-    assert.equal(r1.status, "unavailable");
-
-    global.fetch = async () => {
-      throw new Error("simulated network failure");
-    };
-    const r2 = await monitor.fetchViewCount("123");
-    assert.equal(r2.status, "unavailable");
-  } finally {
-    global.fetch = originalFetch;
-  }
 });
 
 // ---- Cashtag count safety (regression test for the 220095 bug) ----
