@@ -3556,5 +3556,26 @@
     "geminiDuplicateRisk": 20,
     "geminiReasoning": "The post provides a clear, well-structured breakdown of key 4-hour technical levels and indicator context for LSK. Originality is solid as recent posts covered different assets with distinct angles.",
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T07:10:24.899Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "bull_bear",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365796658301134",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365796658301134?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
