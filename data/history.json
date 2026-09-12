@@ -3661,5 +3661,26 @@
     "geminiDuplicateRisk": 20,
     "geminiReasoning": "The post delivers a clean, well-structured technical analysis for $MINA with clear key levels and indicator callouts. Duplicate risk is low as MINA has not been covered recently, despite the historical use of angle 2 on another asset.",
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T10:55:27.631Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "top_movers",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365851965558244",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365851965558244?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
