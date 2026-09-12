@@ -3787,5 +3787,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T15:15:28.126Z",
+    "type": "analysis",
+    "asset": "BNB",
+    "subtype": null,
+    "angle": 1,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365915865074464",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365915865074464?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 85,
+    "geminiDuplicateRisk": 18,
+    "geminiReasoning": "The draft provides concise, data-backed technical analysis on BNB with strong structure and clear readability. It presents minimal duplicate risk as BNB has not been featured in recent posts.",
+    "published": true
   }
 ]
