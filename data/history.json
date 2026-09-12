@@ -3535,5 +3535,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T06:25:29.866Z",
+    "type": "analysis",
+    "asset": "LSK",
+    "subtype": null,
+    "angle": 4,
+    "media": "chart_plus_coin",
+    "title": null,
+    "hashtags": "some",
+    "postId": "365785619370843",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365785619370843?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 88,
+    "geminiDuplicateRisk": 20,
+    "geminiReasoning": "The post provides a clear, well-structured breakdown of key 4-hour technical levels and indicator context for LSK. Originality is solid as recent posts covered different assets with distinct angles.",
+    "published": true
   }
 ]
