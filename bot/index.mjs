@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync, spawnSync } from "node:child_process";
 import sharp from "sharp";
-import { judgeContent } from "./gemini.mjs";
+import { judgeContent, generateMemeImage } from "./gemini.mjs";
 
 const API = "https://data-api.binance.vision";
 const GDELT = "https://api.gdeltproject.org/api/v2/doc/doc";
@@ -369,6 +369,23 @@ async function getSpotCoins() {
     }));
 }
 
+/*
+ * Well-known/meme coins people specifically look for, regardless
+ * of their current momentum ranking — periodically forced into
+ * rotation (see chooseCoin) so they don't only appear when they
+ * happen to be top movers.
+ */
+const TRENDING_COINS = [
+  "PEPE",
+  "SHIB",
+  "DOGE",
+  "BONK",
+  "WIF",
+  "FLOKI",
+  "TRUMP",
+  "BOME"
+];
+
 function chooseCoin(coins, history) {
   const today = new Date()
     .toISOString()
@@ -383,6 +400,32 @@ function chooseCoin(coins, history) {
       )
       .map(x => x.asset)
   );
+
+  /*
+   * Every 5th analysis pick, prefer a well-known/trending coin
+   * if one from the list is currently eligible (meets the same
+   * liquidity floor as everything else) and hasn't been used
+   * today — real coverage of names people actually search for,
+   * not just whatever is topping momentum this cycle.
+   */
+  const pastAnalysisCountForTrending = history.filter(
+    x => x && x.type === "analysis"
+  ).length;
+
+  if (pastAnalysisCountForTrending % 5 === 0) {
+    const trendingPick = coins.find(
+      c =>
+        TRENDING_COINS.includes(c.asset) &&
+        !usedToday.has(c.asset)
+    );
+
+    if (trendingPick) {
+      return {
+        ...trendingPick,
+        tier: "trending"
+      };
+    }
+  }
 
   const eligible = coins.filter(
     c => !usedToday.has(c.asset)
@@ -1198,11 +1241,43 @@ function createCoinCardImage(symbol, variantIndex) {
  * only decides which image(s), if any, accompany it). Same
  * proportional-fair approach as the "other" content scheduler.
  */
+/*
+ * Distinct visual styles for the AI-generated illustration media
+ * type — rotated so these don't all look the same either. Each
+ * describes a scene, not specific numbers/text (image models
+ * render arbitrary text/numbers unreliably, so prompts stay
+ * purely thematic/artistic).
+ */
+const MEME_IMAGE_STYLES = [
+  asset =>
+    `Photorealistic 3D render of a gold ${asset} cryptocurrency coin resting against a small stack of gold bars, dramatic studio lighting, dark background, ultra detailed, luxury product photography style.`,
+  asset =>
+    `Simple hand-drawn cartoon illustration of a green frog character sitting at a desk, drawing a picture of a gold coin with a ${asset} symbol on it, minimalist comic line art, flat colors, white background.`,
+  asset =>
+    `Photorealistic close-up of an ornate gold and diamond bracelet-clad hand holding up a gold coin pendant engraved with a ${asset} symbol, black background, luxury jewelry photography lighting.`,
+  asset =>
+    `Digital illustration of a cool cartoon frog character wearing a hoodie, casually holding a glowing gold ${asset} coin between two fingers, flat vector art style, warm background color.`,
+  asset =>
+    `Photorealistic image of a golden ${asset} coin standing upright in loose gold coins and glitter, warm cinematic lighting, shallow depth of field, dark moody background.`
+];
+
+function pickMemeImagePrompt(asset, history) {
+  const pastAiImageCount = history.filter(
+    x => x && x.media === "ai_image"
+  ).length;
+
+  const style =
+    MEME_IMAGE_STYLES[pastAiImageCount % MEME_IMAGE_STYLES.length];
+
+  return style(asset);
+}
+
 const ANALYSIS_MEDIA_TYPES = [
-  { key: "no_image", weight: 60 },
-  { key: "chart_only", weight: 16 },
-  { key: "chart_plus_coin", weight: 16 },
-  { key: "coin_only", weight: 8 }
+  { key: "no_image", weight: 55 },
+  { key: "chart_only", weight: 15 },
+  { key: "chart_plus_coin", weight: 12 },
+  { key: "coin_only", weight: 8 },
+  { key: "ai_image", weight: 10 }
 ];
 
 /*
@@ -1943,6 +2018,11 @@ function cleanup() {
       ROOT,
       "bot",
       "coin-card.png"
+    ),
+    path.join(
+      ROOT,
+      "bot",
+      "ai-meme.png"
     )
   ];
 
@@ -2084,6 +2164,23 @@ async function main() {
           createAnalysisChart(coin.symbol, angle),
           createCoinCardImage(coin.symbol, pastAnalysisCount)
         ];
+      } else if (media === "ai_image") {
+        const memePrompt = pickMemeImagePrompt(coin.asset, history);
+
+        image = await generateMemeImage(
+          memePrompt,
+          path.join(ROOT, "bot", "ai-meme.png")
+        );
+
+        if (!image) {
+          /*
+           * Generation failed — fall back to the chart rather
+           * than publishing with no image at all for a media
+           * choice that was specifically meant to have one.
+           */
+          media = "chart_only";
+          image = createAnalysisChart(coin.symbol, angle);
+        }
       }
       /* media === "no_image" -> image stays null (text-only) */
     }
@@ -2443,6 +2540,9 @@ export {
   getLastPublished,
   canPublish,
   chooseCoin,
+  TRENDING_COINS,
+  pickMemeImagePrompt,
+  MEME_IMAGE_STYLES,
   analysisText,
   deepAnalysisText,
   selectDepth,

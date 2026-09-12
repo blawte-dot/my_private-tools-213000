@@ -353,6 +353,73 @@ test("gemini.buildPrompt embeds the draft text and never asks Gemini to verify n
   assert.ok(prompt.includes("do NOT have access to live market data"));
 });
 
+test("gemini.generateMemeImage returns null when GEMINI_API_KEY is unset", async () => {
+  const savedKey = process.env.GEMINI_API_KEY;
+  delete process.env.GEMINI_API_KEY;
+
+  try {
+    const result = await gemini.generateMemeImage(
+      "a test prompt",
+      "/tmp/should-not-be-created.png"
+    );
+
+    assert.equal(result, null);
+  } finally {
+    if (savedKey) process.env.GEMINI_API_KEY = savedKey;
+  }
+});
+
+test("chooseCoin picks a trending coin every 5th analysis pick when eligible", () => {
+  const coins = fakeCoins(15);
+  coins.push({
+    symbol: "PEPEUSDT",
+    asset: "PEPE",
+    price: 0.00001,
+    change: 2,
+    volume: 20_000_000
+  });
+
+  // History with exactly 5 past analysis posts (5 % 5 === 0
+  // triggers the trending override on the 6th pick).
+  const history = Array.from({ length: 5 }, (_, i) => ({
+    date: "2026-09-01",
+    type: "analysis",
+    asset: "COIN" + i,
+    published: true
+  }));
+
+  const picked = bot.chooseCoin(coins, history);
+  assert.equal(picked.asset, "PEPE");
+  assert.equal(picked.tier, "trending");
+});
+
+test("chooseCoin falls back to normal scoring when no trending coin is eligible", () => {
+  const coins = fakeCoins(15); // no TRENDING_COINS members present
+
+  const history = Array.from({ length: 5 }, (_, i) => ({
+    date: "2026-09-01",
+    type: "analysis",
+    asset: "X" + i,
+    published: true
+  }));
+
+  const picked = bot.chooseCoin(coins, history);
+  assert.ok(!bot.TRENDING_COINS.includes(picked.asset));
+});
+
+test("pickMemeImagePrompt rotates through distinct styles and embeds the asset", () => {
+  const prompts = new Set();
+
+  for (let i = 0; i < bot.MEME_IMAGE_STYLES.length; i++) {
+    const history = Array.from({ length: i }, () => ({ media: "ai_image" }));
+    const prompt = bot.pickMemeImagePrompt("BTC", history);
+    assert.ok(prompt.includes("BTC"));
+    prompts.add(prompt);
+  }
+
+  assert.equal(prompts.size, bot.MEME_IMAGE_STYLES.length);
+});
+
 // ---- Cashtag count safety (regression test for the 220095 bug) ----
 
 function countDistinctCashtags(text) {

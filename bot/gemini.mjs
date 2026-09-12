@@ -17,9 +17,10 @@
  *   for a bot that must keep publishing.
  */
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI, Type, Modality } from "@google/genai";
 
 const MODEL = "gemini-3.6-flash";
+const IMAGE_MODEL = "gemini-2.5-flash-image";
 
 const RESPONSE_SCHEMA = {
   type: Type.OBJECT,
@@ -163,4 +164,59 @@ Judge this draft and respond with the required JSON only:
 - reasoning_summary: one or two sentences explaining the decision.
 
 Do not be a rubber stamp — a real fraction of drafts should get "rewrite" when they're genuinely repetitive, but most solid, data-grounded drafts should pass as "publish". Never invent a reason involving market data accuracy — that is out of scope for you.`;
+}
+
+/*
+ * Generates a themed illustration (not a data chart — those stay
+ * deterministic and SVG-based) via Gemini's current image model
+ * ("Nano Banana"). Used sparingly as one option in the analysis
+ * media mix for genuine visual variety. Returns a file path on
+ * success, or null on any failure — callers must fall back to a
+ * different media type, never block a post on this.
+ */
+export async function generateMemeImage(prompt, outputPath) {
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    console.log("GEMINI_API_KEY not set — skipping AI image generation.");
+    return null;
+  }
+
+  try {
+    const ai = new GoogleGenAI({ apiKey });
+
+    const response = await ai.models.generateContent({
+      model: IMAGE_MODEL,
+      contents: prompt,
+      config: {
+        responseModalities: [Modality.IMAGE]
+      }
+    });
+
+    const parts = response?.candidates?.[0]?.content?.parts || [];
+    const imagePart = parts.find(p => p.inlineData?.data);
+
+    if (!imagePart) {
+      console.log(
+        "Gemini image generation returned no image data — skipping."
+      );
+      return null;
+    }
+
+    const fs = await import("node:fs");
+    const buffer = Buffer.from(imagePart.inlineData.data, "base64");
+    fs.writeFileSync(outputPath, buffer);
+
+    return outputPath;
+  } catch (err) {
+    const safeMessage = apiKey
+      ? err.message.split(apiKey).join("[REDACTED]")
+      : err.message;
+
+    console.log(
+      `Gemini image generation failed — skipping: ${safeMessage}`
+    );
+
+    return null;
+  }
 }
