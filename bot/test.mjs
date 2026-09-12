@@ -370,6 +370,18 @@ test("gemini.generateMemeImage returns a no-path result (with reason) when GEMIN
   }
 });
 
+test("gemini.suggestTrendingTopic returns null when GEMINI_API_KEY is unset", async () => {
+  const savedKey = process.env.GEMINI_API_KEY;
+  delete process.env.GEMINI_API_KEY;
+
+  try {
+    const result = await gemini.suggestTrendingTopic();
+    assert.equal(result, null);
+  } finally {
+    if (savedKey) process.env.GEMINI_API_KEY = savedKey;
+  }
+});
+
 test("chooseCoin picks a trending coin every 5th analysis pick when eligible", () => {
   const coins = fakeCoins(15);
   coins.push({

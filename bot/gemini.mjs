@@ -226,3 +226,52 @@ export async function generateMemeImage(prompt, outputPath) {
     return { path: null, reason };
   }
 }
+
+/*
+ * Suggests a currently-trending crypto topic/hashtag using real
+ * Google Search grounding (not just the model's training data) —
+ * genuinely current, but NOT Binance's internal daily Task
+ * Center tag specifically, which isn't publicly indexed anywhere
+ * search can reach. Returns a short plain-text suggestion (e.g.
+ * "#Bitcoin100K" or a bare topic phrase) or null on any failure —
+ * this is an occasional enhancement, never required for a post.
+ */
+export async function suggestTrendingTopic() {
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    console.log("GEMINI_API_KEY not set — skipping trending-topic lookup.");
+    return null;
+  }
+
+  try {
+    const ai = new GoogleGenAI({ apiKey });
+
+    const response = await ai.models.generateContent({
+      model: MODEL,
+      contents:
+        "Search the web right now for what's genuinely trending in crypto today (a coin, narrative, or news event getting real attention). Reply with ONLY a single short hashtag or 2-3 word phrase suitable to append to a social media post — no explanation, no punctuation besides an optional #, nothing else.",
+      config: {
+        tools: [{ googleSearch: {} }]
+      }
+    });
+
+    const text = response.text?.trim();
+
+    if (!text || text.length > 40 || text.includes("\n")) {
+      console.log(
+        `Trending-topic response unusable (${text ? "too long/multiline" : "empty"}) — skipping.`
+      );
+      return null;
+    }
+
+    return text;
+  } catch (err) {
+    const safeMessage = apiKey
+      ? err.message.split(apiKey).join("[REDACTED]")
+      : err.message;
+
+    console.log(`Trending-topic lookup failed — skipping: ${safeMessage}`);
+    return null;
+  }
+}

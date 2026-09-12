@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync, spawnSync } from "node:child_process";
 import sharp from "sharp";
-import { judgeContent, generateMemeImage } from "./gemini.mjs";
+import { judgeContent, generateMemeImage, suggestTrendingTopic } from "./gemini.mjs";
 
 const API = "https://data-api.binance.vision";
 const GDELT = "https://api.gdeltproject.org/api/v2/doc/doc";
@@ -2153,6 +2153,21 @@ async function main() {
           includeHashtags,
           cta
         );
+
+      /*
+       * Occasionally (only when hashtags are already being used,
+       * and only sometimes even then, to limit extra API calls)
+       * append a real, search-grounded trending topic — never
+       * Binance's internal daily tag specifically, which isn't
+       * discoverable this way, just genuinely current web chatter.
+       */
+      if (includeHashtags && Math.random() < 0.3) {
+        const trending = await suggestTrendingTopic();
+
+        if (trending && !text.includes(trending)) {
+          text = `${text} ${trending}`;
+        }
+      }
 
       media = selectAnalysisMedia(history);
 

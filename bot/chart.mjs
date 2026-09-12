@@ -1148,6 +1148,23 @@ function createCoinCardSvg(symbol, candles, iconDataUri, variantIndex) {
 
 
 function createEducationSvg(topic) {
+  const headerByTopic = {
+    rsi: {
+      title: "Reading Momentum: RSI Explained",
+      accent: "#8B5CF6"
+    },
+    breakout: {
+      title: "Breakout & Retest, Visualized",
+      accent: "#F0B90B"
+    },
+    candlesticks: {
+      title: "How to Read a Candlestick",
+      accent: "#0ECB81"
+    }
+  };
+
+  const header = headerByTopic[topic] || headerByTopic.candlesticks;
+
   const common = `
     <rect
       width="${WIDTH}"
@@ -1158,12 +1175,12 @@ function createEducationSvg(topic) {
     <text
       x="70"
       y="70"
-      fill="#F0F0F0"
+      fill="${header.accent}"
       font-size="34"
       font-family="Arial"
       font-weight="bold"
     >
-      Binance Crypto Education
+      ${header.title}
     </text>
   `;
 
