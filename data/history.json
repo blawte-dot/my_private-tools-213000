@@ -3703,5 +3703,26 @@
     "geminiDuplicateRisk": 15,
     "geminiReasoning": "The post provides a clean, well-structured scenario analysis with specific key levels and clear technical context. Duplicate risk is low as DOGE has not been covered recently.",
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T12:24:26.686Z",
+    "type": "analysis",
+    "asset": "HOLO",
+    "subtype": null,
+    "angle": 4,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365873834246965",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365873834246965?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 88,
+    "geminiDuplicateRisk": 20,
+    "geminiReasoning": "The draft provides a clean, well-structured 4-hour technical analysis with clear support and resistance levels for HOLO. Duplicate risk is low as the asset is unique and recent posts covered different angles and assets.",
+    "published": true
   }
 ]
