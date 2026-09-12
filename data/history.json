@@ -3430,5 +3430,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T02:41:03.819Z",
+    "type": "analysis",
+    "asset": "VTHO",
+    "subtype": null,
+    "angle": 0,
+    "media": "coin_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365730462558256",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365730462558256?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 82,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft provides a clear, concise technical snapshot for VTHO with relevant indicators and key price levels. Duplicate risk is low as VTHO has not been recently featured.",
+    "published": true
   }
 ]
