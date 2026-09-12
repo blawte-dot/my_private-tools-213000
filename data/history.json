@@ -3514,5 +3514,26 @@
     "geminiDuplicateRisk": 20,
     "geminiReasoning": "The draft provides a clear, well-structured technical analysis for ZEC with solid data points and low overlap with recent posts.",
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T05:40:17.095Z",
+    "type": "analysis",
+    "asset": "TRX",
+    "subtype": null,
+    "angle": 3,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "365774507791071",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365774507791071?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "published": true
   }
 ]
