@@ -3409,5 +3409,26 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T01:57:56.599Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "365719865265442",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365719865265442?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.fool.com/investing/2026/09/11/1-popular-cryptocurrency-cathie-wood-of-ark-invest/",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "published": true
   }
 ]
