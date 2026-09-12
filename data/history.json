@@ -3598,5 +3598,26 @@
     "geminiDuplicateRisk": 15,
     "geminiReasoning": "The draft provides clear technical analysis with specific price levels and indicators for ETHFI. It follows a good structure with strong engagement and presents minimal duplicate risk relative to recent posts.",
     "published": true
+  },
+  {
+    "date": "2026-09-12",
+    "time": "2026-09-12T08:40:23.935Z",
+    "type": "analysis",
+    "asset": "牛来",
+    "subtype": null,
+    "angle": 0,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "365818772662340",
+    "postLink": "https://app.binance.com/uni-qr/cpos/365818772662340?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 82,
+    "geminiDuplicateRisk": 20,
+    "geminiReasoning": "The draft provides a clean, concise technical breakdown of $牛来 with clear levels and actionable commentary. It shows low similarity to recent posts.",
+    "published": true
   }
 ]
