@@ -64,13 +64,13 @@ function fakeCoins(n = 20) {
 
 // ---- Scheduler / interval ----
 
-test("randomPostIntervalMs stays within 39-45 minutes", () => {
+test("randomPostIntervalMs stays within 30-45 minutes", () => {
   for (let i = 0; i < 200; i++) {
     const ms = bot.randomPostIntervalMs();
     const minutes = ms / 60000;
 
     assert.ok(
-      minutes >= 39 && minutes <= 45,
+      minutes >= 30 && minutes <= 45,
       `interval ${minutes} out of range`
     );
   }
@@ -376,6 +376,21 @@ test("gemini.suggestTrendingTopic returns null when GEMINI_API_KEY is unset", as
 
   try {
     const result = await gemini.suggestTrendingTopic();
+    assert.equal(result, null);
+  } finally {
+    if (savedKey) process.env.GEMINI_API_KEY = savedKey;
+  }
+});
+
+test("gemini.writeCreativeEducation returns null when GEMINI_API_KEY is unset", async () => {
+  const savedKey = process.env.GEMINI_API_KEY;
+  delete process.env.GEMINI_API_KEY;
+
+  try {
+    const result = await gemini.writeCreativeEducation(
+      "rsi",
+      bot.EDUCATION_FACTS.rsi
+    );
     assert.equal(result, null);
   } finally {
     if (savedKey) process.env.GEMINI_API_KEY = savedKey;

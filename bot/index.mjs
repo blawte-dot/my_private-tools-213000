@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync, spawnSync } from "node:child_process";
 import sharp from "sharp";
-import { judgeContent, generateMemeImage, suggestTrendingTopic } from "./gemini.mjs";
+import { judgeContent, generateMemeImage, suggestTrendingTopic, writeCreativeEducation } from "./gemini.mjs";
 
 const API = "https://data-api.binance.vision";
 const GDELT = "https://api.gdeltproject.org/api/v2/doc/doc";
@@ -19,7 +19,7 @@ const IMAGE_FILE = path.join(ROOT, "bot", "post-image.png");
  * cadence is itself a bot fingerprint; jitter makes the timing
  * look human without changing the intended pacing.
  */
-const MIN_POST_INTERVAL_MS = 39 * 60 * 1000;
+const MIN_POST_INTERVAL_MS = 30 * 60 * 1000;
 const MAX_POST_INTERVAL_MS = 45 * 60 * 1000;
 const HISTORY_MAX_RECORDS = 500;
 
@@ -1016,6 +1016,12 @@ ${lines.join("\n")}
 #Crypto #Binance #Watchlist #CryptoMarket`;
 }
 
+const EDUCATION_FACTS = {
+  rsi: "RSI (Relative Strength Index) measures momentum on a 0-100 scale. A reading above 70 typically signals strong or potentially overextended momentum. Around 50 is balanced momentum. Below 30 typically signals weak or potentially oversold momentum. RSI should be combined with price structure, volume, and trend for confirmation — not used alone.",
+  breakout: "A price move above a resistance level is not automatically a confirmed breakout. Traders commonly look for: volume expansion, a full candle close beyond the level (not just a brief wick through it), a retest of the broken level holding as new support, and confirmation from higher-timeframe structure. Weak volume on the move increases the chance of a false breakout.",
+  candlesticks: "A bullish candle means buyers were in control during that period; a bearish candle means sellers were in control. The wick (or shadow) of a candle shows price levels that were reached but not held. Candlestick reading becomes more useful when combined with support/resistance levels, the broader trend, volume, and higher-timeframe structure — not read in isolation."
+};
+
 function educationPost(topic) {
   if (topic === "rsi") {
     return `📚 Crypto Education — RSI
@@ -1532,14 +1538,14 @@ function selectPostType(history) {
  * are trimmed slightly to make room.
  */
 const OTHER_CONTENT_TYPES = [
-  { key: "education", weight: 25 },
-  { key: "news", weight: 20 },
-  { key: "poll", weight: 10 },
-  { key: "market_snapshot", weight: 12 },
-  { key: "top_movers", weight: 10 },
-  { key: "bull_bear", weight: 10 },
+  { key: "education", weight: 20 },
+  { key: "news", weight: 32 },
+  { key: "poll", weight: 8 },
+  { key: "market_snapshot", weight: 10 },
+  { key: "top_movers", weight: 8 },
+  { key: "bull_bear", weight: 8 },
   { key: "project_study", weight: 8 },
-  { key: "ecosystem", weight: 5 }
+  { key: "ecosystem", weight: 6 }
 ];
 
 function selectOtherType(history) {
@@ -2374,14 +2380,31 @@ ${ending}
 #CryptoNews #Binance #CryptoMarket`;
 
         /*
-         * Only attach an image when the article actually has
-         * a usable one. Otherwise this goes out as a text-only
-         * post instead of forcing an unrelated fallback image.
+         * 1-3 real images: the article's own image (if usable),
+         * plus a coin card for the asset actually identified in
+         * the headline (if any), plus a broader market snapshot
+         * for extra context on top stories. Never more than what
+         * is genuinely available — no placeholder padding.
          */
-        image =
-          await createNewsImage(
-            article
+        const newsImages = [];
+
+        const articleImg = await createNewsImage(article);
+        if (articleImg) newsImages.push(articleImg);
+
+        if (mentionedCoin) {
+          const coinImg = createCoinCardImage(
+            mentionedCoin.symbol,
+            pastNewsCount
           );
+          if (coinImg) newsImages.push(coinImg);
+        }
+
+        if (newsImages.length < 3 && pastNewsCount % 2 === 0) {
+          const snapshotImg = createMarketSnapshotImage(coins);
+          if (snapshotImg) newsImages.push(snapshotImg);
+        }
+
+        image = newsImages.slice(0, 3);
       } else {
         /*
          * No usable news right now — actually publish as
@@ -2463,10 +2486,30 @@ ${ending}
             topics.length
           ];
 
+        /*
+         * Gemini writes a fresh take each time (varied hook,
+         * structure, emojis) grounded only in the fixed factual
+         * points for this topic — never invents new facts. Falls
+         * back to the standard static text if unavailable.
+         */
+        const creative = await writeCreativeEducation(
+          topic,
+          EDUCATION_FACTS[topic]
+        );
+
+        /*
+         * Same cashtag-count safety learned from the 220095
+         * production outage — Gemini's freeform text isn't
+         * otherwise capped, so verify before trusting it.
+         */
+        const creativeCashtags = new Set(
+          (creative || "").match(/\$[A-Z][A-Z0-9]*/g) || []
+        );
+
         text =
-          educationPost(
-            topic
-          );
+          creative && creativeCashtags.size <= 3
+            ? creative
+            : educationPost(topic);
 
         image =
           createEducationImage(
@@ -2616,6 +2659,7 @@ export {
   bullBearPost,
   whatToWatchPost,
   educationPost,
+  EDUCATION_FACTS,
   selectAnalysisMedia,
   ANALYSIS_MEDIA_TYPES,
   selectHashtagUse,

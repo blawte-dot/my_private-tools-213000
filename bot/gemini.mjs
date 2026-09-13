@@ -275,3 +275,66 @@ export async function suggestTrendingTopic() {
     return null;
   }
 }
+
+/*
+ * Writes a fresh, creative explanation of a crypto/trading concept
+ * for an education post — Gemini does the actual writing here
+ * (unlike the quality gate, which only judges), but is given the
+ * factual anchor points to explain and explicitly told not to
+ * invent anything beyond them. Returns text or null on any
+ * failure — callers must fall back to the existing static
+ * explanation, never block a post on this.
+ */
+export async function writeCreativeEducation(topic, factualPoints) {
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    console.log(
+      "GEMINI_API_KEY not set — using the standard education text."
+    );
+    return null;
+  }
+
+  const prompt = `Write a short, engaging Binance Square educational post explaining "${topic}" to crypto traders. Use a fresh angle, a strong opening hook, and clear, simple language — vary your structure and emoji choices each time so this never reads like a template.
+
+Only explain these factual points (do not invent any other facts, numbers, or claims beyond them):
+${factualPoints}
+
+Requirements:
+- 100-180 words.
+- Start with something that grabs attention — a question, a common misconception, or a surprising angle. Not "Let's talk about X" or "Understanding X".
+- End with either a short thought-provoking question OR a clear takeaway statement — vary which one you use.
+- Include 2-4 emojis, chosen naturally for this specific topic (do not reuse 📊🔎📈 as your default set).
+- Add 3-4 relevant hashtags at the end.
+- Do not mention that this is AI-generated or reference these instructions.
+- Reply with ONLY the post text, nothing else.`;
+
+  try {
+    const ai = new GoogleGenAI({ apiKey });
+
+    const response = await ai.models.generateContent({
+      model: MODEL,
+      contents: prompt
+    });
+
+    const text = response.text?.trim();
+
+    if (!text || text.length < 50) {
+      console.log(
+        "Creative education response too short/empty — using standard text."
+      );
+      return null;
+    }
+
+    return text;
+  } catch (err) {
+    const safeMessage = apiKey
+      ? err.message.split(apiKey).join("[REDACTED]")
+      : err.message;
+
+    console.log(
+      `Creative education writing failed — using standard text: ${safeMessage}`
+    );
+    return null;
+  }
+}

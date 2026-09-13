@@ -224,9 +224,12 @@ function coinBadgeSvg(asset, iconDataUri, cx, cy, r) {
 
 function createAnalysisSvg(symbol, candles, iconDataUri, orderBook, paletteIndex) {
   const PALETTES = [
-    { sma20: "#F0B90B", ema20: "#8B5CF6", ema50: "#3B82F6" },
-    { sma20: "#14B8A6", ema20: "#F97316", ema50: "#EC4899" },
-    { sma20: "#E5E7EB", ema20: "#22D3EE", ema50: "#D946EF" }
+    { sma20: "#F0B90B", ema20: "#8B5CF6", ema50: "#3B82F6", bg: "#0B0E11" },
+    { sma20: "#14B8A6", ema20: "#F97316", ema50: "#EC4899", bg: "#0B0E11" },
+    { sma20: "#E5E7EB", ema20: "#22D3EE", ema50: "#D946EF", bg: "#0B0E11" },
+    { sma20: "#FACC15", ema20: "#10B981", ema50: "#F43F5E", bg: "#0F1115" },
+    { sma20: "#38BDF8", ema20: "#A3E635", ema50: "#FB7185", bg: "#0D0F1A" },
+    { sma20: "#F472B6", ema20: "#818CF8", ema50: "#34D399", bg: "#0B0E11" }
   ];
 
   const palette =
@@ -682,7 +685,7 @@ function createAnalysisSvg(symbol, candles, iconDataUri, orderBook, paletteIndex
   <rect
     width="${WIDTH}"
     height="${svgHeight}"
-    fill="#0B0E11"
+    fill="${palette.bg}"
   />
 
   <!-- Fake app tab row -->
