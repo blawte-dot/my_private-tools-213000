@@ -2323,15 +2323,55 @@ async function main() {
 
         newsUrl = article.url || null;
 
+        /*
+         * Try to identify a genuinely relevant asset from the
+         * headline itself (per the Write-to-Earn guidance: never
+         * tag an asset the content doesn't actually discuss).
+         * Falls back to no coin tag at all if nothing matches —
+         * never forces $BTC as a default filler tag.
+         */
+        const titleLower = article.title.toLowerCase();
+
+        const mentionedCoin = coins.find(c => {
+          const name = c.asset.toLowerCase();
+          return (
+            name.length > 2 &&
+            new RegExp(`\\b${name}\\b`, "i").test(article.title)
+          ) || titleLower.includes(
+            c.asset === "BTC"
+              ? "bitcoin"
+              : c.asset === "ETH"
+                ? "ethereum"
+                : "___no_match___"
+          );
+        });
+
+        const assetLine = mentionedCoin
+          ? `Directly relevant: $${mentionedCoin.asset} is at ${money(mentionedCoin.price)} (${mentionedCoin.change >= 0 ? "+" : ""}${mentionedCoin.change.toFixed(2)}% 24H) — worth watching how it reacts.`
+          : `No single asset is clearly named here — this reads as broader market-relevant news rather than being specific to one coin.`;
+
+        const endings = [
+          "Worth tracking how this develops over the next few sessions.",
+          "The follow-through here will matter more than the headline itself.",
+          "🤔 How do you read this — meaningful shift, or noise?",
+          "Context like this is easy to overreact to in the short term."
+        ];
+
+        const pastNewsCount = history.filter(
+          x => x && x.subtype === "news"
+        ).length;
+
+        const ending = endings[pastNewsCount % endings.length];
+
         text = `${article.title}
 
-📊 This development may be relevant to crypto-market sentiment and should be considered alongside price action and volume.
+${assetLine}
 
-👀 The market can react differently depending on the details and follow-up developments.
+🧭 Why it matters: news like this can shift short-term sentiment even before it changes anything fundamental — the market's reaction often matters more than the event itself.
 
-🤔 How do you think this could affect the crypto market?
+${ending}
 
-#CryptoNews #Binance #Bitcoin #CryptoMarket`;
+#CryptoNews #Binance #CryptoMarket`;
 
         /*
          * Only attach an image when the article actually has
