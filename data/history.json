@@ -4468,5 +4468,27 @@
     "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-13",
+    "time": "2026-09-13T19:15:24.837Z",
+    "type": "analysis",
+    "asset": "BTC",
+    "subtype": null,
+    "angle": 2,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "366328728380836",
+    "postLink": "https://app.binance.com/uni-qr/cpos/366328728380836?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 88,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft provides a clean, well-formatted 4H technical breakdown for BTC with specific indicators and clear support/resistance levels. Duplicate risk is low as recent posts featured different assets and varied angles.",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
