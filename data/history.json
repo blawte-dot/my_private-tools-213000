@@ -4336,5 +4336,27 @@
     "geminiReasoning": "The draft provides a clear, well-structured technical scenario check with distinct bull and bear levels for CVC. It has low duplicate risk since CVC has not been covered in recent posts.",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-13",
+    "time": "2026-09-13T15:23:12.247Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "top_movers",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "366271660632278",
+    "postLink": "https://app.binance.com/uni-qr/cpos/366271660632278?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
