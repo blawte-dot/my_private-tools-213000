@@ -4446,5 +4446,27 @@
     "geminiReasoning": "The draft presents clear, data-driven technical analysis for VTHO with strong readability. Duplicate risk is low as VTHO has not been recently covered and angle 1 was not used in the immediate previous posts.",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-13",
+    "time": "2026-09-13T18:38:23.629Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "top_movers",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "366319630485722",
+    "postLink": "https://app.binance.com/uni-qr/cpos/366319630485722?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
