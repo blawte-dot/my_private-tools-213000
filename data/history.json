@@ -4292,5 +4292,27 @@
     "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-13",
+    "time": "2026-09-13T14:07:55.345Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "366253159315160",
+    "postLink": "https://app.binance.com/uni-qr/cpos/366253159315160?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.finanzen.net/ratgeber/aktien/so-schlaegst-du-die-inflation/",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
