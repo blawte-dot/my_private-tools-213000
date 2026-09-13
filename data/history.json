@@ -4380,5 +4380,27 @@
     "geminiReasoning": "The post offers a well-structured technical analysis of LSK key levels and indicators, presenting distinct asset data with low overlap to recent posts.",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-13",
+    "time": "2026-09-13T16:40:19.754Z",
+    "type": "analysis",
+    "asset": "STEEM",
+    "subtype": null,
+    "angle": 5,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "366290614646861",
+    "postLink": "https://app.binance.com/uni-qr/cpos/366290614646861?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 85,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft is well-structured, clear, and provides specific technical levels and metrics. It has minimal overlap with recent posts, as STEEM has not been covered recently.",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
