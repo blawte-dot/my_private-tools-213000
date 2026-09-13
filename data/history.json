@@ -4028,5 +4028,27 @@
     "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-13",
+    "time": "2026-09-13T00:28:03.563Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "366051669791534",
+    "postLink": "https://app.binance.com/uni-qr/cpos/366051669791534?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.aol.com/articles/why-bitcoin-dropping-today-204955000.html",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
