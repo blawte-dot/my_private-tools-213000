@@ -4402,5 +4402,27 @@
     "geminiReasoning": "The draft is well-structured, clear, and provides specific technical levels and metrics. It has minimal overlap with recent posts, as STEEM has not been covered recently.",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-13",
+    "time": "2026-09-13T17:20:22.476Z",
+    "type": "analysis",
+    "asset": "DOGE",
+    "subtype": null,
+    "angle": 0,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "366300456254035",
+    "postLink": "https://app.binance.com/uni-qr/cpos/366300456254035?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "trending",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 85,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft provides a clean, well-formatted technical summary for DOGE with clear key levels and market bias. It has low duplicate risk as DOGE has not been covered recently.",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
