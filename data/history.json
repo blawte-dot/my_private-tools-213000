@@ -4776,5 +4776,27 @@
     "geminiReasoning": "The draft provides clear, well-structured technical metrics for REZ with high readability. It presents minimal duplicate risk as REZ has not been covered in recent posts.",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-14",
+    "time": "2026-09-14T04:22:49.388Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "top_movers",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "366463259796786",
+    "postLink": "https://app.binance.com/uni-qr/cpos/366463259796786?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
