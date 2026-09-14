@@ -5216,5 +5216,27 @@
     "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-14",
+    "time": "2026-09-14T18:20:22.966Z",
+    "type": "analysis",
+    "asset": "NEAR",
+    "subtype": null,
+    "angle": 0,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "366669098259019",
+    "postLink": "https://app.binance.com/uni-qr/cpos/366669098259019?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 82,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The post provides a concise, well-structured technical analysis of NEAR with clear key levels and indicators. Angle 0 has not been used in the last several posts, making duplicate risk low.",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
