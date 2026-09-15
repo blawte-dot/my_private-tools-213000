@@ -5766,5 +5766,27 @@
     "geminiReasoning": "The draft provides clear, concise, data-backed technical analysis for FF. It exhibits low duplicate risk compared to recent content history.",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-15",
+    "time": "2026-09-15T11:05:20.432Z",
+    "type": "analysis",
+    "asset": "USDC",
+    "subtype": null,
+    "angle": null,
+    "media": "no_image",
+    "title": "$USDC Deep Dive — 4H Structure, Momentum, and Levels",
+    "hashtags": "some",
+    "postId": "366916076710577",
+    "postLink": "https://app.binance.com/uni-qr/cart/366916076710577?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "deep",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
