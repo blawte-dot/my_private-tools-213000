@@ -6690,5 +6690,27 @@
     "geminiReasoning": "The draft provides clear technical analysis metrics for DASH with good readability and structure. It does not conflict with recent post assets or duplicate recent angles closely.",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-16",
+    "time": "2026-09-16T16:22:37.608Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "top_movers",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "367347947512941",
+    "postLink": "https://app.binance.com/uni-qr/cpos/367347947512941?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
