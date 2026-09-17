@@ -7064,5 +7064,27 @@
     "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-17",
+    "time": "2026-09-17T04:05:22.704Z",
+    "type": "analysis",
+    "asset": "SYN",
+    "subtype": null,
+    "angle": 1,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "367520655519987",
+    "postLink": "https://app.binance.com/uni-qr/cpos/367520655519987?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 85,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft provides clear, well-structured technical evidence for $SYN with strong formatting and actionable insights. It presents low duplicate risk compared to recent posts.",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
