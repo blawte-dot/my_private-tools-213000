@@ -7570,5 +7570,27 @@
     "geminiReasoning": "The draft offers a well-structured and clear technical summary of DOT. It carries low duplicate risk since DOT has not been recently covered in the feed.",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-17",
+    "time": "2026-09-17T19:10:21.369Z",
+    "type": "analysis",
+    "asset": "SOXLB",
+    "subtype": null,
+    "angle": 2,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "367743062997011",
+    "postLink": "https://app.binance.com/uni-qr/cpos/367743062997011?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 85,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft provides a clear, data-driven technical analysis for SOXLB with distinct price levels and indicator insights. It uses an angle and asset not recently featured, keeping duplicate risk low.",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
