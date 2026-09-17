@@ -7174,5 +7174,27 @@
     "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-17",
+    "time": "2026-09-17T07:25:21.108Z",
+    "type": "analysis",
+    "asset": "PEPE",
+    "subtype": null,
+    "angle": 5,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "367569800983521",
+    "postLink": "https://app.binance.com/uni-qr/cpos/367569800983521?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "trending",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 85,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft provides a clear, concise technical overview of PEPE's recent price range and key levels. It shows low duplicate risk compared to recent posts.",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
