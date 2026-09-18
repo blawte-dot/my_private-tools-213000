@@ -8406,5 +8406,27 @@
     "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-18",
+    "time": "2026-09-18T20:15:26.012Z",
+    "type": "analysis",
+    "asset": "SOL",
+    "subtype": null,
+    "angle": 2,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "368112950768128",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368112950768128?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "majors",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 85,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft is well-structured, clear, and provides concise technical insights for SOL. Duplicate risk is low as angle 2 was not used in recent posts except for AR several posts ago.",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
