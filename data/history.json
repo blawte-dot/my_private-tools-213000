@@ -8252,5 +8252,27 @@
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-18",
+    "time": "2026-09-18T15:41:10.183Z",
+    "type": "analysis",
+    "asset": "FET",
+    "subtype": null,
+    "angle": 3,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "368045547680851",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368045547680851?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
