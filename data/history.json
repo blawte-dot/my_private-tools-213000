@@ -7790,5 +7790,27 @@
     "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-18",
+    "time": "2026-09-18T02:13:04.732Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "top_movers",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "367846951331001",
+    "postLink": "https://app.binance.com/uni-qr/cpos/367846951331001?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
