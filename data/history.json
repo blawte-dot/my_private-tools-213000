@@ -8912,5 +8912,27 @@
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-19",
+    "time": "2026-09-19T12:25:19.323Z",
+    "type": "analysis",
+    "asset": "DOGE",
+    "subtype": null,
+    "angle": 3,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "368351310464816",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368351310464816?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "trending",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
