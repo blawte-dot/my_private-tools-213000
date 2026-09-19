@@ -9176,5 +9176,27 @@
     "geminiReasoning": "The draft provides a clear, highly educational breakdown of BANK's technical indicators with solid structural explanations. It features a fresh asset and angle compared to recent posts, posing minimal duplicate risk.",
     "aiImageFailureReason": null,
     "published": true
+  },
+  {
+    "date": "2026-09-19",
+    "time": "2026-09-19T20:22:56.998Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "top_movers",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "368468692571773",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368468692571773?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
   }
 ]
