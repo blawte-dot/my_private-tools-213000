@@ -1,12 +1,5 @@
 [
   {
-    "slot": 1192388,
-    "date": "2026-09-05",
-    "time": "2026-09-05T04:39:31.413Z",
-    "type": "analysis",
-    "asset": "DASH"
-  },
-  {
     "date": "2026-09-05",
     "time": "2026-09-05T04:45:24.835Z",
     "type": "analysis",
@@ -9434,6 +9427,28 @@
     "postId": "368593984640991",
     "postLink": "https://app.binance.com/uni-qr/cpos/368593984640991?r=MW37HSBO&l=fr",
     "newsUrl": "https://www.kitv.com/news/politics/trump-vows-to-create-ai-force-and-appoint-czar-amid-calls-to-regulate-technology-s/article_3a810173-dd96-52a2-80cd-9ea5dddc95f1.html",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T05:37:08.354Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "368604890044394",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368604890044394?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.edaily.co.kr/News/Read?newsId=01390726645582088&mediaCodeNo=257",
     "tier": null,
     "depth": null,
     "geminiDecision": null,
