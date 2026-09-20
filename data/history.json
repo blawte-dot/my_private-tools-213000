@@ -1,13 +1,6 @@
 [
   {
     "date": "2026-09-05",
-    "time": "2026-09-05T08:35:49.786Z",
-    "type": "analysis",
-    "asset": "ZEN",
-    "published": true
-  },
-  {
-    "date": "2026-09-05",
     "time": "2026-09-05T11:44:09.081Z",
     "type": "analysis",
     "asset": "NOM",
@@ -9463,6 +9456,28 @@
     "hashtags": null,
     "postId": "368615017290601",
     "postLink": "https://app.binance.com/uni-qr/cpos/368615017290601?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T07:03:23.124Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "top_movers",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "368626085992240",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368626085992240?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "tier": null,
     "depth": null,
