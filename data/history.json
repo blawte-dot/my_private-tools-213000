@@ -1,13 +1,6 @@
 [
   {
     "date": "2026-09-05",
-    "time": "2026-09-05T17:30:21.123Z",
-    "type": "analysis",
-    "asset": "币安人生",
-    "published": true
-  },
-  {
-    "date": "2026-09-05",
     "time": "2026-09-05T18:05:23.981Z",
     "type": "analysis",
     "asset": "CAKE",
@@ -9635,6 +9628,28 @@
     "geminiQualityScore": null,
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T14:25:20.820Z",
+    "type": "analysis",
+    "asset": "EPIC",
+    "subtype": null,
+    "angle": 0,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "368734702237866",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368734702237866?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 82,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft provides a clear and concise technical overview for $EPIC with relevant indicators. It features an asset not recently covered and carries low duplicate risk.",
     "aiImageFailureReason": null,
     "published": true
   }
