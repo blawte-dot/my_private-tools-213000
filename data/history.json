@@ -1,13 +1,6 @@
 [
   {
     "date": "2026-09-05",
-    "time": "2026-09-05T21:45:20.502Z",
-    "type": "analysis",
-    "asset": "OP",
-    "published": true
-  },
-  {
-    "date": "2026-09-05",
     "time": "2026-09-05T22:15:20.334Z",
     "type": "analysis",
     "asset": "FF",
@@ -9770,6 +9763,28 @@
     "geminiQualityScore": null,
     "geminiDuplicateRisk": null,
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T20:15:53.765Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "education",
+    "angle": null,
+    "media": null,
+    "title": "Crypto Market Report — 2026-09-20",
+    "hashtags": null,
+    "postId": "368820853142271",
+    "postLink": "https://app.binance.com/uni-qr/cart/368820853142271?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
   }
