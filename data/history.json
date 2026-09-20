@@ -1,12 +1,5 @@
 [
   {
-    "slot": 1192369,
-    "date": "2026-09-04",
-    "time": "2026-09-04T20:44:54.139Z",
-    "type": "other",
-    "asset": null
-  },
-  {
     "slot": 1192370,
     "date": "2026-09-04",
     "time": "2026-09-04T20:51:36.759Z",
@@ -9350,6 +9343,28 @@
     "geminiQualityScore": 82,
     "geminiDuplicateRisk": 12,
     "geminiReasoning": "The post provides concise, structured technical analysis for DOGE with key EMA, RSI, and range levels. DOGE has not been covered recently in the post history, making duplicate risk minimal.",
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T01:25:23.281Z",
+    "type": "analysis",
+    "asset": "G",
+    "subtype": null,
+    "angle": 1,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "368543019473005",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368543019473005?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 88,
+    "geminiDuplicateRisk": 15,
+    "geminiReasoning": "The draft provides a clear, well-structured technical breakdown with solid data points. Duplicate risk is minimal as the recent post for G used a different angle.",
     "aiImageFailureReason": null,
     "published": true
   }
