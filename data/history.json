@@ -1,13 +1,6 @@
 [
   {
     "date": "2026-09-05",
-    "time": "2026-09-05T18:30:20.350Z",
-    "type": "other",
-    "asset": null,
-    "published": true
-  },
-  {
-    "date": "2026-09-05",
     "time": "2026-09-05T18:55:21.761Z",
     "type": "analysis",
     "asset": "UNI",
@@ -9658,6 +9651,28 @@
     "hashtags": "some",
     "postId": "368744526794675",
     "postLink": "https://app.binance.com/uni-qr/cpos/368744526794675?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T15:40:42.892Z",
+    "type": "analysis",
+    "asset": "SAGA",
+    "subtype": null,
+    "angle": 0,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "none",
+    "postId": "368753224694641",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368753224694641?r=MW37HSBO&l=fr",
     "newsUrl": null,
     "tier": "mid",
     "depth": "normal",
