@@ -1,13 +1,6 @@
 [
   {
     "date": "2026-09-05",
-    "time": "2026-09-05T13:35:19.778Z",
-    "type": "analysis",
-    "asset": "TST",
-    "published": true
-  },
-  {
-    "date": "2026-09-05",
     "time": "2026-09-05T14:00:21.893Z",
     "type": "analysis",
     "asset": "ASTER",
@@ -9539,6 +9532,28 @@
     "postId": "368663950503989",
     "postLink": "https://app.binance.com/uni-qr/cpos/368663950503989?r=MW37HSBO&l=fr",
     "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T10:22:59.755Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "368675142174980",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368675142174980?r=MW37HSBO&l=fr",
+    "newsUrl": "https://newsway.co.kr/news/view?ud=2026092013393990705",
     "tier": null,
     "depth": null,
     "geminiDecision": null,
