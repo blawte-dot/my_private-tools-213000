@@ -1,12 +1,5 @@
 [
   {
-    "slot": 1192372,
-    "date": "2026-09-04",
-    "time": "2026-09-04T22:02:06.296Z",
-    "type": "analysis",
-    "asset": "DASH"
-  },
-  {
     "slot": 1192373,
     "date": "2026-09-04",
     "time": "2026-09-04T22:28:44.924Z",
@@ -9380,6 +9373,28 @@
     "geminiQualityScore": 85,
     "geminiDuplicateRisk": 20,
     "geminiReasoning": "The draft provides a clear, well-structured 4H candle analysis for $BANK with specific indicators and key levels. It differs sufficiently in angle from the recent deep-dive post on BANK, presenting minimal duplicate risk.",
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T02:43:05.426Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "368562115775501",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368562115775501?r=MW37HSBO&l=fr",
+    "newsUrl": "https://247wallst.com/investing/cryptocurrency/2026/09/19/solana-rose-10-and-bitcoin-5-is-the-rotation-into-altcoins-starting/",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
   }
