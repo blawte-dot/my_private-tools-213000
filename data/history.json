@@ -1,13 +1,6 @@
 [
   {
     "date": "2026-09-05",
-    "time": "2026-09-05T23:15:21.308Z",
-    "type": "other",
-    "asset": null,
-    "published": true
-  },
-  {
-    "date": "2026-09-05",
     "time": "2026-09-05T23:45:23.944Z",
     "type": "analysis",
     "asset": "CHIP",
@@ -9815,6 +9808,28 @@
     "geminiQualityScore": null,
     "geminiDuplicateRisk": null,
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T22:10:26.412Z",
+    "type": "analysis",
+    "asset": "FF",
+    "subtype": null,
+    "angle": 0,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "368849003546727",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368849003546727?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 80,
+    "geminiDuplicateRisk": 40,
+    "geminiReasoning": "The draft provides a clear, concise technical summary with key indicators and price levels. Although angle 0 is frequently used, the asset-specific technical data offers good immediate value for followers.",
     "aiImageFailureReason": null,
     "published": true
   }
