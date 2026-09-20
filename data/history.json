@@ -1,13 +1,6 @@
 [
   {
     "date": "2026-09-05",
-    "time": "2026-09-05T15:55:22.760Z",
-    "type": "other",
-    "asset": null,
-    "published": true
-  },
-  {
-    "date": "2026-09-05",
     "time": "2026-09-05T16:30:20.615Z",
     "type": "analysis",
     "asset": "1000CAT",
@@ -9584,6 +9577,28 @@
     "postId": "368694864086200",
     "postLink": "https://app.binance.com/uni-qr/cpos/368694864086200?r=MW37HSBO&l=fr",
     "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T12:22:53.004Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "368704605825391",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368704605825391?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.newstribune.com/news/2026/sep/20/from-the-stacks-looking-at-specifics-of-what-some/",
     "tier": null,
     "depth": null,
     "geminiDecision": null,
