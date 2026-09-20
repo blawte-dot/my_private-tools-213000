@@ -1,13 +1,6 @@
 [
   {
     "date": "2026-09-05",
-    "time": "2026-09-05T16:55:21.038Z",
-    "type": "analysis",
-    "asset": "MUBARAK",
-    "published": true
-  },
-  {
-    "date": "2026-09-05",
     "time": "2026-09-05T17:30:21.123Z",
     "type": "analysis",
     "asset": "币安人生",
@@ -9620,6 +9613,28 @@
     "geminiQualityScore": null,
     "geminiDuplicateRisk": null,
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T13:45:31.656Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "education",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "368724916355833",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368724916355833?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
   }
