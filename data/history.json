@@ -1,13 +1,6 @@
 [
   {
     "date": "2026-09-05",
-    "time": "2026-09-05T12:43:12.690Z",
-    "type": "other",
-    "asset": null,
-    "published": true
-  },
-  {
-    "date": "2026-09-05",
     "time": "2026-09-05T13:10:19.668Z",
     "type": "analysis",
     "asset": "TUT",
@@ -9509,6 +9502,28 @@
     "postId": "368646790283947",
     "postLink": "https://app.binance.com/uni-qr/cpos/368646790283947?r=MW37HSBO&l=fr",
     "newsUrl": "https://twincitiesnewstalk.iheart.com/content/2026-09-19-trump-announces-plans-to-form-federal-ai-force/",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T09:00:36.305Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "education",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "368654893746281",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368654893746281?r=MW37HSBO&l=fr",
+    "newsUrl": null,
     "tier": null,
     "depth": null,
     "geminiDecision": null,
