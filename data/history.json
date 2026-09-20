@@ -1,12 +1,5 @@
 [
   {
-    "slot": 1192378,
-    "date": "2026-09-05",
-    "time": "2026-09-05T00:17:53.991Z",
-    "type": "analysis",
-    "asset": "MARSCOIN"
-  },
-  {
     "slot": 1192388,
     "date": "2026-09-05",
     "time": "2026-09-05T04:39:31.413Z",
@@ -9419,6 +9412,28 @@
     "postId": "368581855238901",
     "postLink": "https://app.binance.com/uni-qr/cpos/368581855238901?r=MW37HSBO&l=fr",
     "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-20",
+    "time": "2026-09-20T04:52:45.885Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "news",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "368593984640991",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368593984640991?r=MW37HSBO&l=fr",
+    "newsUrl": "https://www.kitv.com/news/politics/trump-vows-to-create-ai-force-and-appoint-czar-amid-calls-to-regulate-technology-s/article_3a810173-dd96-52a2-80cd-9ea5dddc95f1.html",
     "tier": null,
     "depth": null,
     "geminiDecision": null,
