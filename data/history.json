@@ -1,17 +1,6 @@
 [
   {
     "date": "2026-09-06",
-    "time": "2026-09-06T19:35:18.890Z",
-    "type": "other",
-    "asset": null,
-    "subtype": "market_snapshot",
-    "angle": null,
-    "media": null,
-    "title": null,
-    "published": true
-  },
-  {
-    "date": "2026-09-06",
     "time": "2026-09-06T20:18:29.036Z",
     "type": "other",
     "asset": null,
@@ -10199,6 +10188,30 @@
     "geminiQualityScore": null,
     "geminiDuplicateRisk": null,
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-21",
+    "time": "2026-09-21T16:50:25.179Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "project_study",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "369124249811049",
+    "postLink": "https://app.binance.com/uni-qr/cpos/369124249811049?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "newsFailureReason": null,
+    "attemptedSubtype": "project_study",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
   }
