@@ -1,17 +1,6 @@
 [
   {
     "date": "2026-09-06",
-    "time": "2026-09-06T18:55:19.812Z",
-    "type": "other",
-    "asset": null,
-    "subtype": "education",
-    "angle": null,
-    "media": null,
-    "title": null,
-    "published": true
-  },
-  {
-    "date": "2026-09-06",
     "time": "2026-09-06T19:35:18.890Z",
     "type": "other",
     "asset": null,
@@ -10186,6 +10175,30 @@
     "geminiQualityScore": null,
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-21",
+    "time": "2026-09-21T16:11:33.900Z",
+    "type": "analysis",
+    "asset": "PEPE",
+    "subtype": null,
+    "angle": 0,
+    "media": "chart_plus_coin",
+    "title": null,
+    "hashtags": "some",
+    "postId": "369114700948189",
+    "postLink": "https://app.binance.com/uni-qr/cpos/369114700948189?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "newsFailureReason": null,
+    "attemptedSubtype": null,
+    "tier": "majors",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
     "aiImageFailureReason": null,
     "published": true
   }
