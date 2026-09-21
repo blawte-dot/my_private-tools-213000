@@ -1,16 +1,6 @@
 [
   {
     "date": "2026-09-06",
-    "time": "2026-09-06T02:40:21.659Z",
-    "type": "analysis",
-    "asset": "TUT",
-    "subtype": null,
-    "angle": 1,
-    "media": "chart_only",
-    "published": true
-  },
-  {
-    "date": "2026-09-06",
     "time": "2026-09-06T03:05:24.558Z",
     "type": "analysis",
     "asset": "UNI",
@@ -9915,6 +9905,28 @@
     "geminiQualityScore": null,
     "geminiDuplicateRisk": null,
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-21",
+    "time": "2026-09-21T02:50:17.481Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "education",
+    "angle": null,
+    "media": null,
+    "title": "Crypto Market Report — 2026-09-21",
+    "hashtags": null,
+    "postId": "368917779760498",
+    "postLink": "https://app.binance.com/uni-qr/cart/368917779760498?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
   }
