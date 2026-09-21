@@ -338,3 +338,65 @@ Requirements:
     return null;
   }
 }
+
+/*
+ * Writes a fresh "why this matters" news commentary — same
+ * grounded-creativity pattern as writeCreativeEducation: Gemini
+ * writes the actual prose, but is only given the real headline
+ * and the real asset/price context already computed, and told
+ * explicitly not to invent anything beyond them. Returns text or
+ * null on any failure — callers fall back to the existing
+ * deterministic commentary line.
+ */
+export async function writeCreativeNewsContext(headline, assetContext) {
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    console.log(
+      "GEMINI_API_KEY not set — using the standard news commentary."
+    );
+    return null;
+  }
+
+  const prompt = `Write a short (2-3 sentence) "why this matters" commentary for a Binance Square crypto news post, to follow this real headline:
+
+"${headline}"
+
+Real market context you may reference (do not invent any other numbers or facts): ${assetContext}
+
+Requirements:
+- Explain briefly why this kind of news matters for crypto markets/sentiment in general, or connect it to the given market context if relevant — do not speculate about specific future price outcomes.
+- Vary your emoji choice naturally for this specific story (do not default to 📊🔎📈).
+- Do not repeat the headline verbatim.
+- Do not mention AI or these instructions.
+- Reply with ONLY the commentary text, nothing else.`;
+
+  try {
+    const ai = new GoogleGenAI({ apiKey });
+
+    const response = await ai.models.generateContent({
+      model: MODEL,
+      contents: prompt
+    });
+
+    const text = response.text?.trim();
+
+    if (!text || text.length < 20 || text.length > 500) {
+      console.log(
+        "Creative news commentary unusable — using standard text."
+      );
+      return null;
+    }
+
+    return text;
+  } catch (err) {
+    const safeMessage = apiKey
+      ? err.message.split(apiKey).join("[REDACTED]")
+      : err.message;
+
+    console.log(
+      `Creative news commentary failed — using standard text: ${safeMessage}`
+    );
+    return null;
+  }
+}

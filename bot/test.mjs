@@ -140,6 +140,56 @@ test("selectOtherType converges to configured weights", () => {
   }
 });
 
+test("REGRESSION: selectOtherType does not starve other types when news always fails (production bug, fixed via cooldown)", () => {
+  // Reproduces the exact real-world failure: every "news"
+  // selection fails and falls back to a rotation of other types,
+  // with `subtype` (the real outcome) diverging from
+  // `attemptedSubtype` (what the scheduler picked) exactly like
+  // the news branch in index.mjs does. Before the cooldown fix,
+  // this produced only "top_movers" forever; it must now produce
+  // real variety.
+  let history = [];
+  const outcomes = [];
+  const failureRotation = ["market_snapshot", "poll", "ecosystem", "top_movers"];
+
+  for (let i = 0; i < 60; i++) {
+    const picked = bot.selectOtherType(history);
+    let actualSubtype = picked;
+
+    if (picked === "news") {
+      const pastFailures = history.filter(
+        x => x.attemptedSubtype === "news" && x.subtype !== "news"
+      ).length;
+
+      actualSubtype = failureRotation[pastFailures % failureRotation.length];
+    }
+
+    outcomes.push(actualSubtype);
+    history.push({
+      type: "other",
+      subtype: actualSubtype,
+      attemptedSubtype: picked
+    });
+  }
+
+  const uniqueTypes = new Set(outcomes);
+
+  assert.ok(
+    uniqueTypes.size >= 5,
+    `expected at least 5 distinct content types over 60 cycles even with news always failing, got ${uniqueTypes.size}: ${[...uniqueTypes]}`
+  );
+
+  // The specific real symptom: must not be 100% (or even a large
+  // majority) top_movers.
+  const topMoversShare =
+    outcomes.filter(s => s === "top_movers").length / outcomes.length;
+
+  assert.ok(
+    topMoversShare < 0.5,
+    `top_movers share too high (${(topMoversShare * 100).toFixed(0)}%) — starvation bug may have regressed`
+  );
+});
+
 test("selectAnalysisMedia converges to 50/20/20/10", () => {
   let history = [];
   const counts = {};
@@ -390,6 +440,21 @@ test("gemini.writeCreativeEducation returns null when GEMINI_API_KEY is unset", 
     const result = await gemini.writeCreativeEducation(
       "rsi",
       bot.EDUCATION_FACTS.rsi
+    );
+    assert.equal(result, null);
+  } finally {
+    if (savedKey) process.env.GEMINI_API_KEY = savedKey;
+  }
+});
+
+test("gemini.writeCreativeNewsContext returns null when GEMINI_API_KEY is unset", async () => {
+  const savedKey = process.env.GEMINI_API_KEY;
+  delete process.env.GEMINI_API_KEY;
+
+  try {
+    const result = await gemini.writeCreativeNewsContext(
+      "Bitcoin ETF sees record inflows",
+      "Directly relevant: $BTC is at $62,000 (+1.80% 24H)."
     );
     assert.equal(result, null);
   } finally {

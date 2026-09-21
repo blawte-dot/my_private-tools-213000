@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync, spawnSync } from "node:child_process";
 import sharp from "sharp";
-import { judgeContent, generateMemeImage, suggestTrendingTopic, writeCreativeEducation } from "./gemini.mjs";
+import { judgeContent, generateMemeImage, suggestTrendingTopic, writeCreativeEducation, writeCreativeNewsContext } from "./gemini.mjs";
 
 const API = "https://data-api.binance.vision";
 const GDELT = "https://api.gdeltproject.org/api/v2/doc/doc";
@@ -1093,6 +1093,7 @@ async function getNews(history) {
   ];
 
   const results = [];
+  const queryErrors = [];
 
   for (const query of queries) {
     try {
@@ -1103,11 +1104,19 @@ async function getNews(history) {
 
       if (Array.isArray(data.articles)) {
         results.push(...data.articles);
+      } else {
+        queryErrors.push(
+          `"${query.slice(0, 30)}...": no articles array`
+        );
       }
     } catch (err) {
       console.log(
         "News search failed:",
         err.message
+      );
+
+      queryErrors.push(
+        `"${query.slice(0, 30)}...": ${err.message}`
       );
     }
   }
@@ -1167,9 +1176,32 @@ async function getNews(history) {
       .map(x => x.newsUrl)
   );
 
-  return [...unique.values()]
-    .filter(a => !recentlyUsed.has(a.url))
-    .slice(0, 30);
+  const afterRecentlyUsed = [...unique.values()].filter(
+    a => !recentlyUsed.has(a.url)
+  );
+
+  const finalList = afterRecentlyUsed.slice(0, 30);
+
+  /*
+   * Diagnostics attached to the returned array (arrays are
+   * objects, so this doesn't change any .length/[0] usage
+   * elsewhere) — persisted to history when a news attempt fails,
+   * so the real reason is inspectable via git instead of an
+   * Actions log no tool here can read. This is exactly the
+   * pattern that diagnosed the Gemini model-name issue earlier —
+   * applying it here too rather than guessing at GDELT's
+   * behavior from outside the actual runtime.
+   */
+  finalList.diagnostics = {
+    queryErrors,
+    rawResultsCount: results.length,
+    afterFilterCount: filtered.length,
+    afterDedupCount: unique.size,
+    afterRecentlyUsedCount: afterRecentlyUsed.length,
+    recentlyUsedCount: recentlyUsed.size
+  };
+
+  return finalList;
 }
 
 async function createNewsImage(article) {
@@ -1538,14 +1570,14 @@ function selectPostType(history) {
  * are trimmed slightly to make room.
  */
 const OTHER_CONTENT_TYPES = [
-  { key: "education", weight: 20 },
-  { key: "news", weight: 32 },
-  { key: "poll", weight: 8 },
-  { key: "market_snapshot", weight: 10 },
-  { key: "top_movers", weight: 8 },
-  { key: "bull_bear", weight: 8 },
-  { key: "project_study", weight: 8 },
-  { key: "ecosystem", weight: 6 }
+  { key: "education", weight: 18 },
+  { key: "news", weight: 40 },
+  { key: "poll", weight: 7 },
+  { key: "market_snapshot", weight: 9 },
+  { key: "top_movers", weight: 7 },
+  { key: "bull_bear", weight: 7 },
+  { key: "project_study", weight: 7 },
+  { key: "ecosystem", weight: 5 }
 ];
 
 function selectOtherType(history) {
@@ -1555,10 +1587,35 @@ function selectOtherType(history) {
 
   const total = recentOther.length || 1;
 
-  let best = OTHER_CONTENT_TYPES[0].key;
+  /*
+   * Cooldown against a real starvation bug found in production:
+   * when "news" is selected but genuinely has nothing available,
+   * it used to silently fall back to publishing as top_movers
+   * while never being RECORDED as a successful "news" share — so
+   * "news" would perpetually look like the most under-served type
+   * (0% actual vs its target) and keep getting re-selected every
+   * single cycle, which starved every other type at 0% for days.
+   * If the most recent attempt was "news" and it didn't actually
+   * succeed as news, exclude news from consideration for exactly
+   * one cycle so something else gets a real turn.
+   */
+  const lastEntry = history
+    .filter(x => x && x.type === "other")
+    .at(-1);
+
+  const newsOnCooldown =
+    lastEntry &&
+    lastEntry.attemptedSubtype === "news" &&
+    lastEntry.subtype !== "news";
+
+  const candidates = newsOnCooldown
+    ? OTHER_CONTENT_TYPES.filter(t => t.key !== "news")
+    : OTHER_CONTENT_TYPES;
+
+  let best = candidates[0].key;
   let bestDeficit = -Infinity;
 
-  for (const t of OTHER_CONTENT_TYPES) {
+  for (const t of candidates) {
     const count = recentOther.filter(
       x => x.subtype === t.key
     ).length;
@@ -2094,6 +2151,8 @@ async function main() {
   let title = null;
   let hashtags = null;
   let newsUrl = null;
+  let newsFailureReason = null;
+  let attemptedSubtype = null;
   let tier = null;
   let depth = null;
   let geminiDecision = null;
@@ -2181,6 +2240,22 @@ async function main() {
         image = createAnalysisChart(coin.symbol, angle);
       } else if (media === "coin_only") {
         image = createCoinCardImage(coin.symbol, pastAnalysisCount);
+
+        if (!image) {
+          /*
+           * No public icon for this coin (createCoinCardImage
+           * returns null in that case, by design). Previously
+           * this left `media` mislabeled as "coin_only" in
+           * history with no actual image — a silently broken,
+           * mislabeled post. Fall back to the chart (always
+           * available for any coin, since it's built from real
+           * klines, not an icon lookup) and record why.
+           */
+          aiImageFailureReason =
+            `coin_only: no public icon found for ${coin.asset}`;
+          media = "chart_only";
+          image = createAnalysisChart(coin.symbol, angle);
+        }
       } else if (media === "chart_plus_coin") {
         image = [
           createAnalysisChart(coin.symbol, angle),
@@ -2318,6 +2393,7 @@ async function main() {
     type = "other";
 
     subtype = selectOtherType(history);
+    attemptedSubtype = subtype;
 
     if (subtype === "news") {
       const news =
@@ -2369,11 +2445,33 @@ async function main() {
 
         const ending = endings[pastNewsCount % endings.length];
 
+        /*
+         * Gemini writes the "why it matters" line fresh each
+         * time (grounded only in the real headline + real asset
+         * context above), falling back to a fixed line if
+         * unavailable — same pattern as education's creative
+         * writing, applied to news since it's now the largest
+         * single content category.
+         */
+        const creativeContext = await writeCreativeNewsContext(
+          article.title,
+          assetLine
+        );
+
+        const contextCashtags = new Set(
+          (creativeContext || "").match(/\$[A-Z][A-Z0-9]*/g) || []
+        );
+
+        const contextLine =
+          creativeContext && contextCashtags.size <= 3
+            ? creativeContext
+            : "🧭 Why it matters: news like this can shift short-term sentiment even before it changes anything fundamental — the market's reaction often matters more than the event itself.";
+
         text = `${article.title}
 
 ${assetLine}
 
-🧭 Why it matters: news like this can shift short-term sentiment even before it changes anything fundamental — the market's reaction often matters more than the event itself.
+${contextLine}
 
 ${ending}
 
@@ -2406,23 +2504,49 @@ ${ending}
 
         image = newsImages.slice(0, 3);
       } else {
+        newsFailureReason = news.diagnostics
+          ? JSON.stringify(news.diagnostics)
+          : "no diagnostics captured";
+
         /*
-         * No usable news right now — actually publish as
-         * top_movers content, and record it as such, so the
-         * adaptive scheduler sees what really went out rather
-         * than crediting a "news" slot that didn't happen.
+         * No usable news right now. Previously this always fell
+         * back to top_movers specifically — combined with the
+         * scheduler starvation bug (fixed above via the cooldown),
+         * that meant EVERY other type starved at 0% for days
+         * while every single non-analysis post became top_movers,
+         * since a failed news attempt never actually counted
+         * against how urgently "news" looked under-served.
+         * Rotate through a few reliable, simple alternatives
+         * instead, and always record the real outcome (not
+         * "news") so the scheduler sees what actually happened.
          */
-        subtype = "top_movers";
+        const failureRotation = [
+          "market_snapshot",
+          "poll",
+          "ecosystem",
+          "top_movers"
+        ];
 
-        text =
-          topMoversPost(
-            coins
-          );
+        const pastNewsFailures = history.filter(
+          x => x && x.attemptedSubtype === "news" && x.subtype !== "news"
+        ).length;
 
-        image =
-          createMoversImage(
-            coins
-          );
+        subtype =
+          failureRotation[pastNewsFailures % failureRotation.length];
+
+        if (subtype === "market_snapshot") {
+          text = marketUpdatePost(coins);
+          image = createMarketSnapshotImage(coins);
+        } else if (subtype === "poll") {
+          text = pollPost(coins);
+          image = null;
+        } else if (subtype === "ecosystem") {
+          text = ecosystemPost();
+          image = null;
+        } else {
+          text = topMoversPost(coins);
+          image = createMoversImage(coins);
+        }
       }
     } else if (subtype === "top_movers") {
       const useWatchlist =
@@ -2600,6 +2724,8 @@ ${ending}
       ? publishResult.postLink
       : null,
     newsUrl,
+    newsFailureReason,
+    attemptedSubtype,
     tier,
     depth,
     geminiDecision,
