@@ -1,4 +1,4 @@
-# binance-square-bot
+
 
 Automated Binance Square publishing bot. Runs on a `*/5 * * * *` GitHub
 Actions schedule; `bot/index.mjs` self-gates so a real post only happens
