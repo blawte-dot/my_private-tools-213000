@@ -1,16 +1,6 @@
 [
   {
     "date": "2026-09-06",
-    "time": "2026-09-06T03:05:24.558Z",
-    "type": "analysis",
-    "asset": "UNI",
-    "subtype": null,
-    "angle": 2,
-    "media": "chart_plus_coin",
-    "published": true
-  },
-  {
-    "date": "2026-09-06",
     "time": "2026-09-06T03:35:20.163Z",
     "type": "analysis",
     "asset": "CAKE",
@@ -9928,6 +9918,30 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-21",
+    "time": "2026-09-21T03:35:33.156Z",
+    "type": "analysis",
+    "asset": "S",
+    "subtype": null,
+    "angle": 0,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "368928903260630",
+    "postLink": "https://app.binance.com/uni-qr/cpos/368928903260630?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "newsFailureReason": null,
+    "attemptedSubtype": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 80,
+    "geminiDuplicateRisk": 20,
+    "geminiReasoning": "The draft provides a clear, concise technical read on $S with relevant EMA and RSI data. Since $S has not been featured in recent posts, duplicate risk is low.",
+    "aiImageFailureReason": "Gemini image call failed: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.5-flash-preview-image\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.5-flash-preview-image\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.5-flash-preview-image\\nPlease retry in 41.478534558s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",\"quotaId\":\"GenerateContentInputTokensPerModelPerMinute-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash-preview-image\"}},{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash-preview-image\",\"location\":\"global\"}},{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash-preview-image\"}}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"41s\"}]}}",
     "published": true
   }
 ]
