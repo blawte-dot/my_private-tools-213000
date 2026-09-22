@@ -1,21 +1,6 @@
 [
   {
     "date": "2026-09-07",
-    "time": "2026-09-07T11:05:14.237Z",
-    "type": "analysis",
-    "asset": "PUMP",
-    "subtype": null,
-    "angle": 5,
-    "media": "no_image",
-    "title": null,
-    "hashtags": "some",
-    "postId": "364084896047782",
-    "postLink": "https://app.binance.com/uni-qr/cpos/364084896047782?r=MW37HSBO&l=fr",
-    "newsUrl": null,
-    "published": true
-  },
-  {
-    "date": "2026-09-07",
     "time": "2026-09-07T11:45:16.618Z",
     "type": "analysis",
     "asset": "INJ",
@@ -10420,6 +10405,30 @@
     "geminiQualityScore": null,
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-22",
+    "time": "2026-09-22T06:50:46.274Z",
+    "type": "analysis",
+    "asset": "SAGA",
+    "subtype": null,
+    "angle": 0,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "369330774521052",
+    "postLink": "https://app.binance.com/uni-qr/cpos/369330774521052?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "newsFailureReason": null,
+    "attemptedSubtype": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
     "aiImageFailureReason": null,
     "published": true
   }
