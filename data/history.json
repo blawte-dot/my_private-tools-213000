@@ -1,21 +1,6 @@
 [
   {
     "date": "2026-09-07",
-    "time": "2026-09-07T14:00:25.966Z",
-    "type": "analysis",
-    "asset": "SUI",
-    "subtype": null,
-    "angle": 2,
-    "media": "chart_only",
-    "title": null,
-    "hashtags": "none",
-    "postId": "364127952270098",
-    "postLink": "https://app.binance.com/uni-qr/cpos/364127952270098?r=MW37HSBO&l=fr",
-    "newsUrl": null,
-    "published": true
-  },
-  {
-    "date": "2026-09-07",
     "time": "2026-09-07T14:45:14.835Z",
     "type": "analysis",
     "asset": "DOT",
@@ -10456,6 +10441,30 @@
     "geminiQualityScore": 85,
     "geminiDuplicateRisk": 25,
     "geminiReasoning": "The draft provides a clear, data-driven technical snapshot for MARSCOIN, and the recent post history shows minimal overlap with this specific asset and angle combination.",
+    "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-22",
+    "time": "2026-09-22T09:30:17.652Z",
+    "type": "other",
+    "asset": null,
+    "subtype": "poll",
+    "angle": null,
+    "media": null,
+    "title": null,
+    "hashtags": null,
+    "postId": "369369978820786",
+    "postLink": "https://app.binance.com/uni-qr/cpos/369369978820786?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "newsFailureReason": null,
+    "attemptedSubtype": "poll",
+    "tier": null,
+    "depth": null,
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": null,
     "aiImageFailureReason": null,
     "published": true
   }
