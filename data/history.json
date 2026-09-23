@@ -1,23 +1,6 @@
 [
   {
     "date": "2026-09-08",
-    "time": "2026-09-08T13:45:17.355Z",
-    "type": "analysis",
-    "asset": "FF",
-    "subtype": null,
-    "angle": 4,
-    "media": "no_image",
-    "title": null,
-    "hashtags": "some",
-    "postId": "364478124801046",
-    "postLink": "https://app.binance.com/uni-qr/cpos/364478124801046?r=MW37HSBO&l=fr",
-    "newsUrl": null,
-    "tier": "mid",
-    "depth": "normal",
-    "published": true
-  },
-  {
-    "date": "2026-09-08",
     "time": "2026-09-08T14:25:22.098Z",
     "type": "analysis",
     "asset": "XPL",
@@ -10707,6 +10690,30 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": null,
     "aiImageFailureReason": null,
+    "published": true
+  },
+  {
+    "date": "2026-09-23",
+    "time": "2026-09-23T06:48:50.177Z",
+    "type": "analysis",
+    "asset": "MET",
+    "subtype": null,
+    "angle": 0,
+    "media": "chart_only",
+    "title": null,
+    "hashtags": "none",
+    "postId": "369684193476881",
+    "postLink": "https://app.binance.com/uni-qr/cpos/369684193476881?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "newsFailureReason": null,
+    "attemptedSubtype": null,
+    "tier": "mid",
+    "depth": "normal",
+    "geminiDecision": "publish",
+    "geminiQualityScore": 72,
+    "geminiDuplicateRisk": 35,
+    "geminiReasoning": "The draft provides a clear, concise technical summary for MET with key levels and indicators. Although angle 0 is frequently used, the specific asset is fresh and the post is ready to publish.",
+    "aiImageFailureReason": "Gemini image call failed: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.5-flash-preview-image\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.5-flash-preview-image\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.5-flash-preview-image\\nPlease retry in 18.836362637s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash-preview-image\"}},{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash-preview-image\"}},{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",\"quotaId\":\"GenerateContentInputTokensPerModelPerMinute-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash-preview-image\"}}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"18s\"}]}}",
     "published": true
   }
 ]
