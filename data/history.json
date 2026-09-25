@@ -1,27 +1,6 @@
 [
   {
     "date": "2026-09-11",
-    "time": "2026-09-11T05:05:27.076Z",
-    "type": "analysis",
-    "asset": "FF",
-    "subtype": null,
-    "angle": 0,
-    "media": "chart_plus_coin",
-    "title": null,
-    "hashtags": "some",
-    "postId": "365412052729902",
-    "postLink": "https://app.binance.com/uni-qr/cpos/365412052729902?r=MW37HSBO&l=fr",
-    "newsUrl": null,
-    "tier": "mid",
-    "depth": "normal",
-    "geminiDecision": null,
-    "geminiQualityScore": null,
-    "geminiDuplicateRisk": null,
-    "geminiReasoning": null,
-    "published": true
-  },
-  {
-    "date": "2026-09-11",
     "time": "2026-09-11T05:50:16.564Z",
     "type": "analysis",
     "asset": "MARSCOIN",
@@ -11274,6 +11253,30 @@
     "geminiDuplicateRisk": null,
     "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
     "aiImageFailureReason": "Gemini image call failed: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.5-flash-preview-image\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.5-flash-preview-image\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.5-flash-preview-image\\nPlease retry in 40.354304704s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash-preview-image\"}},{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash-preview-image\"}},{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",\"quotaId\":\"GenerateContentInputTokensPerModelPerMinute-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash-preview-image\",\"location\":\"global\"}}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"40s\"}]}}",
+    "published": true
+  },
+  {
+    "date": "2026-09-25",
+    "time": "2026-09-25T15:15:22.523Z",
+    "type": "analysis",
+    "asset": "NIL",
+    "subtype": null,
+    "angle": 1,
+    "media": "no_image",
+    "title": null,
+    "hashtags": "some",
+    "postId": "370516469270890",
+    "postLink": "https://app.binance.com/uni-qr/cpos/370516469270890?r=MW37HSBO&l=fr",
+    "newsUrl": null,
+    "newsFailureReason": null,
+    "attemptedSubtype": null,
+    "tier": "large",
+    "depth": "normal",
+    "geminiDecision": null,
+    "geminiQualityScore": null,
+    "geminiDuplicateRisk": null,
+    "geminiReasoning": "Gemini call failed: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+    "aiImageFailureReason": null,
     "published": true
   }
 ]
