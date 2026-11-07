@@ -1,7 +1,7 @@
 {
   "lastSuccessfulPost": "2026-11-07T20:53:09.614Z",
-  "lastFailedAttempt": null,
-  "lastFailureReason": null,
-  "consecutiveFailures": 0,
+  "lastFailedAttempt": "2026-11-07T21:25:55.504Z",
+  "lastFailureReason": "Binance Square publish failed.\nExit code: 1\nstdout:\nUploading: analysis-chart.png\n  Uploaded to S3, polling status...\n  Processing... (1/10)\n  Processing... (2/10)\n  Processing... (3/10)\n  Processing... (4/10)\n  Processing... (5/10)\n  Processing... (6/10)\n  Processing... (7/10)\n  Processing... (8/10",
+  "consecutiveFailures": 1,
   "nextExpectedPublish": "2026-11-07T21:30:39.614Z"
 }
